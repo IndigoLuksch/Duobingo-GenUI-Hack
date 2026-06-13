@@ -3,113 +3,115 @@
   "title": "French",
   "units": [
     {
-      "unit_id": "kitchen_1",
-      "title": "In the Kitchen",
-      "icon": "🍳",
-      "world_id": "kitchen_fr",
-      "marble_prompt": "A photorealistic French country kitchen interior, warmly lit. A large wooden dining table with four chairs in the center. A prominent stove with a big stockpot on the burner. A large open oven with a baking tray visible inside. A deep farmhouse sink under a window. A tall refrigerator against the wall. Open wooden shelving displaying stacked plates and bowls. A hanging pot rack above the counter with a large frying pan and a colander. A cutting board on the counter next to a bread basket. Tiled floor, wooden cabinets, copper details.",
+      "unit_id": "boulangerie_1",
+      "title": "At the Bakery",
+      "description": "Bread, pastries & the baker",
+      "icon": "🥖",
+      "world_id": "boulangerie_fr",
+      "marble_prompt": "A photorealistic French boulangerie interior with warm golden light. A long wooden display counter laden with golden baguettes and rustic round loaves. A tall glass pastry case filled with croissants and pain au chocolat. A large stone oven glowing amber through an arch in the back wall. Flour-dusted wooden shelving stacked with artisan breads. A vintage brass cash register on the counter. A baker in a white apron standing behind the counter. Wicker bread baskets hanging from the ceiling. Hand-painted French signage and a chalkboard menu. Terracotta tiled floor, exposed wooden beams, warm morning light filtering through a glass storefront.",
       "vocab": [
         {
-          "word_id": "table",
-          "fr": "la table",
-          "en": "table",
+          "word_id": "baguette",
+          "fr": "la baguette",
+          "en": "baguette",
           "gender": "f",
-          "distractors": ["le bureau", "le comptoir", "l'étagère"]
+          "distractors": ["le croissant", "le gâteau", "le pain"]
         },
         {
-          "word_id": "chaise",
-          "fr": "la chaise",
-          "en": "chair",
+          "word_id": "pain",
+          "fr": "le pain",
+          "en": "bread",
+          "gender": "m",
+          "distractors": ["la baguette", "la farine", "le gâteau"]
+        },
+        {
+          "word_id": "gateau",
+          "fr": "le gâteau",
+          "en": "cake",
+          "gender": "m",
+          "distractors": ["la baguette", "le pain", "le croissant"]
+        },
+        {
+          "word_id": "farine",
+          "fr": "la farine",
+          "en": "flour",
           "gender": "f",
-          "distractors": ["le tabouret", "le canapé", "le fauteuil"]
+          "distractors": ["le pain", "le sucre", "le sel"]
         },
         {
           "word_id": "four",
           "fr": "le four",
           "en": "oven",
           "gender": "m",
-          "distractors": ["le réfrigérateur", "la cuisinière", "le micro-ondes"]
+          "distractors": ["la caisse", "le comptoir", "la table"]
         },
         {
-          "word_id": "refrigerateur",
-          "fr": "le réfrigérateur",
-          "en": "refrigerator",
+          "word_id": "caisse",
+          "fr": "la caisse",
+          "en": "cash register",
+          "gender": "f",
+          "distractors": ["le four", "le comptoir", "la fenêtre"]
+        },
+        {
+          "word_id": "panier",
+          "fr": "le panier",
+          "en": "basket",
           "gender": "m",
-          "distractors": ["le congélateur", "le four", "l'évier"]
+          "distractors": ["la caisse", "le sac", "la table"]
         },
         {
-          "word_id": "evier",
-          "fr": "l'évier",
-          "en": "sink",
+          "word_id": "boulanger",
+          "fr": "le boulanger",
+          "en": "baker",
           "gender": "m",
-          "distractors": ["la baignoire", "le lavabo", "la douche"]
+          "distractors": ["le vendeur", "le chef", "le cuisinier"]
         },
         {
-          "word_id": "cuisiniere",
-          "fr": "la cuisinière",
-          "en": "stove",
-          "gender": "f",
-          "distractors": ["le four", "le micro-ondes", "la plaque"]
+          "word_id": "tablier",
+          "fr": "le tablier",
+          "en": "apron",
+          "gender": "m",
+          "distractors": ["le chapeau", "le manteau", "le pantalon"]
         },
         {
-          "word_id": "poele",
-          "fr": "la poêle",
-          "en": "frying pan",
-          "gender": "f",
-          "distractors": ["la casserole", "la louche", "la spatule"]
-        },
-        {
-          "word_id": "marmite",
-          "fr": "la marmite",
-          "en": "stockpot",
-          "gender": "f",
-          "distractors": ["la casserole", "la cocotte", "le bol"]
-        },
-        {
-          "word_id": "etagere",
-          "fr": "l'étagère",
-          "en": "shelf",
-          "gender": "f",
-          "distractors": ["le placard", "le tiroir", "le comptoir"]
-        },
-        {
-          "word_id": "fenetre",
-          "fr": "la fenêtre",
-          "en": "window",
-          "gender": "f",
-          "distractors": ["la porte", "le mur", "le rideau"]
+          "word_id": "comptoir",
+          "fr": "le comptoir",
+          "en": "counter",
+          "gender": "m",
+          "distractors": ["la table", "la caisse", "le four"]
         }
       ],
       "sentences": [
         {
-          "fr": "Le four est chaud",
-          "en": "The oven is hot",
-          "tiles": ["chaud", "Le", "froid", "est", "four", "La"],
-          "answer": ["Le", "four", "est", "chaud"]
+          "fr": "La baguette est fraîche",
+          "en": "The baguette is fresh",
+          "tiles": ["La", "baguette", "est", "fraîche", "le", "pain", "vieille"],
+          "answer": ["La", "baguette", "est", "fraîche"]
         },
         {
-          "fr": "La marmite est sur la cuisinière",
-          "en": "The stockpot is on the stove",
-          "tiles": ["marmite", "sur", "la", "est", "La", "le", "cuisinière", "four"],
-          "answer": ["La", "marmite", "est", "sur", "la", "cuisinière"]
+          "fr": "Le boulanger met le pain dans le four",
+          "en": "The baker puts the bread in the oven",
+          "tiles": ["Le", "boulanger", "met", "le", "pain", "dans", "le", "four", "la", "caisse"],
+          "answer": ["Le", "boulanger", "met", "le", "pain", "dans", "le", "four"]
         },
         {
-          "fr": "Les chaises sont autour de la table",
-          "en": "The chairs are around the table",
-          "tiles": ["chaises", "autour", "de", "la", "table", "Les", "sont", "Le", "mur"],
-          "answer": ["Les", "chaises", "sont", "autour", "de", "la", "table"]
+          "fr": "Le gâteau est dans le panier",
+          "en": "The cake is in the basket",
+          "tiles": ["Le", "gâteau", "est", "dans", "le", "panier", "la", "caisse", "sur"],
+          "answer": ["Le", "gâteau", "est", "dans", "le", "panier"]
         },
         {
-          "fr": "Il y a une poêle sur l'étagère",
-          "en": "There is a frying pan on the shelf",
-          "tiles": ["Il", "y", "a", "une", "poêle", "sur", "l'étagère", "la", "marmite"],
-          "answer": ["Il", "y", "a", "une", "poêle", "sur", "l'étagère"]
+          "fr": "La farine est sur le comptoir",
+          "en": "The flour is on the counter",
+          "tiles": ["La", "farine", "est", "sur", "le", "comptoir", "dans", "la", "caisse"],
+          "answer": ["La", "farine", "est", "sur", "le", "comptoir"]
         }
       ]
     },
     {
       "unit_id": "cafe_1",
       "title": "At the Café",
+      "description": "Drinks, seating & café life",
       "icon": "☕",
       "world_id": "cafe_fr",
       "marble_prompt": "A photorealistic Parisian café interior. A long marble counter with a large brass espresso machine as the centerpiece. A tall glass display case filled with croissants and large pastries. Small round bistro tables with wicker chairs. A large chalkboard menu covering most of the back wall. An ornate Art Nouveau bar with shelves of bottles behind it. A coat rack near the entrance. A large arched window looking onto a Paris street with an awning. Warm amber lighting from hanging pendant lamps. Tiled mosaic floor.",
@@ -209,6 +211,218 @@
           "en": "The lamp is above the table",
           "tiles": ["La", "lampe", "est", "au-dessus", "de", "la", "table", "Le", "comptoir"],
           "answer": ["La", "lampe", "est", "au-dessus", "de", "la", "table"]
+        }
+      ]
+    },
+    {
+      "unit_id": "gare_1",
+      "title": "At the Station",
+      "description": "Travel, tickets & departures",
+      "icon": "🚂",
+      "world_id": "gare_fr",
+      "marble_prompt": "A photorealistic French train station interior, Belle Époque architecture. High vaulted glass ceiling flooding the concourse with natural light. A large iron clock mounted high on the wall above the platforms. A long row of ticket windows with ornate brass grilles. A departures board showing French city names. Wooden benches on a polished marble floor. A train visible through arched platform entrances. Passengers pulling suitcases across the concourse. Iron pillars, glazed tile walls, a small newsstand kiosk. Warm afternoon sunlight streaming through the glass roof onto the stone floor.",
+      "vocab": [
+        {
+          "word_id": "train",
+          "fr": "le train",
+          "en": "train",
+          "gender": "m",
+          "distractors": ["le bus", "le métro", "le tram"]
+        },
+        {
+          "word_id": "quai",
+          "fr": "le quai",
+          "en": "platform",
+          "gender": "m",
+          "distractors": ["le couloir", "la salle", "le hall"]
+        },
+        {
+          "word_id": "billet",
+          "fr": "le billet",
+          "en": "ticket",
+          "gender": "m",
+          "distractors": ["le passeport", "la carte", "le reçu"]
+        },
+        {
+          "word_id": "valise",
+          "fr": "la valise",
+          "en": "suitcase",
+          "gender": "f",
+          "distractors": ["le sac", "le panier", "le cartable"]
+        },
+        {
+          "word_id": "horloge",
+          "fr": "l'horloge",
+          "en": "clock",
+          "gender": "f",
+          "distractors": ["la montre", "le réveil", "le calendrier"]
+        },
+        {
+          "word_id": "guichet",
+          "fr": "le guichet",
+          "en": "ticket window",
+          "gender": "m",
+          "distractors": ["le bureau", "la porte", "le comptoir"]
+        },
+        {
+          "word_id": "panneau",
+          "fr": "le panneau",
+          "en": "sign",
+          "gender": "m",
+          "distractors": ["le tableau", "le mur", "l'écran"]
+        },
+        {
+          "word_id": "banc",
+          "fr": "le banc",
+          "en": "bench",
+          "gender": "m",
+          "distractors": ["la chaise", "le siège", "le fauteuil"]
+        },
+        {
+          "word_id": "escalier",
+          "fr": "l'escalier",
+          "en": "staircase",
+          "gender": "m",
+          "distractors": ["l'ascenseur", "la rampe", "le couloir"]
+        },
+        {
+          "word_id": "depart",
+          "fr": "le départ",
+          "en": "departure",
+          "gender": "m",
+          "distractors": ["l'arrivée", "le retard", "le trajet"]
+        }
+      ],
+      "sentences": [
+        {
+          "fr": "Le train arrive sur le quai",
+          "en": "The train arrives on the platform",
+          "tiles": ["Le", "train", "arrive", "sur", "le", "quai", "dans", "la", "gare"],
+          "answer": ["Le", "train", "arrive", "sur", "le", "quai"]
+        },
+        {
+          "fr": "Le billet est au guichet",
+          "en": "The ticket is at the window",
+          "tiles": ["Le", "billet", "est", "au", "guichet", "la", "valise", "sur", "le"],
+          "answer": ["Le", "billet", "est", "au", "guichet"]
+        },
+        {
+          "fr": "La valise est sur le banc",
+          "en": "The suitcase is on the bench",
+          "tiles": ["La", "valise", "est", "sur", "le", "banc", "l'escalier", "le", "quai"],
+          "answer": ["La", "valise", "est", "sur", "le", "banc"]
+        },
+        {
+          "fr": "L'horloge est au-dessus du panneau",
+          "en": "The clock is above the sign",
+          "tiles": ["L'horloge", "est", "au-dessus", "du", "panneau", "le", "guichet", "sous", "le"],
+          "answer": ["L'horloge", "est", "au-dessus", "du", "panneau"]
+        }
+      ]
+    },
+    {
+      "unit_id": "marche_1",
+      "title": "At the Market",
+      "description": "Fresh produce & vendors",
+      "icon": "🛒",
+      "world_id": "marche_fr",
+      "marble_prompt": "A photorealistic open-air French market in Provence. Colourful striped canvas awnings shading wooden market stalls. Wooden crates overflowing with bright red tomatoes, green courgettes, orange carrots, and purple aubergines. A cheese stand with large wheels of comté and rounds of camembert. A flower stall bursting with yellow sunflowers, purple lavender bundles, and white roses. A friendly vendor in a blue-and-white striped apron standing behind the produce stand. Old brass weighing scales sitting on a wooden table. Cobblestone street, a stone fountain visible in the background. Dappled morning sunlight through the awnings, clear Provençal sky.",
+      "vocab": [
+        {
+          "word_id": "tomate",
+          "fr": "la tomate",
+          "en": "tomato",
+          "gender": "f",
+          "distractors": ["la pomme", "la poire", "la cerise"]
+        },
+        {
+          "word_id": "fromage",
+          "fr": "le fromage",
+          "en": "cheese",
+          "gender": "m",
+          "distractors": ["le beurre", "le lait", "la crème"]
+        },
+        {
+          "word_id": "legume",
+          "fr": "le légume",
+          "en": "vegetable",
+          "gender": "m",
+          "distractors": ["le fruit", "la viande", "le grain"]
+        },
+        {
+          "word_id": "fruit",
+          "fr": "le fruit",
+          "en": "fruit",
+          "gender": "m",
+          "distractors": ["le légume", "la viande", "le pain"]
+        },
+        {
+          "word_id": "stand",
+          "fr": "le stand",
+          "en": "stall",
+          "gender": "m",
+          "distractors": ["la boutique", "le magasin", "le kiosque"]
+        },
+        {
+          "word_id": "vendeur",
+          "fr": "le vendeur",
+          "en": "vendor",
+          "gender": "m",
+          "distractors": ["le client", "le chef", "le livreur"]
+        },
+        {
+          "word_id": "panier",
+          "fr": "le panier",
+          "en": "basket",
+          "gender": "m",
+          "distractors": ["le sac", "la caisse", "la boîte"]
+        },
+        {
+          "word_id": "fleur",
+          "fr": "la fleur",
+          "en": "flower",
+          "gender": "f",
+          "distractors": ["la plante", "l'arbre", "la feuille"]
+        },
+        {
+          "word_id": "balance",
+          "fr": "la balance",
+          "en": "scales",
+          "gender": "f",
+          "distractors": ["la mesure", "la boîte", "la caisse"]
+        },
+        {
+          "word_id": "prix",
+          "fr": "le prix",
+          "en": "price",
+          "gender": "m",
+          "distractors": ["le coût", "la valeur", "l'argent"]
+        }
+      ],
+      "sentences": [
+        {
+          "fr": "Les tomates sont dans le panier",
+          "en": "The tomatoes are in the basket",
+          "tiles": ["Les", "tomates", "sont", "dans", "le", "panier", "sur", "le", "stand"],
+          "answer": ["Les", "tomates", "sont", "dans", "le", "panier"]
+        },
+        {
+          "fr": "Le vendeur vend du fromage",
+          "en": "The vendor sells cheese",
+          "tiles": ["Le", "vendeur", "vend", "du", "fromage", "le", "fruit", "la", "tomate"],
+          "answer": ["Le", "vendeur", "vend", "du", "fromage"]
+        },
+        {
+          "fr": "Les légumes sont sur la balance",
+          "en": "The vegetables are on the scales",
+          "tiles": ["Les", "légumes", "sont", "sur", "la", "balance", "le", "stand", "dans"],
+          "answer": ["Les", "légumes", "sont", "sur", "la", "balance"]
+        },
+        {
+          "fr": "La fleur a un bon prix",
+          "en": "The flower has a good price",
+          "tiles": ["La", "fleur", "a", "un", "bon", "prix", "le", "fruit", "beau"],
+          "answer": ["La", "fleur", "a", "un", "bon", "prix"]
         }
       ]
     }

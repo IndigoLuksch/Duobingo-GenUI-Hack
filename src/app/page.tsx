@@ -16,8 +16,10 @@ const defaultProfile: LearnerProfile = {
   hearts: 3,
   last_active: new Date().toISOString(),
   unit_progress: {
-    kitchen_1: "current",
+    boulangerie_1: "current",
     cafe_1: "locked",
+    gare_1: "locked",
+    marche_1: "locked",
   },
 };
 
@@ -35,7 +37,22 @@ export default function Home() {
   useEffect(() => {
     fetch("/api/redis/profile?uid=demo")
       .then((res) => res.json())
-      .then((data: LearnerProfile) => setProfile(data))
+      .then((data: LearnerProfile) => {
+        // Merge Redis profile with current course units so stale unit_ids are dropped
+        // and any new units that aren't in Redis yet get their default status.
+        const mergedProgress = { ...defaultProfile.unit_progress };
+        for (const unit of typedCourse.units) {
+          if (data.unit_progress[unit.unit_id]) {
+            mergedProgress[unit.unit_id] = data.unit_progress[unit.unit_id];
+          }
+        }
+        // Ensure at least one unit is "current" if none made it through the merge.
+        const hasCurrent = Object.values(mergedProgress).some((s) => s === "current");
+        if (!hasCurrent && typedCourse.units.length > 0) {
+          mergedProgress[typedCourse.units[0].unit_id] = "current";
+        }
+        setProfile({ ...data, unit_progress: mergedProgress });
+      })
       .catch(() => setProfile(defaultProfile));
   }, []);
 

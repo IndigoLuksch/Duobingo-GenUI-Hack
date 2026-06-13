@@ -20,14 +20,12 @@ interface NodePosition {
 
 function getNodePositions(count: number, width: number, height: number): NodePosition[] {
   if (count === 0) return [];
-
-  const paddingTop = 80;
-  const paddingBottom = 80;
+  const paddingTop = 100;
+  const paddingBottom = 100;
   const usableHeight = Math.max(height - paddingTop - paddingBottom, 200);
   const spacing = count > 1 ? usableHeight / (count - 1) : 0;
-
   return Array.from({ length: count }, (_, i) => ({
-    x: width * (i % 2 === 0 ? 0.38 : 0.62),
+    x: width * (i % 2 === 0 ? 0.36 : 0.64),
     y: paddingTop + i * spacing,
   }));
 }
@@ -46,16 +44,16 @@ function buildPath(points: NodePosition[]): string {
 
 function XpDisplay({ xp }: { xp: number }) {
   return (
-    <div className={styles.xp}>
+    <div className={styles.xpChip}>
       <AnimatePresence mode="popLayout">
         <motion.span
           key={xp}
-          initial={{ y: 12, opacity: 0 }}
+          initial={{ y: 10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: -12, opacity: 0 }}
+          exit={{ y: -10, opacity: 0 }}
           transition={{ duration: 0.25 }}
         >
-          {xp} XP
+          ⚡ {xp} XP
         </motion.span>
       </AnimatePresence>
     </div>
@@ -63,28 +61,47 @@ function XpDisplay({ xp }: { xp: number }) {
 }
 
 export default function PathMap({ units, progress, xp, streak, onUnitClick }: PathMapProps) {
-  const containerHeight = Math.max(520, units.length * 240);
+  const containerHeight = Math.max(760, units.length * 300);
   const containerWidth = 432;
+
   const positions = useMemo(
     () => getNodePositions(units.length, containerWidth, containerHeight),
     [units.length, containerHeight]
   );
   const pathD = useMemo(() => buildPath(positions), [positions]);
 
+  const completeCount = Object.values(progress).filter((s) => s === "complete").length;
+
   const handleNodeClick = (unitId: string, status: string) => {
-    if (status === "current" || status === "complete") {
-      onUnitClick(unitId);
-    }
+    if (status !== "locked") onUnitClick(unitId);
   };
 
   return (
     <>
       <header className={styles.header}>
-        <span className={styles.streak}>🔥 {streak}</span>
+        <div className={styles.courseInfo}>
+          <span className={styles.flag}>🇫🇷</span>
+          <div className={styles.courseText}>
+            <span className={styles.courseName}>French</span>
+            <span className={styles.courseSubtitle}>
+              {completeCount}/{units.length} lessons complete
+            </span>
+          </div>
+        </div>
         <div className={styles.headerRight}>
+          <span className={styles.streakChip}>🔥 {streak}</span>
           <XpDisplay xp={xp} />
         </div>
       </header>
+
+      <div className={styles.progressBarTrack}>
+        <motion.div
+          className={styles.progressBarFill}
+          initial={{ width: 0 }}
+          animate={{ width: `${units.length > 0 ? (completeCount / units.length) * 100 : 0}%` }}
+          transition={{ duration: 0.9, ease: "easeOut" }}
+        />
+      </div>
 
       <div className={styles.container} style={{ height: containerHeight }}>
         <svg
@@ -113,6 +130,18 @@ export default function PathMap({ units, progress, xp, streak, onUnitClick }: Pa
                   top: pos.y,
                 }}
               >
+                <span
+                  className={`${styles.unitBadge} ${
+                    isComplete
+                      ? styles.unitBadgeComplete
+                      : isLocked
+                        ? styles.unitBadgeLocked
+                        : styles.unitBadgeCurrent
+                  }`}
+                >
+                  {isComplete ? "✓ Done" : `Lesson ${index + 1}`}
+                </span>
+
                 <motion.button
                   type="button"
                   className={`${styles.node} ${
@@ -124,38 +153,61 @@ export default function PathMap({ units, progress, xp, streak, onUnitClick }: Pa
                   }`}
                   onClick={() => handleNodeClick(unit.unit_id, status)}
                   aria-label={unit.title}
-                  animate={
-                    isCurrent ? { scale: [1, 1.08, 1] } : undefined
-                  }
+                  disabled={isLocked}
+                  animate={isCurrent ? { scale: [1, 1.06, 1] } : undefined}
                   transition={
                     isCurrent
-                      ? { duration: 1.6, repeat: Infinity, ease: "easeInOut" }
+                      ? { duration: 2.2, repeat: Infinity, ease: "easeInOut" }
                       : undefined
                   }
-                  whileTap={!isLocked ? { scale: 0.95 } : undefined}
+                  whileTap={!isLocked ? { scale: 0.92 } : undefined}
                 >
                   {isCurrent && (
                     <motion.span
                       className={styles.pulseRing}
-                      animate={{ scale: [1, 1.12, 1], opacity: [0.7, 0.35, 0.7] }}
-                      transition={{
-                        duration: 1.6,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
+                      animate={{ scale: [1, 1.22, 1], opacity: [0.55, 0, 0.55] }}
+                      transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
                     />
                   )}
-                  <span>{unit.icon}</span>
-                  {isComplete && <span className={styles.checkmark}>✓</span>}
+                  <span className={styles.nodeIcon}>{unit.icon}</span>
+                  {isComplete && (
+                    <span className={styles.completeCheck}>✓</span>
+                  )}
+                  {isLocked && (
+                    <span className={styles.lockBadge}>🔒</span>
+                  )}
                 </motion.button>
 
-                {isLocked && <span className={styles.lockIcon}>🔒</span>}
+                <div className={`${styles.labelCard} ${isLocked ? styles.labelCardLocked : ""}`}>
+                  <span className={styles.labelTitle}>{unit.title}</span>
+                  {unit.description && (
+                    <span className={styles.labelDesc}>{unit.description}</span>
+                  )}
+                </div>
 
-                <span
-                  className={`${styles.label} ${isLocked ? styles.labelLocked : ""}`}
-                >
-                  {unit.title}
-                </span>
+                {isCurrent && (
+                  <motion.button
+                    type="button"
+                    className={styles.startButton}
+                    onClick={() => onUnitClick(unit.unit_id)}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.12 }}
+                    whileTap={{ scale: 0.96 }}
+                  >
+                    Start lesson →
+                  </motion.button>
+                )}
+
+                {isComplete && (
+                  <button
+                    type="button"
+                    className={styles.reviewButton}
+                    onClick={() => onUnitClick(unit.unit_id)}
+                  >
+                    Review
+                  </button>
+                )}
               </div>
             );
           })}

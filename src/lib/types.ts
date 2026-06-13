@@ -18,6 +18,7 @@ export interface SentenceItem {
 export interface Unit {
   unit_id: string;
   title: string;
+  description?: string;   // short subtitle shown on the path map
   icon: string;           // emoji
   world_id: string;       // matches filename: kitchen_fr → /worlds/kitchen_fr.spz
   marble_prompt: string;
