@@ -844,6 +844,846 @@
           ]
         }
       ]
+    },
+    {
+      "unit_id": "airport_1",
+      "title": "Am Flughafen",
+      "description": "Grundwortschatz und Sätze",
+      "icon": "✈️",
+      "world_id": "airport_de",
+      "marble_prompt": "A photorealistic 3D scene of a modern German airport terminal bustling with travelers. The scene includes check-in counters with signs reading 'Check-in', 'Gepäckaufgabe', and 'Flugnummer', a security checkpoint with metal detectors, a boarding gate area with digital displays showing flight information, and passengers with luggage and boarding passes. Airport staff assist travelers, and clear signage in German guides visitors through the terminal. The atmosphere is busy but organized, with natural lighting streaming through large windows.",
+      "vocab": [
+        {
+          "word_id": "flughafen",
+          "fr": "der Flughafen",
+          "en": "airport",
+          "gender": "m",
+          "distractors": [
+            "die Flugnummer",
+            "das Gepäck",
+            "die Sicherheitskontrolle"
+          ]
+        },
+        {
+          "word_id": "flugticket",
+          "fr": "das Flugticket",
+          "en": "flight ticket",
+          "gender": null,
+          "distractors": [
+            "der Passagier",
+            "die Bordkarte",
+            "der Koffer"
+          ]
+        },
+        {
+          "word_id": "bordkarte",
+          "fr": "die Bordkarte",
+          "en": "boarding pass",
+          "gender": "f",
+          "distractors": [
+            "der Flug",
+            "das Handgepäck",
+            "die Sicherheitskontrolle"
+          ]
+        },
+        {
+          "word_id": "koffer",
+          "fr": "der Koffer",
+          "en": "suitcase",
+          "gender": "m",
+          "distractors": [
+            "die Tasche",
+            "das Handgepäck",
+            "der Pass"
+          ]
+        },
+        {
+          "word_id": "handgepack",
+          "fr": "das Handgepäck",
+          "en": "hand luggage",
+          "gender": null,
+          "distractors": [
+            "der Koffer",
+            "die Bordkarte",
+            "die Sicherheitskontrolle"
+          ]
+        },
+        {
+          "word_id": "sicherheitskontrolle",
+          "fr": "die Sicherheitskontrolle",
+          "en": "security check",
+          "gender": "f",
+          "distractors": [
+            "der Check-in",
+            "das Gate",
+            "der Pass"
+          ]
+        },
+        {
+          "word_id": "pass",
+          "fr": "der Pass",
+          "en": "passport",
+          "gender": "m",
+          "distractors": [
+            "die Bordkarte",
+            "das Flugticket",
+            "der Koffer"
+          ]
+        },
+        {
+          "word_id": "gate",
+          "fr": "das Gate",
+          "en": "boarding gate",
+          "gender": null,
+          "distractors": [
+            "die Sicherheitskontrolle",
+            "der Pass",
+            "der Flug"
+          ]
+        },
+        {
+          "word_id": "flug",
+          "fr": "der Flug",
+          "en": "flight",
+          "gender": "m",
+          "distractors": [
+            "die Bordkarte",
+            "das Gate",
+            "der Koffer"
+          ]
+        },
+        {
+          "word_id": "flugnummer",
+          "fr": "die Flugnummer",
+          "en": "flight number",
+          "gender": "f",
+          "distractors": [
+            "der Pass",
+            "das Flugticket",
+            "die Sicherheitskontrolle"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "fr": "Ich habe mein Flugticket am Schalter abgeholt.",
+          "en": "I picked up my flight ticket at the counter.",
+          "tiles": [
+            ".",
+            "Ich",
+            "Flugticket",
+            "habe",
+            "die",
+            "Bordkarte",
+            "abgeholt",
+            "mein",
+            "Schalter",
+            "am"
+          ],
+          "answer": [
+            "Ich",
+            "habe",
+            "mein",
+            "Flugticket",
+            "am",
+            "Schalter",
+            "abgeholt",
+            "."
+          ]
+        },
+        {
+          "fr": "Wo ist das Gate für meinen Flug?",
+          "en": "Where is the gate for my flight?",
+          "tiles": [
+            "Wo",
+            "für",
+            "Gate",
+            "ist",
+            "Pass",
+            "der",
+            "meinen",
+            "Flug",
+            "?",
+            "das"
+          ],
+          "answer": [
+            "Wo",
+            "ist",
+            "das",
+            "Gate",
+            "für",
+            "meinen",
+            "Flug",
+            "?"
+          ]
+        },
+        {
+          "fr": "Die Sicherheitskontrolle dauert etwa fünfzehn Minuten.",
+          "en": "The security check takes about fifteen minutes.",
+          "tiles": [
+            ".",
+            "fünfzehn",
+            "der",
+            "Sicherheitskontrolle",
+            "etwa",
+            "Minuten",
+            "Die",
+            "dauert",
+            "Flughafen"
+          ],
+          "answer": [
+            "Die",
+            "Sicherheitskontrolle",
+            "dauert",
+            "etwa",
+            "fünfzehn",
+            "Minuten",
+            "."
+          ]
+        },
+        {
+          "fr": "Ich möchte einen Fensterplatz im Flugzeug.",
+          "en": "I would like a window seat on the plane.",
+          "tiles": [
+            ".",
+            "der",
+            "Koffer",
+            "Flugzeug",
+            "einen",
+            "möchte",
+            "Ich",
+            "Fensterplatz",
+            "im"
+          ],
+          "answer": [
+            "Ich",
+            "möchte",
+            "einen",
+            "Fensterplatz",
+            "im",
+            "Flugzeug",
+            "."
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "park_1",
+      "title": "Im Park",
+      "description": "Grundwortschatz und Sätze",
+      "icon": "🌳",
+      "world_id": "park_de",
+      "marble_prompt": "A sunny German city park with green grass, trees, benches, and people walking, sitting, and playing. Children are playing near a playground, an elderly couple is sitting on a bench, and a person is reading a book under a tree. The scene is peaceful and natural, showing everyday life in a park.",
+      "vocab": [
+        {
+          "word_id": "park",
+          "fr": "der Park",
+          "en": "the park",
+          "gender": "m",
+          "distractors": [
+            "die Straße",
+            "das Haus",
+            "die Bank"
+          ]
+        },
+        {
+          "word_id": "bank",
+          "fr": "die Bank",
+          "en": "the bench",
+          "gender": "f",
+          "distractors": [
+            "der Baum",
+            "das Buch",
+            "die Blume"
+          ]
+        },
+        {
+          "word_id": "baum",
+          "fr": "der Baum",
+          "en": "the tree",
+          "gender": "m",
+          "distractors": [
+            "die Blume",
+            "das Auto",
+            "die Straße"
+          ]
+        },
+        {
+          "word_id": "gras",
+          "fr": "das Gras",
+          "en": "the grass",
+          "gender": null,
+          "distractors": [
+            "der Tisch",
+            "die Lampe",
+            "die Straße"
+          ]
+        },
+        {
+          "word_id": "spielplatz",
+          "fr": "das Spielplatz",
+          "en": "the playground",
+          "gender": null,
+          "distractors": [
+            "der Park",
+            "die Bank",
+            "das Buch"
+          ]
+        },
+        {
+          "word_id": "buch",
+          "fr": "das Buch",
+          "en": "the book",
+          "gender": null,
+          "distractors": [
+            "die Blume",
+            "der Baum",
+            "die Bank"
+          ]
+        },
+        {
+          "word_id": "blume",
+          "fr": "die Blume",
+          "en": "the flower",
+          "gender": "f",
+          "distractors": [
+            "der Baum",
+            "das Gras",
+            "die Bank"
+          ]
+        },
+        {
+          "word_id": "hund",
+          "fr": "der Hund",
+          "en": "the dog",
+          "gender": "m",
+          "distractors": [
+            "die Katze",
+            "das Auto",
+            "die Blume"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "fr": "Wir gehen oft im Park spazieren.",
+          "en": "We often go for a walk in the park.",
+          "tiles": [
+            ".",
+            "spazieren",
+            "oft",
+            "Haus",
+            "lesen",
+            "gehen",
+            "Park",
+            "im",
+            "Wir"
+          ],
+          "answer": [
+            "Wir",
+            "gehen",
+            "oft",
+            "im",
+            "Park",
+            "spazieren",
+            "."
+          ]
+        },
+        {
+          "fr": "Er sitzt im Park auf einer Bank und liest.",
+          "en": "He is sitting on a bench in the park and reading.",
+          "tiles": [
+            "Ist",
+            "Er",
+            "Park",
+            ".",
+            "Das",
+            "sitzt",
+            "im",
+            "Und",
+            "und",
+            "Die",
+            "auf",
+            "einer",
+            "Der",
+            "Bank",
+            "liest",
+            "Ein"
+          ],
+          "answer": [
+            "Er",
+            "sitzt",
+            "im",
+            "Park",
+            "auf",
+            "einer",
+            "Bank",
+            "und",
+            "liest",
+            "."
+          ]
+        },
+        {
+          "fr": "Die Kinder spielen auf dem Spielplatz.",
+          "en": "The children are playing on the playground.",
+          "tiles": [
+            "spielen",
+            "lesen",
+            "Bank",
+            "auf",
+            "Spielplatz",
+            "Die",
+            ".",
+            "dem",
+            "Kinder"
+          ],
+          "answer": [
+            "Die",
+            "Kinder",
+            "spielen",
+            "auf",
+            "dem",
+            "Spielplatz",
+            "."
+          ]
+        },
+        {
+          "fr": "Der Hund läuft im Gras.",
+          "en": "The dog is running in the grass.",
+          "tiles": [
+            "Der",
+            "läuft",
+            "Hund",
+            "Bank",
+            "Gras",
+            ".",
+            "im",
+            "Haus"
+          ],
+          "answer": [
+            "Der",
+            "Hund",
+            "läuft",
+            "im",
+            "Gras",
+            "."
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "restaurant_1",
+      "title": "Restaurant Basics",
+      "description": "Essential dining vocabulary",
+      "icon": "🍽️",
+      "world_id": "restaurant_de",
+      "marble_prompt": "A cozy modern restaurant interior with wooden tables, soft lighting, a menu board, and a waiter serving food to customers",
+      "vocab": [
+        {
+          "word_id": "tisch",
+          "fr": "ein Tisch",
+          "en": "a table",
+          "gender": "m",
+          "distractors": [
+            "die Tische",
+            "das Tisch",
+            "ein Tische"
+          ]
+        },
+        {
+          "word_id": "kellner",
+          "fr": "der Kellner",
+          "en": "the waiter",
+          "gender": "m",
+          "distractors": [
+            "die Kellnerin",
+            "die Kellner",
+            "der Kellnerin"
+          ]
+        },
+        {
+          "word_id": "speisekarte",
+          "fr": "die Speisekarte",
+          "en": "the menu",
+          "gender": "f",
+          "distractors": [
+            "das Speisekarte",
+            "die Speisekarten",
+            "das Menü"
+          ]
+        },
+        {
+          "word_id": "essen",
+          "fr": "das Essen",
+          "en": "the food",
+          "gender": "n",
+          "distractors": [
+            "das Essens",
+            "die Essen",
+            "ein Essen"
+          ]
+        },
+        {
+          "word_id": "glas_wasser",
+          "fr": "ein Glas Wasser",
+          "en": "a glass of water",
+          "gender": "n",
+          "distractors": [
+            "ein Glas Wassert",
+            "ein Glas Wassertablet",
+            "ein Glas Wassertablet"
+          ]
+        },
+        {
+          "word_id": "kaffee",
+          "fr": "der Kaffee",
+          "en": "the coffee",
+          "gender": "m",
+          "distractors": [
+            "die Kaffee",
+            "das Kaffee",
+            "der Kaffeein"
+          ]
+        },
+        {
+          "word_id": "besteck",
+          "fr": "das Besteck",
+          "en": "the cutlery",
+          "gender": "n",
+          "distractors": [
+            "die Bestecke",
+            "das Besteckes",
+            "ein Besteck"
+          ]
+        },
+        {
+          "word_id": "vorspeise",
+          "fr": "die Vorspeise",
+          "en": "the appetizer",
+          "gender": "f",
+          "distractors": [
+            "das Vorspeise",
+            "die Vorspeisen",
+            "das Vorspeisen"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "fr": "Ich möchte bitte die Speisekarte haben.",
+          "en": "I would like to have the menu, please.",
+          "tiles": [
+            "bitte",
+            "Ich",
+            "die",
+            "möchte",
+            "Speisekarte",
+            "bitte",
+            "Speisekarte",
+            "habe",
+            "die",
+            "haben"
+          ],
+          "answer": [
+            "Ich",
+            "möchte",
+            "bitte",
+            "die",
+            "Speisekarte",
+            "haben"
+          ]
+        },
+        {
+          "fr": "Können wir bitte die Rechnung haben?",
+          "en": "Could we please have the bill?",
+          "tiles": [
+            "wir",
+            "Rechnung",
+            "Können",
+            "bitte",
+            "Rechnung",
+            "haben",
+            "die",
+            "habe",
+            "bitte",
+            "die"
+          ],
+          "answer": [
+            "Können",
+            "wir",
+            "bitte",
+            "die",
+            "Rechnung",
+            "haben"
+          ]
+        },
+        {
+          "fr": "Ich hätte gern einen Kaffee.",
+          "en": "I would like a coffee.",
+          "tiles": [
+            "hätte",
+            "Kaffee",
+            "einen",
+            "einen",
+            "hätte",
+            "einen",
+            "Kaffee",
+            "gern",
+            "Ich",
+            "gern"
+          ],
+          "answer": [
+            "Ich",
+            "hätte",
+            "gern",
+            "einen",
+            "Kaffee"
+          ]
+        },
+        {
+          "fr": "Entschuldigen Sie bitte.",
+          "en": "Excuse me, please.",
+          "tiles": [
+            "bitte",
+            "bitte",
+            "Entschuldigen",
+            "bitte",
+            "Sie",
+            "bitte",
+            "Entschuldigen",
+            "Entschuldigen"
+          ],
+          "answer": [
+            "Entschuldigen",
+            "Sie",
+            "bitte"
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "pharmacy_1",
+      "title": "At the Pharmacy",
+      "description": "Beginner German lesson on pharmacy",
+      "icon": "💊",
+      "world_id": "pharmacy_de",
+      "marble_prompt": "A photorealistic 3D scene of a modern German pharmacy interior with shelves of medicines, a counter with a pharmacist helping a customer, signs in German like 'die Apotheke', 'Medikament', and 'Rezept'. The scene includes typical pharmacy items such as tablets, ointments, and cough syrup bottles, with a friendly atmosphere and clear labeling.",
+      "vocab": [
+        {
+          "word_id": "apotheke",
+          "fr": "die Apotheke",
+          "en": "pharmacy",
+          "gender": "f",
+          "distractors": [
+            "der Arzt",
+            "das Krankenhaus",
+            "die Klinik"
+          ]
+        },
+        {
+          "word_id": "medikament",
+          "fr": "das Medikament",
+          "en": "medication",
+          "gender": "",
+          "distractors": [
+            "die Krankheit",
+            "der Patient",
+            "die Tablette"
+          ]
+        },
+        {
+          "word_id": "rezept",
+          "fr": "das Rezept",
+          "en": "prescription",
+          "gender": "",
+          "distractors": [
+            "die Salbe",
+            "der Hustensaft",
+            "die Dosierung"
+          ]
+        },
+        {
+          "word_id": "schmerzmittel",
+          "fr": "das Schmerzmittel",
+          "en": "painkiller",
+          "gender": "",
+          "distractors": [
+            "die Erkältung",
+            "der Husten",
+            "die Allergie"
+          ]
+        },
+        {
+          "word_id": "tablette",
+          "fr": "die Tablette",
+          "en": "tablet / pill",
+          "gender": "f",
+          "distractors": [
+            "das Fieber",
+            "der Arzt",
+            "die Tropfen"
+          ]
+        },
+        {
+          "word_id": "salbe",
+          "fr": "die Salbe",
+          "en": "ointment",
+          "gender": "f",
+          "distractors": [
+            "das Medikament",
+            "der Apotheker",
+            "die Nebenwirkungen"
+          ]
+        },
+        {
+          "word_id": "tropfen",
+          "fr": "die Tropfen",
+          "en": "drops (medicine)",
+          "gender": "f",
+          "distractors": [
+            "die Tablette",
+            "das Rezept",
+            "der Hustensaft"
+          ]
+        },
+        {
+          "word_id": "nebenwirkungen",
+          "fr": "die Nebenwirkungen",
+          "en": "side effects",
+          "gender": "f",
+          "distractors": [
+            "die Dosierung",
+            "die Allergie",
+            "die Erkältung"
+          ]
+        },
+        {
+          "word_id": "dosierung",
+          "fr": "die Dosierung",
+          "en": "dosage",
+          "gender": "f",
+          "distractors": [
+            "das Rezept",
+            "die Nebenwirkungen",
+            "der Apotheker"
+          ]
+        },
+        {
+          "word_id": "hustensaft",
+          "fr": "der Hustensaft",
+          "en": "cough syrup",
+          "gender": "m",
+          "distractors": [
+            "die Salbe",
+            "das Fieber",
+            "die Tablette"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "fr": "Ich brauche etwas gegen Kopfschmerzen.",
+          "en": "I need something for a headache.",
+          "tiles": [
+            ".",
+            "Husten",
+            "gegen",
+            "Fieber",
+            "etwas",
+            "Kopfschmerzen",
+            "Ich",
+            "brauche"
+          ],
+          "answer": [
+            "Ich",
+            "brauche",
+            "etwas",
+            "gegen",
+            "Kopfschmerzen",
+            "."
+          ]
+        },
+        {
+          "fr": "Haben Sie etwas gegen Husten?",
+          "en": "Do you have something for a cough?",
+          "tiles": [
+            "Husten",
+            "gegen",
+            "Ein",
+            "Der",
+            "Sie",
+            "Haben",
+            "?",
+            "Die",
+            "Ist",
+            "etwas",
+            "Und",
+            "Das"
+          ],
+          "answer": [
+            "Haben",
+            "Sie",
+            "etwas",
+            "gegen",
+            "Husten",
+            "?"
+          ]
+        },
+        {
+          "fr": "Ich habe Halsschmerzen und Fieber.",
+          "en": "I have a sore throat and fever.",
+          "tiles": [
+            "Fieber",
+            "und",
+            "Halsschmerzen",
+            "habe",
+            "Ist",
+            ".",
+            "Ein",
+            "Das",
+            "Ich",
+            "Und",
+            "Die",
+            "Der"
+          ],
+          "answer": [
+            "Ich",
+            "habe",
+            "Halsschmerzen",
+            "und",
+            "Fieber",
+            "."
+          ]
+        },
+        {
+          "fr": "Gibt es das Medikament auch rezeptfrei?",
+          "en": "Is the medicine also available without a prescription?",
+          "tiles": [
+            "Das",
+            "das",
+            "Ein",
+            "Und",
+            "Der",
+            "Ist",
+            "Medikament",
+            "rezeptfrei",
+            "Die",
+            "?",
+            "Gibt",
+            "es",
+            "auch"
+          ],
+          "answer": [
+            "Gibt",
+            "es",
+            "das",
+            "Medikament",
+            "auch",
+            "rezeptfrei",
+            "?"
+          ]
+        }
+      ]
     }
   ]
 }

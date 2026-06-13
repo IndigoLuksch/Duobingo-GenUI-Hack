@@ -10,6 +10,7 @@
     "start": "next start",
     "seed": "npx tsx src/lib/seed.ts",
     "build-prebuilt-worlds": "npx tsx scripts/build-prebuilt-worlds.ts",
+    "build-prebuilt-lessons": "npx tsx scripts/build-prebuilt-lessons.ts",
     "upload-memory": "npx tsx scripts/upload-memory-to-render.ts",
     "test:e2e": "npx tsx scripts/e2e-integration-test.ts"
   },
