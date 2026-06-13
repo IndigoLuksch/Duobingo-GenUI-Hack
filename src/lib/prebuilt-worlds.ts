@@ -24,7 +24,7 @@ export const PREBUILT_WORLDS: PrebuiltWorld[] = [
   },
   {
     key: "pret",
-    place_id: "ChIJ08XLvMoEdkgR8jMUChbcmgE",
+    place_id: "ChIJ53bz-TsbdkgRMO_6tzdHxso",
     place_name: "Pret A Manger, King's Cross",
     unit_id: "cafe_1",
     world_id: "cafe_fr",

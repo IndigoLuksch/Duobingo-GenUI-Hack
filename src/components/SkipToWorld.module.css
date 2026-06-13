@@ -26,10 +26,12 @@
   gap: 8px;
   max-width: 520px;
   margin: 0 auto;
+  justify-content: center;
 }
 
 .venueButton {
   flex: 1;
+  max-width: 220px;
   display: flex;
   flex-direction: column;
   align-items: center;

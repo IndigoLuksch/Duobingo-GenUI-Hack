@@ -2,8 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useCourse } from "@/lib/course-context";
+import { CourseId } from "@/lib/courses";
 import { SpeakItExercise } from "@/lib/types";
 import styles from "./exercises.module.css";
+
+const SPEECH_LANG: Record<CourseId, string> = {
+  fr: "fr-FR",
+  de: "de-DE",
+  it: "it-IT",
+};
 
 interface Props {
   exercise: SpeakItExercise;
@@ -25,6 +33,8 @@ type SpeechRecognitionCtor = new () => {
 };
 
 export default function SpeakIt({ exercise, onSubmit, feedbackState }: Props) {
+  const { courseId } = useCourse();
+  const speechLang = SPEECH_LANG[courseId];
   const [submitted, setSubmitted] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [isRecording, setIsRecording] = useState(false);
@@ -48,7 +58,7 @@ export default function SpeakIt({ exercise, onSubmit, feedbackState }: Props) {
 
   const speakTarget = () => {
     const utterance = new SpeechSynthesisUtterance(exercise.target_text);
-    utterance.lang = "fr-FR";
+    utterance.lang = speechLang;
     window.speechSynthesis.speak(utterance);
   };
 
@@ -68,7 +78,7 @@ export default function SpeakIt({ exercise, onSubmit, feedbackState }: Props) {
     if (!Recognition || submitted) return;
 
     const recognition = new Recognition();
-    recognition.lang = "fr-FR";
+    recognition.lang = speechLang;
     recognition.continuous = false;
     recognition.interimResults = false;
 

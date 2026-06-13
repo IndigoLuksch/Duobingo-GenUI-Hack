@@ -80,9 +80,17 @@ export async function runMemoryGeneration(
   textPrompt?: string
 ): Promise<void> {
   const existing = await getMemoryPlace(uid, placeId);
-  if (!existing) return;
+  if (!existing) {
+    console.warn(
+      `[memory-generation] No memory_place record for ${placeId} — cannot generate`
+    );
+    return;
+  }
 
   if (!process.env.WORLDLABS_API_KEY) {
+    console.warn(
+      "[memory-generation] WORLDLABS_API_KEY not set — skipping Marble world generation"
+    );
     await setMemoryPlace(uid, {
       ...existing,
       pano_url: photoUrl,
@@ -96,6 +104,9 @@ export async function runMemoryGeneration(
 
   const mediaAssetId = await prepareAndUploadImage(photoUrl);
   if (!mediaAssetId) {
+    console.warn(
+      "[memory-generation] Marble image upload failed — world not started"
+    );
     await setMemoryPlace(uid, {
       ...existing,
       pano_url: photoUrl,
@@ -111,6 +122,9 @@ export async function runMemoryGeneration(
     textPrompt
   );
   if (!operationId) {
+    console.warn(
+      "[memory-generation] Marble worlds:generate failed — world not started"
+    );
     await setMemoryPlace(uid, {
       ...existing,
       pano_url: photoUrl,
@@ -126,6 +140,9 @@ export async function runMemoryGeneration(
     world_status: "generating",
     pano_status: "generating",
   });
+  console.log(
+    `[memory-generation] Marble generation started (operation_id=${operationId})`
+  );
 
   for (let i = 0; i < MAX_POLLS; i++) {
     await sleep(POLL_MS);

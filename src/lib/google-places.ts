@@ -24,6 +24,48 @@ export interface PlaceSuggestion {
   description: string;
 }
 
+export async function searchPlaceByText(
+  textQuery: string,
+  maxResultCount = 1
+): Promise<PlaceSuggestion[]> {
+  const apiKey = placesKey();
+  if (!apiKey) return [];
+
+  const res = await fetch(`${PLACES_BASE}/places:searchText`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Goog-Api-Key": apiKey,
+      "X-Goog-FieldMask":
+        "places.id,places.displayName,places.formattedAddress",
+    },
+    body: JSON.stringify({ textQuery, maxResultCount }),
+  });
+
+  if (!res.ok) {
+    console.warn("Places text search failed:", res.status, await res.text());
+    return [];
+  }
+
+  const data = (await res.json()) as {
+    places?: {
+      id?: string;
+      displayName?: { text?: string };
+      formattedAddress?: string;
+    }[];
+  };
+
+  return (data.places ?? [])
+    .filter((p): p is { id: string; displayName?: { text?: string }; formattedAddress?: string } =>
+      Boolean(p.id)
+    )
+    .map((place) => ({
+      place_id: place.id,
+      place_name: place.displayName?.text ?? textQuery,
+      description: place.formattedAddress ?? place.displayName?.text ?? textQuery,
+    }));
+}
+
 export async function autocompletePlaces(
   input: string,
   includedPrimaryTypes?: string[]
@@ -95,7 +137,8 @@ function parsePlacesError(body: string): string {
 
 export async function fetchPlaceDetails(
   placeId: string,
-  placeName?: string
+  placeName?: string,
+  maxPhotos = 10
 ): Promise<PlaceDetails | null> {
   const apiKey = placesKey();
   if (!apiKey) return null;
@@ -121,7 +164,7 @@ export async function fetchPlaceDetails(
   };
 
   const photos: PlacePhoto[] = [];
-  for (const photo of (data.photos ?? []).slice(0, 10)) {
+  for (const photo of (data.photos ?? []).slice(0, maxPhotos)) {
     if (!photo.name) continue;
     const url = await fetchPhotoUrl(photo.name, apiKey);
     if (url) {

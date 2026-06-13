@@ -154,7 +154,8 @@ YOUR BEHAVIOR:
 5. POINT-AND-ASK MODE: Before ${VOCAB_GOAL} words are done, only use this if the learner explicitly asks. After lesson complete, answer freely.
 6. LANGUAGE RULES: Speak primarily in ${language.name}. Short responses (1-2 sentences). Use informal address (tu/du/tu).
 7. VISUAL GROUNDING: Base responses on what you see in frames. Never claim to see something you're not confident about.
-8. TOOL USAGE: Call show_word_card EVERY TIME you teach or confirm a word. Call update_strength EVERY TIME.`;
+8. TOOL USAGE: Call show_word_card EVERY TIME you teach or confirm a word. Call update_strength EVERY TIME.
+9. BINGO: Whenever the learner gets anything correct — finding a scavenger hunt target or answering a question — always start your spoken response with an enthusiastic "Bingo!" before any other praise or the next instruction.`;
 }
 
 function arrayBufferToBase64(buffer: ArrayBuffer): string {

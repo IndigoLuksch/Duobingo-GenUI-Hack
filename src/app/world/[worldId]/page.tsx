@@ -8,7 +8,7 @@ import GeminiLiveController from "@/components/GeminiLiveController";
 import WorldCard from "@/components/WorldCard";
 import WorldHUD from "@/components/WorldHUD";
 import { useCourse } from "@/lib/course-context";
-import { findUnitByWorldId, getSplatWorldId } from "@/lib/course-data";
+import { findUnitByWorldId, getSplatWorldId, getWorldCourseId } from "@/lib/course-data";
 import { useWorldStore } from "@/lib/store";
 import { WordStrength, Unit } from "@/lib/types";
 import styles from "./page.module.css";
@@ -24,7 +24,8 @@ export default function WorldPage({
   const { missed } = use(searchParams);
   const router = useRouter();
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { course, courseId } = useCourse();
+  const { courseId } = useCourse();
+  const worldCourseId = getWorldCourseId(courseId, worldId);
 
   const [wordStrengths, setWordStrengths] = useState<WordStrength[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -37,8 +38,8 @@ export default function WorldPage({
   );
 
   const builtInUnit = useMemo(
-    () => course.units.find((u) => u.world_id === worldId) ?? null,
-    [course.units, worldId]
+    () => findUnitByWorldId(courseId, worldId),
+    [courseId, worldId]
   );
   const [unit, setUnit] = useState<Unit | null>(builtInUnit);
 
@@ -46,7 +47,9 @@ export default function WorldPage({
     setUnit(findUnitByWorldId(courseId, worldId));
   }, [courseId, worldId]);
 
-  const splatUrl = unit ? `/worlds/${getSplatWorldId(unit)}.spz` : "";
+  const splatWorldId = unit ? getSplatWorldId(unit) : "";
+  const splatUrl = splatWorldId ? `/worlds/${splatWorldId}.spz` : "";
+  const marbleSplat = splatWorldId === "wasabi";
 
   const strengthsReady = wordStrengths.length > 0;
 
@@ -111,6 +114,7 @@ export default function WorldPage({
       <SplatScene
         splatUrl={splatUrl}
         canvasRef={canvasRef}
+        opencvToOpengl={marbleSplat}
       />
 
       {!strengthsReady && !loadError && (
@@ -128,7 +132,7 @@ export default function WorldPage({
             unitVocab={unit.vocab}
             wordStrengths={wordStrengths}
             unitTitle={unit.title}
-            courseId={courseId}
+            courseId={worldCourseId}
           />
           <WorldCard />
           <WorldHUD />

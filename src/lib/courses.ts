@@ -1,7 +1,8 @@
 import deCourse from "../../data/courses/de.json";
+import deStaticExercises from "../../data/courses/static-exercises/de.json";
 import frCourse from "../../data/courses/fr.json";
 import itCourse from "../../data/courses/it.json";
-import { Course, LearnerProfile } from "./types";
+import { Course, ExercisePayload, LearnerProfile } from "./types";
 
 export type CourseId = "fr" | "de" | "it";
 
@@ -84,7 +85,17 @@ export function defaultCourseProgress(): Record<
 }
 
 export function getCourse(courseId: CourseId): Course {
-  return COURSES[courseId];
+  const course = COURSES[courseId];
+  if (courseId !== "de") return course;
+
+  const exerciseMap = deStaticExercises as Record<string, ExercisePayload[]>;
+  return {
+    ...course,
+    units: course.units.map((unit) => ({
+      ...unit,
+      exercises: exerciseMap[unit.unit_id] ?? unit.exercises,
+    })),
+  };
 }
 
 export function isCourseId(value: string): value is CourseId {

@@ -9,11 +9,13 @@ import SkipToWorld from "@/components/SkipToWorld";
 import LoadingState from "@/components/ui/LoadingState";
 import { useCourse } from "@/lib/course-context";
 import { getCustomUnits, saveCustomUnit } from "@/lib/custom-units";
+import { findUnitById } from "@/lib/course-data";
 import {
   COURSE_FLAGS,
   defaultUnitProgress,
   mergeUnitProgress,
 } from "@/lib/courses";
+import { hasStaticExercises } from "@/lib/static-lesson";
 import { LearnerProfile, Unit } from "@/lib/types";
 
 interface SelectedUnit {
@@ -72,15 +74,24 @@ export default function Home() {
   }, [courseId, courseReady, customUnits, units]);
 
   useEffect(() => {
+    router.prefetch("/world/wasabi");
+  }, [router]);
+
+  useEffect(() => {
     if (!selectedUnit) return;
     router.prefetch(`/lesson/${selectedUnit.unitId}`);
   }, [selectedUnit, router]);
 
   const handleUnitClick = (unitId: string) => {
     const unit = units.find((u) => u.unit_id === unitId);
-    if (unit) {
-      setSelectedUnit({ unitId, title: unit.title });
+    if (!unit) return;
+
+    if (hasStaticExercises(unit)) {
+      router.push(`/lesson/${unitId}`);
+      return;
     }
+
+    setSelectedUnit({ unitId, title: unit.title });
   };
 
   const handleLessonCreated = useCallback(

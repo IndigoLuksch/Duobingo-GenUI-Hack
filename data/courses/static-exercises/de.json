@@ -1,0 +1,490 @@
+{
+  "boulangerie_1": [
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e1",
+      "word_id": "baguette",
+      "prompt": "Which one means 'baguette'?",
+      "options": ["das Baguette", "das Brötchen", "der Kuchen", "das Brot"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.word_bank",
+      "exercise_id": "e2",
+      "prompt_en": "The baguette is fresh",
+      "tiles": ["Das", "Baguette", "ist", "frisch", "das", "Brot", "alt"],
+      "answer": ["Das", "Baguette", "ist", "frisch"]
+    },
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e3",
+      "word_id": "pain",
+      "prompt": "Which one means 'bread'?",
+      "options": ["das Mehl", "das Brot", "das Baguette", "der Kuchen"],
+      "answer_idx": 1
+    },
+    {
+      "type": "exercise.word_bank",
+      "exercise_id": "e4",
+      "prompt_en": "The baker puts the bread in the oven",
+      "tiles": ["Der", "Bäcker", "legt", "das", "Brot", "in", "den", "Ofen", "die", "Kasse"],
+      "answer": ["Der", "Bäcker", "legt", "das", "Brot", "in", "den", "Ofen"]
+    },
+    {
+      "type": "exercise.listening",
+      "exercise_id": "e5",
+      "word_id": "gateau",
+      "audio_url": "/tts/gateau.mp3",
+      "options": ["der Kuchen", "das Baguette", "das Brot"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.listening",
+      "exercise_id": "e6",
+      "word_id": "farine",
+      "audio_url": "/tts/farine.mp3",
+      "options": ["das Mehl", "der Ofen", "die Kasse"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e7",
+      "word_id": "four",
+      "prompt": "Which one means 'oven'?",
+      "options": ["die Kasse", "der Ofen", "die Theke", "der Korb"],
+      "answer_idx": 1
+    },
+    {
+      "type": "exercise.speak_it",
+      "exercise_id": "e8",
+      "target_text": "der Bäcker"
+    }
+  ],
+  "cafe_1": [
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e1",
+      "word_id": "comptoir",
+      "prompt": "Which one means 'counter'?",
+      "options": ["der Tisch", "die Theke", "der Bar", "die Vitrine"],
+      "answer_idx": 1
+    },
+    {
+      "type": "exercise.word_bank",
+      "exercise_id": "e2",
+      "prompt_en": "The counter is marble",
+      "tiles": ["Die", "Theke", "ist", "aus", "Marmor", "Der", "Holz"],
+      "answer": ["Die", "Theke", "ist", "aus", "Marmor"]
+    },
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e3",
+      "word_id": "croissant",
+      "prompt": "Which one means 'croissant'?",
+      "options": ["das Brot", "das Croissant", "die Baguette", "der Kuchen"],
+      "answer_idx": 1
+    },
+    {
+      "type": "exercise.word_bank",
+      "exercise_id": "e4",
+      "prompt_en": "The croissants are in the display case",
+      "tiles": ["Die", "Croissants", "sind", "in", "der", "Vitrine", "Das", "Regal"],
+      "answer": ["Die", "Croissants", "sind", "in", "der", "Vitrine"]
+    },
+    {
+      "type": "exercise.listening",
+      "exercise_id": "e5",
+      "word_id": "vitrine",
+      "audio_url": "/tts/vitrine.mp3",
+      "options": ["die Vitrine", "die Theke", "das Fenster"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.listening",
+      "exercise_id": "e6",
+      "word_id": "chaise",
+      "audio_url": "/tts/chaise.mp3",
+      "options": ["der Stuhl", "der Tisch", "der Garderobenständer"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e7",
+      "word_id": "lampe",
+      "prompt": "Which one means 'lamp'?",
+      "options": ["das Fenster", "die Lampe", "das Gemälde", "die Kaffeemaschine"],
+      "answer_idx": 1
+    },
+    {
+      "type": "exercise.speak_it",
+      "exercise_id": "e8",
+      "target_text": "die Kaffeemaschine"
+    }
+  ],
+  "gare_1": [
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e1",
+      "word_id": "train",
+      "prompt": "Which one means 'train'?",
+      "options": ["der Zug", "der Bahnsteig", "die Fahrkarte", "der Koffer"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.word_bank",
+      "exercise_id": "e2",
+      "prompt_en": "The train arrives on the platform",
+      "tiles": ["Der", "Zug", "kommt", "auf", "dem", "Bahnsteig", "an", "Die", "Fahrkarte"],
+      "answer": ["Der", "Zug", "kommt", "auf", "dem", "Bahnsteig", "an"]
+    },
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e3",
+      "word_id": "quai",
+      "prompt": "Which one means 'platform'?",
+      "options": ["der Schalter", "der Bahnsteig", "der Zug", "das Schild"],
+      "answer_idx": 1
+    },
+    {
+      "type": "exercise.word_bank",
+      "exercise_id": "e4",
+      "prompt_en": "The ticket is at the window",
+      "tiles": ["Die", "Fahrkarte", "ist", "am", "Schalter", "Der", "Koffer"],
+      "answer": ["Die", "Fahrkarte", "ist", "am", "Schalter"]
+    },
+    {
+      "type": "exercise.listening",
+      "exercise_id": "e5",
+      "word_id": "billet",
+      "audio_url": "/tts/billet.mp3",
+      "options": ["die Fahrkarte", "der Koffer", "die Uhr"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.listening",
+      "exercise_id": "e6",
+      "word_id": "valise",
+      "audio_url": "/tts/valise.mp3",
+      "options": ["der Koffer", "die Bank", "die Treppe"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e7",
+      "word_id": "guichet",
+      "prompt": "Which one means 'ticket window'?",
+      "options": ["das Schild", "der Schalter", "die Abfahrt", "die Bank"],
+      "answer_idx": 1
+    },
+    {
+      "type": "exercise.speak_it",
+      "exercise_id": "e8",
+      "target_text": "die Abfahrt"
+    }
+  ],
+  "marche_1": [
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e1",
+      "word_id": "tomate",
+      "prompt": "Which one means 'tomato'?",
+      "options": ["die Tomate", "der Apfel", "die Birne", "die Kirsche"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.word_bank",
+      "exercise_id": "e2",
+      "prompt_en": "The tomatoes are in the basket",
+      "tiles": ["Die", "Tomaten", "sind", "im", "Korb", "auf", "dem", "Stand"],
+      "answer": ["Die", "Tomaten", "sind", "im", "Korb"]
+    },
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e3",
+      "word_id": "fromage",
+      "prompt": "Which one means 'cheese'?",
+      "options": ["die Butter", "der Käse", "die Milch", "die Sahne"],
+      "answer_idx": 1
+    },
+    {
+      "type": "exercise.word_bank",
+      "exercise_id": "e4",
+      "prompt_en": "The vendor sells cheese",
+      "tiles": ["Der", "Verkäufer", "verkauft", "Käse", "das", "Obst", "die", "Tomate"],
+      "answer": ["Der", "Verkäufer", "verkauft", "Käse"]
+    },
+    {
+      "type": "exercise.listening",
+      "exercise_id": "e5",
+      "word_id": "legume",
+      "audio_url": "/tts/legume.mp3",
+      "options": ["das Gemüse", "das Obst", "das Fleisch"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.listening",
+      "exercise_id": "e6",
+      "word_id": "fruit",
+      "audio_url": "/tts/fruit.mp3",
+      "options": ["das Obst", "das Gemüse", "das Brot"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e7",
+      "word_id": "stand",
+      "prompt": "Which one means 'stall'?",
+      "options": ["der Stand", "das Geschäft", "der Laden", "der Kiosk"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.speak_it",
+      "exercise_id": "e8",
+      "target_text": "der Preis"
+    }
+  ],
+  "airport_1": [
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e1",
+      "word_id": "flughafen",
+      "prompt": "Which one means 'airport'?",
+      "options": ["der Flughafen", "die Flugnummer", "das Gepäck", "die Sicherheitskontrolle"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.word_bank",
+      "exercise_id": "e2",
+      "prompt_en": "I picked up my flight ticket at the counter.",
+      "tiles": ["Ich", "habe", "mein", "Flugticket", "am", "Schalter", "abgeholt", "."],
+      "answer": ["Ich", "habe", "mein", "Flugticket", "am", "Schalter", "abgeholt", "."]
+    },
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e3",
+      "word_id": "flugticket",
+      "prompt": "Which one means 'flight ticket'?",
+      "options": ["die Bordkarte", "das Flugticket", "der Passagier", "der Koffer"],
+      "answer_idx": 1
+    },
+    {
+      "type": "exercise.word_bank",
+      "exercise_id": "e4",
+      "prompt_en": "Where is the gate for my flight?",
+      "tiles": ["Wo", "ist", "das", "Gate", "für", "meinen", "Flug", "?"],
+      "answer": ["Wo", "ist", "das", "Gate", "für", "meinen", "Flug", "?"]
+    },
+    {
+      "type": "exercise.listening",
+      "exercise_id": "e5",
+      "word_id": "bordkarte",
+      "audio_url": "/tts/bordkarte.mp3",
+      "options": ["die Bordkarte", "der Flug", "das Handgepäck"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.listening",
+      "exercise_id": "e6",
+      "word_id": "koffer",
+      "audio_url": "/tts/koffer.mp3",
+      "options": ["der Koffer", "die Tasche", "das Handgepäck"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e7",
+      "word_id": "sicherheitskontrolle",
+      "prompt": "Which one means 'security check'?",
+      "options": ["der Check-in", "die Sicherheitskontrolle", "das Gate", "der Pass"],
+      "answer_idx": 1
+    },
+    {
+      "type": "exercise.speak_it",
+      "exercise_id": "e8",
+      "target_text": "der Pass"
+    }
+  ],
+  "park_1": [
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e1",
+      "word_id": "park",
+      "prompt": "Which one means 'the park'?",
+      "options": ["der Park", "die Straße", "das Haus", "die Bank"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.word_bank",
+      "exercise_id": "e2",
+      "prompt_en": "We often go for a walk in the park.",
+      "tiles": [".", "spazieren", "oft", "Haus", "lesen", "gehen", "Park", "im", "Wir"],
+      "answer": ["Wir", "gehen", "oft", "im", "Park", "spazieren", "."]
+    },
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e3",
+      "word_id": "bank",
+      "prompt": "Which one means 'the bench'?",
+      "options": ["der Baum", "die Bank", "das Buch", "die Blume"],
+      "answer_idx": 1
+    },
+    {
+      "type": "exercise.word_bank",
+      "exercise_id": "e4",
+      "prompt_en": "He is sitting on a bench in the park and reading.",
+      "tiles": ["Er", "sitzt", "im", "Park", "auf", "einer", "Bank", "und", "liest", "."],
+      "answer": ["Er", "sitzt", "im", "Park", "auf", "einer", "Bank", "und", "liest", "."]
+    },
+    {
+      "type": "exercise.listening",
+      "exercise_id": "e5",
+      "word_id": "baum",
+      "audio_url": "/tts/baum.mp3",
+      "options": ["der Baum", "die Blume", "das Auto"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.listening",
+      "exercise_id": "e6",
+      "word_id": "gras",
+      "audio_url": "/tts/gras.mp3",
+      "options": ["das Gras", "der Tisch", "die Lampe"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e7",
+      "word_id": "spielplatz",
+      "prompt": "Which one means 'the playground'?",
+      "options": ["der Park", "das Spielplatz", "die Bank", "das Buch"],
+      "answer_idx": 1
+    },
+    {
+      "type": "exercise.speak_it",
+      "exercise_id": "e8",
+      "target_text": "der Hund"
+    }
+  ],
+  "restaurant_1": [
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e1",
+      "word_id": "tisch",
+      "prompt": "Which one means 'a table'?",
+      "options": ["ein Tisch", "die Tische", "das Tisch", "ein Tische"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.word_bank",
+      "exercise_id": "e2",
+      "prompt_en": "I would like to have the menu, please.",
+      "tiles": ["Ich", "möchte", "bitte", "die", "Speisekarte", "haben"],
+      "answer": ["Ich", "möchte", "bitte", "die", "Speisekarte", "haben"]
+    },
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e3",
+      "word_id": "kellner",
+      "prompt": "Which one means 'the waiter'?",
+      "options": ["die Kellnerin", "der Kellner", "die Kellner", "der Kellnerin"],
+      "answer_idx": 1
+    },
+    {
+      "type": "exercise.word_bank",
+      "exercise_id": "e4",
+      "prompt_en": "Could we please have the bill?",
+      "tiles": ["Können", "wir", "bitte", "die", "Rechnung", "haben"],
+      "answer": ["Können", "wir", "bitte", "die", "Rechnung", "haben"]
+    },
+    {
+      "type": "exercise.listening",
+      "exercise_id": "e5",
+      "word_id": "speisekarte",
+      "audio_url": "/tts/speisekarte.mp3",
+      "options": ["die Speisekarte", "das Menü", "die Speisekarten"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.listening",
+      "exercise_id": "e6",
+      "word_id": "essen",
+      "audio_url": "/tts/essen.mp3",
+      "options": ["das Essen", "die Essen", "ein Essen"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e7",
+      "word_id": "kaffee",
+      "prompt": "Which one means 'the coffee'?",
+      "options": ["die Kaffee", "das Kaffee", "der Kaffee"],
+      "answer_idx": 2
+    },
+    {
+      "type": "exercise.speak_it",
+      "exercise_id": "e8",
+      "target_text": "die Vorspeise"
+    }
+  ],
+  "pharmacy_1": [
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e1",
+      "word_id": "apotheke",
+      "prompt": "Which one means 'pharmacy'?",
+      "options": ["die Apotheke", "der Arzt", "das Krankenhaus", "die Klinik"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.word_bank",
+      "exercise_id": "e2",
+      "prompt_en": "I need something for a headache.",
+      "tiles": [".", "Husten", "gegen", "Fieber", "etwas", "Kopfschmerzen", "Ich", "brauche"],
+      "answer": ["Ich", "brauche", "etwas", "gegen", "Kopfschmerzen", "."]
+    },
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e3",
+      "word_id": "medikament",
+      "prompt": "Which one means 'medication'?",
+      "options": ["die Krankheit", "das Medikament", "der Patient", "die Tablette"],
+      "answer_idx": 1
+    },
+    {
+      "type": "exercise.word_bank",
+      "exercise_id": "e4",
+      "prompt_en": "Do you have something for a cough?",
+      "tiles": ["Haben", "Sie", "etwas", "gegen", "Husten", "?"],
+      "answer": ["Haben", "Sie", "etwas", "gegen", "Husten", "?"]
+    },
+    {
+      "type": "exercise.listening",
+      "exercise_id": "e5",
+      "word_id": "rezept",
+      "audio_url": "/tts/rezept.mp3",
+      "options": ["das Rezept", "die Salbe", "der Hustensaft"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.listening",
+      "exercise_id": "e6",
+      "word_id": "schmerzmittel",
+      "audio_url": "/tts/schmerzmittel.mp3",
+      "options": ["das Schmerzmittel", "die Erkältung", "der Husten"],
+      "answer_idx": 0
+    },
+    {
+      "type": "exercise.multiple_choice",
+      "exercise_id": "e7",
+      "word_id": "tablette",
+      "prompt": "Which one means 'tablet / pill'?",
+      "options": ["das Fieber", "die Tablette", "der Arzt", "die Tropfen"],
+      "answer_idx": 1
+    },
+    {
+      "type": "exercise.speak_it",
+      "exercise_id": "e8",
+      "target_text": "die Apotheke"
+    }
+  ]
+}

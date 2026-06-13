@@ -16,6 +16,7 @@ import WordBank from "@/components/exercises/WordBank";
 import Listening from "@/components/exercises/Listening";
 import SpeakIt from "@/components/exercises/SpeakIt";
 import LessonComplete from "@/components/exercises/LessonComplete";
+import StaticLessonExperience from "@/components/StaticLessonExperience";
 import { useCourse } from "@/lib/course-context";
 import { LANGUAGE_LABELS } from "@/lib/courses";
 import { findUnitById } from "@/lib/course-data";
@@ -24,6 +25,7 @@ import {
   pendingJudgmentRef,
 } from "@/lib/lessonAgentBridge";
 import { getLessonPrepStepId } from "@/lib/lesson-prep-status";
+import { hasStaticExercises } from "@/lib/static-lesson";
 import { useLessonStore } from "@/lib/store";
 import {
   ExercisePayload,
@@ -74,7 +76,7 @@ function parseExerciseFromText(text: string): ExercisePayload | null {
   return null;
 }
 
-function LessonExperience({
+function AgentLessonExperience({
   unitId,
   agentError,
 }: {
@@ -459,6 +461,34 @@ function LessonExperience({
   );
 }
 
+function LessonRouter({
+  unitId,
+  agentError,
+}: {
+  unitId: string;
+  agentError: boolean;
+}) {
+  const { courseId } = useCourse();
+  const unit = useMemo(
+    () => findUnitById(courseId, unitId),
+    [courseId, unitId]
+  );
+
+  if (!unit) {
+    return (
+      <div className={styles.notFound}>
+        <p>Unit not found.</p>
+      </div>
+    );
+  }
+
+  if (hasStaticExercises(unit)) {
+    return <StaticLessonExperience unit={unit} />;
+  }
+
+  return <AgentLessonExperience unitId={unitId} agentError={agentError} />;
+}
+
 export default function LessonPage({
   params,
 }: {
@@ -466,11 +496,20 @@ export default function LessonPage({
 }) {
   const { unitId } = use(params);
   const { courseId } = useCourse();
+  const unit = useMemo(
+    () => findUnitById(courseId, unitId),
+    [courseId, unitId]
+  );
+  const isStatic = unit ? hasStaticExercises(unit) : false;
   const [agentError, setAgentError] = useState(false);
   const lessonThreadId = useMemo(
     () => `lesson-${courseId}-${unitId}-${crypto.randomUUID()}`,
     [courseId, unitId]
   );
+
+  if (isStatic) {
+    return <LessonRouter unitId={unitId} agentError={false} />;
+  }
 
   return (
     <CopilotKit
@@ -479,7 +518,7 @@ export default function LessonPage({
       threadId={lessonThreadId}
       onError={() => setAgentError(true)}
     >
-      <LessonExperience unitId={unitId} agentError={agentError} />
+      <LessonRouter unitId={unitId} agentError={agentError} />
     </CopilotKit>
   );
 }

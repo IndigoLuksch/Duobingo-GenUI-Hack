@@ -4,7 +4,6 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -26,13 +25,9 @@ interface CourseContextValue {
 const CourseContext = createContext<CourseContextValue | null>(null);
 
 export function CourseProvider({ children }: { children: React.ReactNode }) {
-  const [courseId, setCourseIdState] = useState<CourseId>("fr");
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    setCourseIdState(readStoredCourseId());
-    setReady(true);
-  }, []);
+  const [courseId, setCourseIdState] = useState<CourseId>(() =>
+    typeof window !== "undefined" ? readStoredCourseId() : "fr"
+  );
 
   const setCourseId = useCallback((next: CourseId) => {
     setCourseIdState(next);
@@ -44,9 +39,9 @@ export function CourseProvider({ children }: { children: React.ReactNode }) {
       courseId,
       course: getCourse(courseId),
       setCourseId,
-      ready,
+      ready: true,
     }),
-    [courseId, setCourseId, ready]
+    [courseId, setCourseId]
   );
 
   return (

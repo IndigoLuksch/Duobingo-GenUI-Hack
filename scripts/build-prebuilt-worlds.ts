@@ -10,15 +10,15 @@
 
 import { readFileSync, writeFileSync } from "fs";
 import { resolve } from "path";
-import Redis from "ioredis";
 import {
   PREBUILT_WORLDS,
   PrebuiltWorldKey,
   toMemoryPlaceRecord,
 } from "../src/lib/prebuilt-worlds";
-import { fetchPlaceDetails } from "../src/lib/google-places";
+import { fetchPlaceDetails, searchPlaceByText } from "../src/lib/google-places";
 import { runMemoryGeneration } from "../src/lib/memory-generation";
-import { getMemoryPlace } from "../src/lib/redis";
+import { getMemoryPlace, setMemoryPlace } from "../src/lib/redis";
+import redis from "../src/lib/redis";
 
 const envPath = resolve(process.cwd(), ".env.local");
 try {
@@ -51,9 +51,19 @@ async function waitForReady(placeId: string, timeoutMs = 12 * 60_000) {
   while (Date.now() - start < timeoutMs) {
     const record = await getMemoryPlace(uid, placeId);
     if (record?.spz_url) return record;
-    if (record?.world_status === "not_started" && record.pano_status === "ready") {
-      return record;
+    if (
+      record?.world_status === "not_started" &&
+      record.pano_status === "ready" &&
+      !record.world_operation_id
+    ) {
+      throw new Error(
+        "Marble generation never started (check WORLDLABS_API_KEY and logs above)"
+      );
     }
+    const elapsed = Math.round((Date.now() - start) / 1000);
+    console.log(
+      `  … polling (${elapsed}s) world_status=${record?.world_status ?? "missing"} op=${record?.world_operation_id ?? "none"}`
+    );
     await new Promise((r) => setTimeout(r, 15_000));
   }
   throw new Error(`Timed out waiting for world ${placeId}`);
@@ -64,31 +74,67 @@ async function buildOne(key: PrebuiltWorldKey) {
   if (!world) throw new Error(`Unknown key: ${key}`);
 
   console.log(`\n=== ${world.place_name} (${key}) ===`);
+  console.log(`place_id: ${world.place_id}`);
 
-  const details = await fetchPlaceDetails(world.place_id, world.place_name);
+  if (!process.env.WORLDLABS_API_KEY) {
+    throw new Error("WORLDLABS_API_KEY is not set in .env.local");
+  }
+
+  console.log("Fetching first place photo from Google Places…");
+  let details = await fetchPlaceDetails(world.place_id, world.place_name, 1);
+  if (!details?.photos[0]?.url) {
+    const query =
+      key === "pret"
+        ? "Pret A Manger Kings Cross Station London"
+        : key === "station"
+          ? "London King's Cross Station"
+          : "GAIL's Bakery Kings Cross London";
+    console.log(`Place lookup failed for cached id — searching: ${query}`);
+    const matches = await searchPlaceByText(query, 1);
+    if (!matches[0]) {
+      throw new Error(`No Google place found for ${world.place_name}`);
+    }
+    console.log(`Resolved ${matches[0].place_name} (${matches[0].place_id})`);
+    details = await fetchPlaceDetails(matches[0].place_id, matches[0].place_name, 1);
+  }
   if (!details?.photos[0]?.url) {
     throw new Error(`No photo for ${world.place_name}`);
   }
+  console.log(`Resolved place: ${details.place_name}`);
+  console.log(`Address: ${details.address ?? "unknown"}`);
 
-  const redis = new Redis(process.env.REDIS_URL ?? "redis://localhost:6379");
   const record = toMemoryPlaceRecord(world);
+  record.place_id = details.place_id;
+  record.place_name = details.place_name;
   record.source_photo_url = details.photos[0].url;
   record.address = details.address;
-  await redis.set(
-    `memory_place:${uid}:${world.place_id}`,
-    JSON.stringify(record)
-  );
-  await redis.quit();
+  await setMemoryPlace(uid, record);
+  const seeded = await getMemoryPlace(uid, details.place_id);
+  if (!seeded) {
+    throw new Error(
+      "Could not read memory place from Redis — is docker compose up / REDIS_URL correct?"
+    );
+  }
+  console.log("Seeded Redis record");
 
+  console.log("Starting Marble world generation…");
   await runMemoryGeneration(
     uid,
-    world.place_id,
+    details.place_id,
     details.photos[0].url,
-    world.place_name,
-    `A realistic navigable interior of ${world.place_name} at King's Cross, London, suitable for language learning.`
+    details.place_name,
+    `A realistic navigable interior of ${details.place_name} at King's Cross, London, suitable for language learning.`
   );
 
-  const ready = await waitForReady(world.place_id);
+  const afterStart = await getMemoryPlace(uid, details.place_id);
+  if (!afterStart?.world_operation_id) {
+    console.error("Redis record after generation attempt:", afterStart);
+    throw new Error("No operation_id saved — Marble API call did not start");
+  }
+  console.log(`Marble operation_id: ${afterStart.world_operation_id}`);
+
+  console.log("Waiting for splat (up to ~12 min)…");
+  const ready = await waitForReady(details.place_id);
   const overrides = loadOverrides();
   const entry = overrides.worlds.find((w) => w.key === key);
   if (entry) {
@@ -104,6 +150,14 @@ async function buildOne(key: PrebuiltWorldKey) {
 }
 
 async function main() {
+  try {
+    await redis.connect();
+  } catch {
+    throw new Error(
+      "Could not connect to Redis — run: docker compose up -d"
+    );
+  }
+
   const keys =
     target === "all"
       ? PREBUILT_WORLDS.map((w) => w.key)
@@ -113,6 +167,7 @@ async function main() {
     await buildOne(key);
   }
   console.log("\nUpdated data/prebuilt-worlds.json");
+  await redis.quit();
 }
 
 main().catch((err) => {
