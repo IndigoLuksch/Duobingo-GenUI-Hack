@@ -1,0 +1,116 @@
+// === Course content (loaded from fr.json) ===
+
+export interface VocabItem {
+  word_id: string;        // e.g. "louche"
+  fr: string;             // e.g. "la louche"
+  en: string;             // e.g. "ladle"
+  gender: "m" | "f" | null;
+  distractors: string[];  // 3 wrong options for multiple choice
+}
+
+export interface SentenceItem {
+  fr: string;             // e.g. "Le four est chaud"
+  en: string;             // e.g. "The oven is hot"
+  tiles: string[];        // shuffled tiles including distractors
+  answer: string[];       // correct order
+}
+
+export interface Unit {
+  unit_id: string;
+  title: string;
+  icon: string;           // emoji
+  world_id: string;       // matches filename: kitchen_fr → /worlds/kitchen_fr.spz
+  marble_prompt: string;
+  vocab: VocabItem[];
+  sentences: SentenceItem[];
+}
+
+export interface Course {
+  course: string;         // "fr"
+  title: string;          // "French"
+  units: Unit[];
+}
+
+// === Learner state (stored in Redis) ===
+
+export interface LearnerProfile {
+  uid: string;
+  xp: number;
+  streak: number;
+  hearts: number;         // max 3, restored on world entry
+  last_active: string;    // ISO date
+  unit_progress: Record<string, "locked" | "current" | "complete">;
+}
+
+export interface WordStrength {
+  word_id: string;
+  strength: number;       // 0.0 to 1.0
+  due_ts: number;         // unix timestamp
+  seen: number;
+  correct: number;
+  wrong: number;
+}
+
+// === Exercise payloads (emitted by Lesson Director agent) ===
+
+export interface MultipleChoiceExercise {
+  type: "exercise.multiple_choice";
+  exercise_id: string;
+  word_id: string;
+  prompt: string;
+  options: string[];      // 4 options
+  answer_idx: number;
+  audio_url?: string;
+}
+
+export interface WordBankExercise {
+  type: "exercise.word_bank";
+  exercise_id: string;
+  prompt_en: string;
+  tiles: string[];        // shuffled including distractors
+  answer: string[];       // correct tile order
+}
+
+export interface ListeningExercise {
+  type: "exercise.listening";
+  exercise_id: string;
+  word_id: string;
+  audio_url: string;
+  options: string[];
+  answer_idx: number;
+}
+
+export interface SpeakItExercise {
+  type: "exercise.speak_it";
+  exercise_id: string;
+  target_text: string;
+}
+
+export interface LessonComplete {
+  type: "lesson.complete";
+  xp_gained: number;
+  missed_word_ids: string[];
+  world_id: string;
+  unit_title: string;
+}
+
+export type ExercisePayload =
+  | MultipleChoiceExercise
+  | WordBankExercise
+  | ListeningExercise
+  | SpeakItExercise
+  | LessonComplete;
+
+// === World card (triggered by Gemini Live function call) ===
+
+export interface WorldCardData {
+  id: string;
+  word: string;
+  translation: string;
+  gender: "m" | "f" | "n" | null;
+  example_sentence: string | null;
+  authentic_sentence: string | null;  // real sentence from LinkUp AI web search
+  authentic_source: string | null;    // source attribution (e.g. "Le Monde")
+  position_hint: "center" | "top-left" | "top-right" | "bottom-left" | "bottom-right";
+  timestamp: number;
+}

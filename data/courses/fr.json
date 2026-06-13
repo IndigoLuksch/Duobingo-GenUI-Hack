@@ -1,0 +1,216 @@
+{
+  "course": "fr",
+  "title": "French",
+  "units": [
+    {
+      "unit_id": "kitchen_1",
+      "title": "In the Kitchen",
+      "icon": "🍳",
+      "world_id": "kitchen_fr",
+      "marble_prompt": "A photorealistic French country kitchen interior, warmly lit. A large wooden dining table with four chairs in the center. A prominent stove with a big stockpot on the burner. A large open oven with a baking tray visible inside. A deep farmhouse sink under a window. A tall refrigerator against the wall. Open wooden shelving displaying stacked plates and bowls. A hanging pot rack above the counter with a large frying pan and a colander. A cutting board on the counter next to a bread basket. Tiled floor, wooden cabinets, copper details.",
+      "vocab": [
+        {
+          "word_id": "table",
+          "fr": "la table",
+          "en": "table",
+          "gender": "f",
+          "distractors": ["le bureau", "le comptoir", "l'étagère"]
+        },
+        {
+          "word_id": "chaise",
+          "fr": "la chaise",
+          "en": "chair",
+          "gender": "f",
+          "distractors": ["le tabouret", "le canapé", "le fauteuil"]
+        },
+        {
+          "word_id": "four",
+          "fr": "le four",
+          "en": "oven",
+          "gender": "m",
+          "distractors": ["le réfrigérateur", "la cuisinière", "le micro-ondes"]
+        },
+        {
+          "word_id": "refrigerateur",
+          "fr": "le réfrigérateur",
+          "en": "refrigerator",
+          "gender": "m",
+          "distractors": ["le congélateur", "le four", "l'évier"]
+        },
+        {
+          "word_id": "evier",
+          "fr": "l'évier",
+          "en": "sink",
+          "gender": "m",
+          "distractors": ["la baignoire", "le lavabo", "la douche"]
+        },
+        {
+          "word_id": "cuisiniere",
+          "fr": "la cuisinière",
+          "en": "stove",
+          "gender": "f",
+          "distractors": ["le four", "le micro-ondes", "la plaque"]
+        },
+        {
+          "word_id": "poele",
+          "fr": "la poêle",
+          "en": "frying pan",
+          "gender": "f",
+          "distractors": ["la casserole", "la louche", "la spatule"]
+        },
+        {
+          "word_id": "marmite",
+          "fr": "la marmite",
+          "en": "stockpot",
+          "gender": "f",
+          "distractors": ["la casserole", "la cocotte", "le bol"]
+        },
+        {
+          "word_id": "etagere",
+          "fr": "l'étagère",
+          "en": "shelf",
+          "gender": "f",
+          "distractors": ["le placard", "le tiroir", "le comptoir"]
+        },
+        {
+          "word_id": "fenetre",
+          "fr": "la fenêtre",
+          "en": "window",
+          "gender": "f",
+          "distractors": ["la porte", "le mur", "le rideau"]
+        }
+      ],
+      "sentences": [
+        {
+          "fr": "Le four est chaud",
+          "en": "The oven is hot",
+          "tiles": ["chaud", "Le", "froid", "est", "four", "La"],
+          "answer": ["Le", "four", "est", "chaud"]
+        },
+        {
+          "fr": "La marmite est sur la cuisinière",
+          "en": "The stockpot is on the stove",
+          "tiles": ["marmite", "sur", "la", "est", "La", "le", "cuisinière", "four"],
+          "answer": ["La", "marmite", "est", "sur", "la", "cuisinière"]
+        },
+        {
+          "fr": "Les chaises sont autour de la table",
+          "en": "The chairs are around the table",
+          "tiles": ["chaises", "autour", "de", "la", "table", "Les", "sont", "Le", "mur"],
+          "answer": ["Les", "chaises", "sont", "autour", "de", "la", "table"]
+        },
+        {
+          "fr": "Il y a une poêle sur l'étagère",
+          "en": "There is a frying pan on the shelf",
+          "tiles": ["Il", "y", "a", "une", "poêle", "sur", "l'étagère", "la", "marmite"],
+          "answer": ["Il", "y", "a", "une", "poêle", "sur", "l'étagère"]
+        }
+      ]
+    },
+    {
+      "unit_id": "cafe_1",
+      "title": "At the Café",
+      "icon": "☕",
+      "world_id": "cafe_fr",
+      "marble_prompt": "A photorealistic Parisian café interior. A long marble counter with a large brass espresso machine as the centerpiece. A tall glass display case filled with croissants and large pastries. Small round bistro tables with wicker chairs. A large chalkboard menu covering most of the back wall. An ornate Art Nouveau bar with shelves of bottles behind it. A coat rack near the entrance. A large arched window looking onto a Paris street with an awning. Warm amber lighting from hanging pendant lamps. Tiled mosaic floor.",
+      "vocab": [
+        {
+          "word_id": "comptoir",
+          "fr": "le comptoir",
+          "en": "counter",
+          "gender": "m",
+          "distractors": ["la table", "le bar", "la vitrine"]
+        },
+        {
+          "word_id": "croissant",
+          "fr": "le croissant",
+          "en": "croissant",
+          "gender": "m",
+          "distractors": ["le pain", "la baguette", "le gâteau"]
+        },
+        {
+          "word_id": "vitrine",
+          "fr": "la vitrine",
+          "en": "display case",
+          "gender": "f",
+          "distractors": ["le comptoir", "la fenêtre", "l'étagère"]
+        },
+        {
+          "word_id": "chaise",
+          "fr": "la chaise",
+          "en": "chair",
+          "gender": "f",
+          "distractors": ["le tabouret", "le fauteuil", "le banc"]
+        },
+        {
+          "word_id": "table",
+          "fr": "la table",
+          "en": "table",
+          "gender": "f",
+          "distractors": ["le comptoir", "le bar", "le bureau"]
+        },
+        {
+          "word_id": "tableau",
+          "fr": "le tableau",
+          "en": "painting",
+          "gender": "m",
+          "distractors": ["le miroir", "la fenêtre", "l'affiche"]
+        },
+        {
+          "word_id": "fenetre",
+          "fr": "la fenêtre",
+          "en": "window",
+          "gender": "f",
+          "distractors": ["la porte", "le mur", "la vitrine"]
+        },
+        {
+          "word_id": "lampe",
+          "fr": "la lampe",
+          "en": "lamp",
+          "gender": "f",
+          "distractors": ["la lumière", "le lustre", "la bougie"]
+        },
+        {
+          "word_id": "porte_manteau",
+          "fr": "le porte-manteau",
+          "en": "coat rack",
+          "gender": "m",
+          "distractors": ["la porte", "le manteau", "le vestiaire"]
+        },
+        {
+          "word_id": "machine_a_cafe",
+          "fr": "la machine à café",
+          "en": "coffee machine",
+          "gender": "f",
+          "distractors": ["la tasse", "le café", "la cafetière"]
+        }
+      ],
+      "sentences": [
+        {
+          "fr": "Le comptoir est en marbre",
+          "en": "The counter is marble",
+          "tiles": ["Le", "comptoir", "est", "en", "marbre", "La", "bois"],
+          "answer": ["Le", "comptoir", "est", "en", "marbre"]
+        },
+        {
+          "fr": "Les croissants sont dans la vitrine",
+          "en": "The croissants are in the display case",
+          "tiles": ["Les", "croissants", "sont", "dans", "la", "vitrine", "Le", "comptoir"],
+          "answer": ["Les", "croissants", "sont", "dans", "la", "vitrine"]
+        },
+        {
+          "fr": "Le tableau est sur le mur",
+          "en": "The painting is on the wall",
+          "tiles": ["Le", "tableau", "est", "sur", "le", "mur", "La", "fenêtre"],
+          "answer": ["Le", "tableau", "est", "sur", "le", "mur"]
+        },
+        {
+          "fr": "La lampe est au-dessus de la table",
+          "en": "The lamp is above the table",
+          "tiles": ["La", "lampe", "est", "au-dessus", "de", "la", "table", "Le", "comptoir"],
+          "answer": ["La", "lampe", "est", "au-dessus", "de", "la", "table"]
+        }
+      ]
+    }
+  ]
+}
