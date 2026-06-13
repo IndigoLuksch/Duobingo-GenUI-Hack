@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "agent": "cd services/agents && python -m uvicorn server:app --port 8000 --reload",
     "build": "next build",
     "start": "next start",
     "seed": "npx tsx src/lib/seed.ts",
+    "upload-memory": "npx tsx scripts/upload-memory-to-render.ts",
     "test:e2e": "npx tsx scripts/e2e-integration-test.ts"
   },
   "dependencies": {
