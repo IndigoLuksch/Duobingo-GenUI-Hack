@@ -1,4 +1,4 @@
-# Loci Lingua
+# Duobingo
 
 A language learning app that drops you into AI-generated 3D worlds and lets you practice with a real-time voice tutor — built on Google Gemini, CopilotKit, and Gaussian splatting.
 
