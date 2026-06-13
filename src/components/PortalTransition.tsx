@@ -8,6 +8,7 @@ interface PortalTransitionProps {
   active?: boolean;
   worldId: string;
   missedIds: string[];
+  memoryPlaceId?: string;
   onComplete: () => void;
   children?: React.ReactNode;
 }
@@ -63,6 +64,7 @@ export default function PortalTransition({
   active = true,
   worldId,
   missedIds,
+  memoryPlaceId,
   onComplete,
   children,
 }: PortalTransitionProps) {
@@ -75,9 +77,13 @@ export default function PortalTransition({
     playRisingTone();
 
     const navTimer = setTimeout(() => {
-      const missed = missedIds.filter(Boolean).join(",");
-      const query = missed ? `?missed=${missed}` : "";
-      router.push(`/world/${worldId}${query}`);
+      if (memoryPlaceId) {
+        router.push(`/memory/${encodeURIComponent(memoryPlaceId)}`);
+      } else {
+        const missed = missedIds.filter(Boolean).join(",");
+        const query = missed ? `?missed=${missed}` : "";
+        router.push(`/world/${worldId}${query}`);
+      }
       onComplete();
     }, 1200);
 

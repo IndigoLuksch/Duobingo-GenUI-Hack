@@ -13,6 +13,7 @@ interface Props {
 export default function LessonComplete({ exercise }: Props) {
   const [displayedXp, setDisplayedXp] = useState(0);
   const [portalOpen, setPortalOpen] = useState(false);
+  const [memoryPlaceId, setMemoryPlaceId] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     let start: number | null = null;
@@ -30,6 +31,18 @@ export default function LessonComplete({ exercise }: Props) {
     requestAnimationFrame(animate);
   }, [exercise.xp_gained]);
 
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("pending_memory_place");
+      if (saved) {
+        const parsed = JSON.parse(saved) as { placeId: string };
+        setMemoryPlaceId(parsed.placeId);
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
   const unitLabel = exercise.unit_title.replace(/^In the /, "").replace(/^At the /, "");
 
   return (
@@ -37,7 +50,11 @@ export default function LessonComplete({ exercise }: Props) {
       active={portalOpen}
       worldId={exercise.world_id}
       missedIds={exercise.missed_word_ids}
-      onComplete={() => setPortalOpen(false)}
+      memoryPlaceId={memoryPlaceId}
+      onComplete={() => {
+        localStorage.removeItem("pending_memory_place");
+        setPortalOpen(false);
+      }}
     >
       <div className={styles.complete}>
         <motion.div

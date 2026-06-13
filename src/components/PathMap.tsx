@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo } from "react";
-import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { Unit } from "@/lib/types";
 import styles from "./PathMap.module.css";
@@ -11,7 +10,7 @@ interface PathMapProps {
   progress: Record<string, "locked" | "current" | "complete">;
   xp: number;
   streak: number;
-  onStoreMemory?: () => void;
+  onUnitClick: (unitId: string) => void;
 }
 
 interface NodePosition {
@@ -63,8 +62,7 @@ function XpDisplay({ xp }: { xp: number }) {
   );
 }
 
-export default function PathMap({ units, progress, xp, streak, onStoreMemory }: PathMapProps) {
-  const router = useRouter();
+export default function PathMap({ units, progress, xp, streak, onUnitClick }: PathMapProps) {
   const containerHeight = Math.max(520, units.length * 240);
   const containerWidth = 432;
   const positions = useMemo(
@@ -75,7 +73,7 @@ export default function PathMap({ units, progress, xp, streak, onStoreMemory }: 
 
   const handleNodeClick = (unitId: string, status: string) => {
     if (status === "current" || status === "complete") {
-      router.push(`/lesson/${unitId}`);
+      onUnitClick(unitId);
     }
   };
 
@@ -84,15 +82,6 @@ export default function PathMap({ units, progress, xp, streak, onStoreMemory }: 
       <header className={styles.header}>
         <span className={styles.streak}>🔥 {streak}</span>
         <div className={styles.headerRight}>
-          {onStoreMemory && (
-            <button
-              type="button"
-              className={styles.memoryButton}
-              onClick={onStoreMemory}
-            >
-              📍 Store a memory
-            </button>
-          )}
           <XpDisplay xp={xp} />
         </div>
       </header>
