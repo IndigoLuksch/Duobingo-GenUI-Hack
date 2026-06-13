@@ -11,6 +11,7 @@ type Step = "search" | "loading" | "photos" | "building";
 interface MemoryPlaceSearchProps {
   unitId: string;
   unitTitle: string;
+  navigatingToLesson?: boolean;
   onSkip: () => void;
   onComplete: (placeId: string) => void;
 }
@@ -29,6 +30,7 @@ interface PlaceSuggestion {
 export default function MemoryPlaceSearch({
   unitId,
   unitTitle,
+  navigatingToLesson = false,
   onSkip,
   onComplete,
 }: MemoryPlaceSearchProps) {
@@ -150,7 +152,12 @@ export default function MemoryPlaceSearch({
 
   return (
     <div className={styles.overlay}>
-      <button type="button" className={styles.closeButton} onClick={onSkip}>
+      <button
+        type="button"
+        className={styles.closeButton}
+        onClick={onSkip}
+        disabled={navigatingToLesson}
+      >
         Skip →
       </button>
 
@@ -168,7 +175,7 @@ export default function MemoryPlaceSearch({
           practice French in a place you actually know.
         </p>
 
-        {step === "search" && (
+        {step === "search" && !navigatingToLesson && (
           <div className={styles.searchBox}>
             <input
               className={styles.input}
@@ -227,6 +234,10 @@ export default function MemoryPlaceSearch({
           <p className={styles.loading}>
             Starting your world build… taking you to the lesson!
           </p>
+        )}
+
+        {navigatingToLesson && (
+          <p className={styles.loading}>Starting your lesson…</p>
         )}
 
         {error && <p className={styles.error}>{error}</p>}

@@ -25,6 +25,7 @@ export async function POST(request: NextRequest) {
       spz_url: null,
       world_status: "not_started",
       world_operation_id: null,
+      world_id: null,
       created_at: new Date().toISOString(),
     };
 

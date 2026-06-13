@@ -1,7 +1,6 @@
 "use client";
 
-import { use } from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { use, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   CopilotKit,
   useCopilotChatInternal,
@@ -17,7 +16,6 @@ import SpeakIt from "@/components/exercises/SpeakIt";
 import LessonComplete from "@/components/exercises/LessonComplete";
 import course from "../../../../data/courses/fr.json";
 import {
-  lessonStartSent,
   pendingExerciseRespondRef,
   pendingJudgmentRef,
 } from "@/lib/lessonAgentBridge";
@@ -37,6 +35,41 @@ function getWordId(exercise: ExercisePayload | null): string | null {
   return null;
 }
 
+function hasLessonStartMessage(
+  messages: { role?: string; content?: unknown }[] | undefined,
+  unitId: string
+): boolean {
+  return (messages ?? []).some(
+    (message) =>
+      message.role === "user" &&
+      typeof message.content === "string" &&
+      message.content.includes(unitId)
+  );
+}
+
+function parseExerciseFromText(text: string): ExercisePayload | null {
+  const start = text.indexOf('{"type"');
+  if (start === -1) return null;
+
+  const candidate = text.slice(start);
+  const end = candidate.lastIndexOf("}");
+  if (end === -1) return null;
+
+  try {
+    const parsed = JSON.parse(candidate.slice(0, end + 1)) as ExercisePayload;
+    if (
+      parsed?.type?.startsWith("exercise.") ||
+      parsed?.type === "lesson.complete"
+    ) {
+      return parsed;
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
+
 function LessonExperience({
   unitId,
   agentError,
@@ -51,8 +84,10 @@ function LessonExperience({
 
   const [wordStrengths, setWordStrengths] = useState<WordStrength[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [prepTimedOut, setPrepTimedOut] = useState(false);
   const lastAssistantMessageRef = useRef<string | null>(null);
-  const prevUnitIdRef = useRef<string | null>(null);
+  const lessonStartSentRef = useRef(false);
+  const prevUnitIdRef = useRef(unitId);
 
   const currentExercise = useLessonStore((s) => s.currentExercise);
   const feedbackState = useLessonStore((s) => s.feedbackState);
@@ -63,7 +98,22 @@ function LessonExperience({
   const loseHeart = useLessonStore((s) => s.loseHeart);
   const addMissed = useLessonStore((s) => s.addMissed);
 
-  const { appendMessage, messages } = useCopilotChatInternal();
+  const { appendMessage, messages, isAvailable, isLoading } =
+    useCopilotChatInternal();
+
+  const strengthsReady = wordStrengths.length > 0;
+
+  const sendLessonStart = useCallback(() => {
+    if (!unit) return;
+    lessonStartSentRef.current = true;
+    setPrepTimedOut(false);
+    appendMessage(
+      new TextMessage({
+        role: Role.User,
+        content: `Start the lesson for unit "${unit.title}" (${unit.unit_id}). Use the vocabulary, sentences, and word strengths provided in context.`,
+      })
+    );
+  }, [unit, appendMessage]);
 
   useCopilotReadable({
     description:
@@ -83,11 +133,11 @@ function LessonExperience({
   });
 
   useEffect(() => {
-    if (prevUnitIdRef.current && prevUnitIdRef.current !== unitId) {
-      lessonStartSent.delete(prevUnitIdRef.current);
+    if (prevUnitIdRef.current !== unitId) {
+      lessonStartSentRef.current = false;
+      prevUnitIdRef.current = unitId;
     }
-    prevUnitIdRef.current = unitId;
-
+    setPrepTimedOut(false);
     useLessonStore.getState().reset();
     pendingExerciseRespondRef.current = null;
     pendingJudgmentRef.current = null;
@@ -112,18 +162,63 @@ function LessonExperience({
   }, [unit]);
 
   useEffect(() => {
-    if (!unit || loadError) return;
+    if (!unit || loadError || !isAvailable || !strengthsReady || isLoading) {
+      return;
+    }
+    if (lessonStartSentRef.current) return;
+    if (hasLessonStartMessage(messages, unitId)) {
+      lessonStartSentRef.current = true;
+      return;
+    }
 
-    if (lessonStartSent.has(unitId)) return;
+    const timer = setTimeout(() => {
+      if (lessonStartSentRef.current) return;
+      sendLessonStart();
+    }, 300);
 
-    lessonStartSent.add(unitId);
-    appendMessage(
-      new TextMessage({
-        role: Role.User,
-        content: `Start the lesson for unit "${unit.title}" (${unit.unit_id}). Use the vocabulary, sentences, and word strengths provided in context.`,
-      })
+    return () => clearTimeout(timer);
+  }, [
+    unit,
+    unitId,
+    loadError,
+    isAvailable,
+    strengthsReady,
+    isLoading,
+    messages,
+    sendLessonStart,
+  ]);
+
+  useEffect(() => {
+    if (currentExercise) return;
+
+    const assistants = (messages ?? []).filter(
+      (message) =>
+        message.role === "assistant" && typeof message.content === "string"
     );
-  }, [unit, unitId, loadError, appendMessage]);
+
+    for (let i = assistants.length - 1; i >= 0; i -= 1) {
+      const payload = parseExerciseFromText(assistants[i].content as string);
+      if (!payload) continue;
+
+      const { setExercise, advanceIndex, setFeedback } =
+        useLessonStore.getState();
+      setExercise(payload);
+      setFeedback("idle");
+      if (payload.type.startsWith("exercise.")) {
+        advanceIndex();
+      }
+      break;
+    }
+  }, [messages, currentExercise]);
+
+  useEffect(() => {
+    if (currentExercise) {
+      setPrepTimedOut(false);
+      return;
+    }
+    const timer = setTimeout(() => setPrepTimedOut(true), 60_000);
+    return () => clearTimeout(timer);
+  }, [currentExercise, unitId]);
 
   useEffect(() => {
     const assistants = (messages ?? []).filter(
@@ -163,13 +258,26 @@ function LessonExperience({
     const wordId = getWordId(useLessonStore.getState().currentExercise);
     pendingJudgmentRef.current = { wordId };
 
-    pendingExerciseRespondRef.current?.({
-      exercise_id: exerciseId,
-      ...(typeof response === "object" && response !== null
+    const payload =
+      typeof response === "object" && response !== null
         ? (response as Record<string, unknown>)
-        : { response }),
-    });
-    pendingExerciseRespondRef.current = null;
+        : { response };
+
+    if (pendingExerciseRespondRef.current) {
+      pendingExerciseRespondRef.current({
+        exercise_id: exerciseId,
+        ...payload,
+      });
+      pendingExerciseRespondRef.current = null;
+      return;
+    }
+
+    appendMessage(
+      new TextMessage({
+        role: Role.User,
+        content: `My answer for exercise ${exerciseId}: ${JSON.stringify(payload)}`,
+      })
+    );
   };
 
   if (!unit) {
@@ -206,9 +314,36 @@ function LessonExperience({
       <LessonAgentBridge />
 
       {!currentExercise && (
-        <p style={{ textAlign: "center", marginTop: 48, color: "#6b7280" }}>
-          Preparing your lesson…
-        </p>
+        <div style={{ textAlign: "center", marginTop: 48, color: "#6b7280" }}>
+          <p>Preparing your lesson…</p>
+          {prepTimedOut && (
+            <div style={{ marginTop: 16, maxWidth: 420, marginInline: "auto", lineHeight: 1.5 }}>
+              <p>
+                This is taking longer than expected. Make sure the lesson agent is
+                running on port 8000.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  lessonStartSentRef.current = false;
+                  sendLessonStart();
+                }}
+                style={{
+                  marginTop: 12,
+                  padding: "10px 18px",
+                  borderRadius: 8,
+                  border: "none",
+                  background: "#4f46e5",
+                  color: "#fff",
+                  cursor: "pointer",
+                  fontWeight: 600,
+                }}
+              >
+                Try again
+              </button>
+            </div>
+          )}
+        </div>
       )}
 
       {currentExercise?.type === "exercise.multiple_choice" && (
@@ -250,11 +385,16 @@ export default function LessonPage({
 }) {
   const { unitId } = use(params);
   const [agentError, setAgentError] = useState(false);
+  const lessonThreadId = useMemo(
+    () => `lesson-${unitId}-${crypto.randomUUID()}`,
+    [unitId]
+  );
 
   return (
     <CopilotKit
       runtimeUrl="/api/copilotkit"
       agent="lesson_director"
+      threadId={lessonThreadId}
       onError={() => setAgentError(true)}
     >
       <LessonExperience unitId={unitId} agentError={agentError} />

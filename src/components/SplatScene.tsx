@@ -1,24 +1,70 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls.js";
 import { SparkRenderer, SplatMesh } from "@sparkjsdev/spark";
+import styles from "./SplatScene.module.css";
 
 interface SplatSceneProps {
   splatUrl: string;
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
   spawnPosition?: [number, number, number];
+  /** Apply OpenCV→OpenGL axis fix for Marble CDN splats. Auto-detected from URL when omitted. */
+  opencvToOpengl?: boolean;
 }
 
 const MOVE_SPEED = 4;
 
+function isMarbleSplatUrl(url: string): boolean {
+  return /marble\.worldlabs\.ai|worldlabs\.ai\//.test(url);
+}
+
+function applyMarbleCoordinateFix(splatMesh: THREE.Object3D): void {
+  // Marble exports use OpenCV (+y down, +z forward). Three.js uses OpenGL (+y up).
+  splatMesh.scale.set(1, -1, -1);
+}
+
+function positionCameraInScene(
+  camera: THREE.PerspectiveCamera,
+  splatMesh: THREE.Object3D,
+  spawnPosition?: [number, number, number],
+  marbleSplat = false
+) {
+  if (spawnPosition) {
+    camera.position.set(...spawnPosition);
+    camera.lookAt(0, 1, 0);
+    return;
+  }
+
+  const box = new THREE.Box3().setFromObject(splatMesh);
+  if (box.isEmpty()) {
+    camera.position.set(0, 1.6, 0);
+    return;
+  }
+
+  const center = box.getCenter(new THREE.Vector3());
+  const size = box.getSize(new THREE.Vector3());
+  const floorY = box.min.y;
+
+  // Marble bbox often includes distant sky/ceiling splats, so use a low capped offset.
+  const eyeHeight = marbleSplat
+    ? THREE.MathUtils.clamp(size.y * 0.03, 0.08, 0.85)
+    : THREE.MathUtils.clamp(size.y * 0.08, 0.25, 1.65);
+
+  const eyeY = floorY + eyeHeight;
+  camera.position.set(center.x, eyeY, center.z);
+  camera.lookAt(center.x, eyeY, center.z - 1);
+}
+
 export default function SplatScene({
   splatUrl,
   canvasRef,
-  spawnPosition = [0, 1.6, 3],
+  spawnPosition,
+  opencvToOpengl = isMarbleSplatUrl(splatUrl),
 }: SplatSceneProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [showControlsHint, setShowControlsHint] = useState(true);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -28,6 +74,7 @@ export default function SplatScene({
     canvas.style.width = "100%";
     canvas.style.height = "100%";
     canvas.style.display = "block";
+    canvas.style.cursor = "crosshair";
     container.appendChild(canvas);
 
     if (canvasRef) {
@@ -42,8 +89,6 @@ export default function SplatScene({
       0.1,
       1000
     );
-    camera.position.set(...spawnPosition);
-    camera.lookAt(0, 1, 0);
 
     const renderer = new THREE.WebGLRenderer({
       canvas,
@@ -60,7 +105,7 @@ export default function SplatScene({
     const controls = new PointerLockControls(camera, canvas);
     scene.add(controls.object);
 
-    const keys = { w: false, a: false, s: false, d: false };
+    const keys = { w: false, a: false, s: false, d: false, up: false, down: false };
     const clock = new THREE.Clock();
     let frameId = 0;
     let disposed = false;
@@ -81,11 +126,30 @@ export default function SplatScene({
     directional.position.set(4, 8, 2);
     scene.add(ambient, directional);
 
-    splatMesh.initialized.catch(() => {
-      if (!disposed) {
-        fallbackCube.visible = true;
-      }
-    });
+    void splatMesh.initialized
+      .then(() => {
+        if (disposed) return;
+        if (opencvToOpengl) {
+          applyMarbleCoordinateFix(splatMesh);
+        }
+        positionCameraInScene(
+          camera,
+          splatMesh,
+          spawnPosition,
+          opencvToOpengl
+        );
+      })
+      .catch(() => {
+        if (!disposed) {
+          fallbackCube.visible = true;
+          positionCameraInScene(camera, fallbackCube, spawnPosition, false);
+        }
+      });
+
+    const onLock = () => setShowControlsHint(false);
+    const onUnlock = () => setShowControlsHint(true);
+    controls.addEventListener("lock", onLock);
+    controls.addEventListener("unlock", onUnlock);
 
     const onKeyDown = (event: KeyboardEvent) => {
       switch (event.code) {
@@ -100,6 +164,14 @@ export default function SplatScene({
           break;
         case "KeyD":
           keys.d = true;
+          break;
+        case "Space":
+          keys.up = true;
+          event.preventDefault();
+          break;
+        case "ShiftLeft":
+        case "ShiftRight":
+          keys.down = true;
           break;
       }
     };
@@ -118,12 +190,19 @@ export default function SplatScene({
         case "KeyD":
           keys.d = false;
           break;
+        case "Space":
+          keys.up = false;
+          break;
+        case "ShiftLeft":
+        case "ShiftRight":
+          keys.down = false;
+          break;
       }
     };
 
     const onCanvasClick = () => {
       if (!controls.isLocked) {
-        controls.lock();
+        void controls.lock();
       }
     };
 
@@ -143,6 +222,8 @@ export default function SplatScene({
       if (keys.s) controls.moveForward(-distance);
       if (keys.a) controls.moveRight(-distance);
       if (keys.d) controls.moveRight(distance);
+      if (keys.up) camera.position.y += distance;
+      if (keys.down) camera.position.y -= distance;
     };
 
     const animate = () => {
@@ -157,7 +238,7 @@ export default function SplatScene({
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("keyup", onKeyUp);
     window.addEventListener("resize", onResize);
-    canvas.addEventListener("click", onCanvasClick);
+    container.addEventListener("click", onCanvasClick);
 
     animate();
 
@@ -167,7 +248,9 @@ export default function SplatScene({
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("keyup", onKeyUp);
       window.removeEventListener("resize", onResize);
-      canvas.removeEventListener("click", onCanvasClick);
+      container.removeEventListener("click", onCanvasClick);
+      controls.removeEventListener("lock", onLock);
+      controls.removeEventListener("unlock", onUnlock);
       controls.dispose();
 
       scene.remove(splatMesh);
@@ -188,18 +271,34 @@ export default function SplatScene({
 
       container.removeChild(canvas);
     };
-  }, [canvasRef, splatUrl, spawnPosition]);
+  }, [canvasRef, splatUrl, spawnPosition, opencvToOpengl]);
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        position: "absolute",
-        inset: 0,
-        width: "100vw",
-        height: "100vh",
-        zIndex: 0,
-      }}
-    />
+    <>
+      <div
+        ref={containerRef}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100vw",
+          height: "100vh",
+          zIndex: 0,
+        }}
+      />
+      {showControlsHint && (
+        <div className={styles.hint}>
+          <div className={styles.hintCard}>
+            <p className={styles.hintTitle}>Click to enter the scene</p>
+            <p className={styles.hintText}>
+              Your view starts inside the generated world. Click anywhere on the
+              scene to capture the mouse and look around.
+            </p>
+            <p className={styles.hintKeys}>
+              WASD move · Space up · Shift down · Esc release mouse
+            </p>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

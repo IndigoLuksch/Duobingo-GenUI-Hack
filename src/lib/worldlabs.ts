@@ -68,9 +68,6 @@ export async function prepareAndUploadImage(
   const uploadHeaders: Record<string, string> = {
     ...(prep.upload_info?.required_headers ?? {}),
   };
-  if (!uploadHeaders["Content-Type"]) {
-    uploadHeaders["Content-Type"] = contentType;
-  }
 
   const uploadRes = await fetch(uploadUrl, {
     method: "PUT",
@@ -141,6 +138,19 @@ export async function getOperation(
   return (await res.json()) as MarbleOperation;
 }
 
+export async function getWorld(
+  worldId: string
+): Promise<MarbleWorld | null> {
+  const key = apiKey();
+  if (!key) return null;
+
+  const res = await fetch(`${BASE_URL}/worlds/${worldId}`, {
+    headers: headers(),
+  });
+  if (!res.ok) return null;
+  return (await res.json()) as MarbleWorld;
+}
+
 export function extractWorldAssets(world: MarbleWorld | null | undefined): {
   pano_url: string | null;
   spz_url: string | null;
@@ -151,8 +161,10 @@ export function extractWorldAssets(world: MarbleWorld | null | undefined): {
   const pano_url = world.assets.imagery?.pano_url ?? null;
   const spzUrls = world.assets.splats?.spz_urls ?? {};
   const spz_url =
+    spzUrls.full_res ??
     spzUrls.full ??
     spzUrls["500k"] ??
+    spzUrls["150k"] ??
     spzUrls["100k"] ??
     Object.values(spzUrls)[0] ??
     null;

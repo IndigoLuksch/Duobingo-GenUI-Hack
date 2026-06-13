@@ -387,6 +387,11 @@ export default function GeminiLiveController({
 
     init().catch((error) => {
       console.error("Gemini Live init failed:", error);
+      if (!disposed) {
+        setConnectionError(
+          error instanceof Error ? error.message : "Gemini Live init failed"
+        );
+      }
     });
 
     return () => {

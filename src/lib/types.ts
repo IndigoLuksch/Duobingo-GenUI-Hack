@@ -136,5 +136,6 @@ export interface MemoryPlaceRecord {
   spz_url: string | null;
   world_status: "not_started" | "generating" | "ready";
   world_operation_id: string | null;
+  world_id: string | null;
   created_at: string;
 }

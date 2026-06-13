@@ -14,6 +14,7 @@ import worldStyles from "../../world/[worldId]/page.module.css";
 import styles from "./page.module.css";
 
 const typedCourse = course as Course;
+const EMPTY_MISSED: string[] = [];
 
 export default function MemoryPlacePage({
   params,
@@ -27,6 +28,7 @@ export default function MemoryPlacePage({
   const [memory, setMemory] = useState<MemoryPlaceRecord | null>(null);
   const [wordStrengths, setWordStrengths] = useState<WordStrength[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [retryingWorld, setRetryingWorld] = useState(false);
 
   const unit = useMemo(() => {
     if (!memory?.unit_id) return null;
@@ -46,13 +48,13 @@ export default function MemoryPlacePage({
   useEffect(() => {
     let cancelled = false;
 
-    async function load() {
+    async function load(): Promise<boolean> {
       const res = await fetch(
         `/api/memory-place/status?uid=demo&place_id=${encodeURIComponent(placeId)}`
       );
       if (!res.ok) {
         if (!cancelled) setLoadError("Memory place not found.");
-        return;
+        return false;
       }
       const data = await res.json();
       if (!cancelled) {
@@ -60,19 +62,30 @@ export default function MemoryPlacePage({
           place_id: placeId,
           place_name: data.place_name,
           unit_id: data.unit_id,
-          source_photo_url: data.pano_url ?? "",
+          source_photo_url: data.source_photo_url ?? data.pano_url ?? "",
           pano_url: data.pano_url,
           pano_status: data.pano_status,
           spz_url: data.spz_url,
           world_status: data.world_status,
-          world_operation_id: null,
+          world_operation_id: data.world_operation_id ?? null,
+          world_id: data.world_id ?? null,
           created_at: new Date().toISOString(),
         });
       }
+      const sceneReady =
+        data.pano_status === "ready" &&
+        Boolean(data.pano_url || data.spz_url);
+      const worldStillGenerating = data.world_status === "generating";
+      return !sceneReady || worldStillGenerating;
     }
 
     void load();
-    const interval = setInterval(load, 5000);
+    const interval = setInterval(() => {
+      void load().then((shouldPoll) => {
+        if (!shouldPoll) clearInterval(interval);
+      });
+    }, 5000);
+
     return () => {
       cancelled = true;
       clearInterval(interval);
@@ -97,6 +110,46 @@ export default function MemoryPlacePage({
     useWorldStore.getState().reset();
     router.push("/");
   };
+
+  const handleBuildWorld = async () => {
+    setRetryingWorld(true);
+    setLoadError(null);
+    try {
+      const res = await fetch("/api/memory-place/retry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ uid: "demo", place_id: placeId }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to start 3D world generation");
+      }
+      setMemory((current) =>
+        current
+          ? {
+              ...current,
+              spz_url: null,
+              world_status: "generating",
+              world_operation_id: null,
+              world_id: null,
+              pano_status: "generating",
+            }
+          : current
+      );
+    } catch (e) {
+      setLoadError(
+        e instanceof Error ? e.message : "Could not start 3D world generation."
+      );
+    } finally {
+      setRetryingWorld(false);
+    }
+  };
+
+  const showPanoFallback =
+    Boolean(memory?.pano_url) &&
+    !memory?.spz_url &&
+    memory?.world_status === "not_started" &&
+    !memory?.world_operation_id;
 
   if (loadError) {
     return (
@@ -143,7 +196,7 @@ export default function MemoryPlacePage({
         <div className={worldStyles.overlayLayer}>
           <GeminiLiveController
             canvasRef={canvasRef}
-            missedWordIds={[]}
+            missedWordIds={EMPTY_MISSED}
             unitVocab={unit.vocab}
             wordStrengths={wordStrengths}
             unitTitle={unit.title}
@@ -156,7 +209,21 @@ export default function MemoryPlacePage({
 
       {memory.world_status === "generating" && (
         <div className={styles.generatingChip}>
-          Full world generating… check back tomorrow
+          Full world generating… check back in a few minutes
+        </div>
+      )}
+
+      {showPanoFallback && (
+        <div className={styles.fallbackBanner}>
+          <p>Showing the place photo. The 3D world was not generated for this location.</p>
+          <button
+            type="button"
+            className={styles.buildWorldButton}
+            onClick={handleBuildWorld}
+            disabled={retryingWorld}
+          >
+            {retryingWorld ? "Starting…" : "Build 3D world"}
+          </button>
         </div>
       )}
 

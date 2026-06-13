@@ -30,6 +30,7 @@ export default function Home() {
   const router = useRouter();
   const [profile, setProfile] = useState<LearnerProfile | null>(null);
   const [selectedUnit, setSelectedUnit] = useState<SelectedUnit | null>(null);
+  const [navigatingToLesson, setNavigatingToLesson] = useState(false);
 
   useEffect(() => {
     fetch("/api/redis/profile?uid=demo")
@@ -37,6 +38,11 @@ export default function Home() {
       .then((data: LearnerProfile) => setProfile(data))
       .catch(() => setProfile(defaultProfile));
   }, []);
+
+  useEffect(() => {
+    if (!selectedUnit) return;
+    router.prefetch(`/lesson/${selectedUnit.unitId}`);
+  }, [selectedUnit, router]);
 
   const handleUnitClick = (unitId: string) => {
     const unit = typedCourse.units.find((u) => u.unit_id === unitId);
@@ -47,18 +53,18 @@ export default function Home() {
 
   const handleMemorySkip = () => {
     if (!selectedUnit) return;
+    setNavigatingToLesson(true);
     router.push(`/lesson/${selectedUnit.unitId}`);
-    setSelectedUnit(null);
   };
 
   const handleMemoryComplete = (placeId: string) => {
     if (!selectedUnit) return;
+    setNavigatingToLesson(true);
     localStorage.setItem(
       "pending_memory_place",
       JSON.stringify({ placeId })
     );
     router.push(`/lesson/${selectedUnit.unitId}`);
-    setSelectedUnit(null);
   };
 
   if (!profile) {
@@ -78,6 +84,7 @@ export default function Home() {
         <MemoryPlaceSearch
           unitId={selectedUnit.unitId}
           unitTitle={selectedUnit.title}
+          navigatingToLesson={navigatingToLesson}
           onSkip={handleMemorySkip}
           onComplete={handleMemoryComplete}
         />

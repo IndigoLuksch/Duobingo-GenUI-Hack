@@ -1,0 +1,42 @@
+.hint {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.45);
+  color: #f8fafc;
+  text-align: center;
+  pointer-events: none;
+}
+
+.hintCard {
+  max-width: 420px;
+  padding: 20px 24px;
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.hintTitle {
+  margin: 0 0 10px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.hintText {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #cbd5e1;
+}
+
+.hintKeys {
+  margin: 14px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #a5b4fc;
+}

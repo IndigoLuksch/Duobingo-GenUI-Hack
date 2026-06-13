@@ -1,7 +1,7 @@
 const WS_URL =
   "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent";
 
-const LIVE_MODEL = "models/gemini-2.5-flash-native-audio-preview-12-2025";
+const LIVE_MODEL = "models/gemini-2.5-flash-native-audio-latest";
 
 export interface GeminiLiveConfig {
   apiKey: string;
@@ -28,6 +28,8 @@ export class GeminiLiveClient {
   private config: GeminiLiveConfig;
   private ws: WebSocket | null = null;
   private ready = false;
+  private lastError: string | null = null;
+  private setupTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor(config: GeminiLiveConfig) {
     this.config = config;
@@ -35,25 +37,53 @@ export class GeminiLiveClient {
 
   connect(): void {
     this.ready = false;
+    this.lastError = null;
+
+    this.setupTimer = setTimeout(() => {
+      if (!this.ready && this.ws) {
+        this.lastError = "Gemini Live setup timed out — check your API key and network.";
+        this.ws.close();
+      }
+    }, 10_000);
+
     this.ws = new WebSocket(`${WS_URL}?key=${this.config.apiKey}`);
     this.ws.onopen = () => this.sendSetup();
     this.ws.onmessage = (event) => {
+      const raw = event.data;
+      if (raw instanceof Blob) {
+        raw.text().then((text) => {
+          try {
+            void this.handleMessage(JSON.parse(text));
+          } catch (e) {
+            console.warn("Gemini Live message parse failed:", e);
+          }
+        });
+        return;
+      }
       try {
-        const msg = JSON.parse(event.data as string);
+        const msg = JSON.parse(raw as string);
         void this.handleMessage(msg);
       } catch (e) {
         console.warn("Gemini Live message parse failed:", e);
       }
     };
     this.ws.onerror = () => {
-      this.config.onError?.("Gemini Live connection error");
+      if (!this.lastError) {
+        this.lastError = "Gemini Live connection error";
+      }
     };
     this.ws.onclose = (event) => {
+      if (this.setupTimer) {
+        clearTimeout(this.setupTimer);
+        this.setupTimer = null;
+      }
       if (!this.ready) {
         const reason = event.reason?.trim();
-        this.config.onError?.(
-          reason || `Gemini Live disconnected (${event.code})`
-        );
+        const msg =
+          this.lastError ||
+          reason ||
+          `Gemini Live disconnected (${event.code})`;
+        this.config.onError?.(msg);
       }
       this.ws = null;
     };
@@ -106,13 +136,19 @@ export class GeminiLiveClient {
 
   async handleMessage(msg: Record<string, unknown>): Promise<void> {
     if (msg.error) {
-      const error = msg.error as { message?: string };
-      this.config.onError?.(error.message || "Gemini Live setup failed");
+      const error = msg.error as { message?: string; code?: number; status?: string };
+      const detail = error.message || error.status || "Gemini Live setup failed";
+      this.lastError = detail;
+      this.config.onError?.(detail);
       return;
     }
 
     if (msg.setupComplete !== undefined) {
       this.ready = true;
+      if (this.setupTimer) {
+        clearTimeout(this.setupTimer);
+        this.setupTimer = null;
+      }
       console.log("Gemini Live session ready");
       this.config.onReady?.();
       return;
@@ -177,6 +213,10 @@ export class GeminiLiveClient {
   }
 
   disconnect(): void {
+    if (this.setupTimer) {
+      clearTimeout(this.setupTimer);
+      this.setupTimer = null;
+    }
     if (this.ws) {
       this.ws.close();
       this.ws = null;
