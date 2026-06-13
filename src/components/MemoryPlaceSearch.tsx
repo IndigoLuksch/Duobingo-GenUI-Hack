@@ -10,7 +10,9 @@ type Step = "search" | "loading" | "photos" | "building";
 
 interface MemoryPlaceSearchProps {
   unitId: string;
-  onClose: () => void;
+  unitTitle: string;
+  onSkip: () => void;
+  onComplete: (placeId: string) => void;
 }
 
 interface PlaceSelection {
@@ -26,8 +28,14 @@ interface PlaceSuggestion {
 
 export default function MemoryPlaceSearch({
   unitId,
-  onClose,
+  unitTitle,
+  onSkip,
+  onComplete,
 }: MemoryPlaceSearchProps) {
+  const placeTheme = unitTitle
+    .replace(/^In the /i, "")
+    .replace(/^At the /i, "")
+    .toLowerCase();
   const [step, setStep] = useState<Step>("search");
   const [error, setError] = useState<string | null>(null);
   const [place, setPlace] = useState<PlaceSelection | null>(null);
@@ -119,18 +127,8 @@ export default function MemoryPlaceSearch({
       if (!res.ok) {
         throw new Error(data.error || "Failed to start generation");
       }
-
-      const interval = setInterval(async () => {
-        const statusRes = await fetch(
-          `/api/memory-place/status?uid=demo&place_id=${encodeURIComponent(place.place_id)}`
-        );
-        if (!statusRes.ok) return;
-        const status = await statusRes.json();
-        if (status.pano_status === "ready" && status.pano_url) {
-          clearInterval(interval);
-          window.location.href = `/memory/${encodeURIComponent(place.place_id)}`;
-        }
-      }, 3000);
+      // Generation started in background — navigate to the lesson immediately
+      onComplete(place.place_id);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Build failed");
       setStep("photos");
@@ -144,7 +142,7 @@ export default function MemoryPlaceSearch({
         address={address}
         photos={photos}
         onBack={() => setStep("search")}
-        onClose={onClose}
+        onClose={onSkip}
         onBuild={handleBuild}
       />
     );
@@ -152,8 +150,8 @@ export default function MemoryPlaceSearch({
 
   return (
     <div className={styles.overlay}>
-      <button type="button" className={styles.closeButton} onClick={onClose}>
-        ✕ Close
+      <button type="button" className={styles.closeButton} onClick={onSkip}>
+        Skip →
       </button>
 
       <motion.div
@@ -163,11 +161,11 @@ export default function MemoryPlaceSearch({
         transition={{ type: "spring", stiffness: 320, damping: 28 }}
       >
         <h1 className={styles.heading}>
-          Where would you like to store this memory?
+          What&apos;s your favorite {placeTheme}?
         </h1>
         <p className={styles.subheading}>
-          Search for a place you&apos;ve been — a café, a kitchen, a station.
-          We&apos;ll rebuild it for you.
+          Find it here — we&apos;ll build a 3D world from it so you can
+          practice French in a place you actually know.
         </p>
 
         {step === "search" && (
@@ -175,7 +173,7 @@ export default function MemoryPlaceSearch({
             <input
               className={styles.input}
               type="text"
-              placeholder="Search for a place…"
+              placeholder={`Search for a ${placeTheme}…`}
               autoComplete="off"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -211,6 +209,13 @@ export default function MemoryPlaceSearch({
                 ))}
               </ul>
             )}
+            <button
+              type="button"
+              className={styles.skipInline}
+              onClick={onSkip}
+            >
+              Skip, just start the lesson →
+            </button>
           </div>
         )}
 
@@ -220,7 +225,7 @@ export default function MemoryPlaceSearch({
 
         {step === "building" && (
           <p className={styles.loading}>
-            Building your memory of {place?.place_name ?? "this place"}…
+            Starting your world build… taking you to the lesson!
           </p>
         )}
 

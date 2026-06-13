@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import course from "../../data/courses/fr.json";
 import PathMap from "@/components/PathMap";
 import MemoryPlaceSearch from "@/components/MemoryPlaceSearch";
@@ -20,17 +21,15 @@ const defaultProfile: LearnerProfile = {
   },
 };
 
-export default function Home() {
-  const [profile, setProfile] = useState<LearnerProfile | null>(null);
-  const [showMemoryFlow, setShowMemoryFlow] = useState(false);
+interface SelectedUnit {
+  unitId: string;
+  title: string;
+}
 
-  const currentUnitId = useMemo(() => {
-    if (!profile) return "kitchen_1";
-    const current = Object.entries(profile.unit_progress).find(
-      ([, status]) => status === "current"
-    );
-    return current?.[0] ?? "kitchen_1";
-  }, [profile]);
+export default function Home() {
+  const router = useRouter();
+  const [profile, setProfile] = useState<LearnerProfile | null>(null);
+  const [selectedUnit, setSelectedUnit] = useState<SelectedUnit | null>(null);
 
   useEffect(() => {
     fetch("/api/redis/profile?uid=demo")
@@ -38,6 +37,29 @@ export default function Home() {
       .then((data: LearnerProfile) => setProfile(data))
       .catch(() => setProfile(defaultProfile));
   }, []);
+
+  const handleUnitClick = (unitId: string) => {
+    const unit = typedCourse.units.find((u) => u.unit_id === unitId);
+    if (unit) {
+      setSelectedUnit({ unitId, title: unit.title });
+    }
+  };
+
+  const handleMemorySkip = () => {
+    if (!selectedUnit) return;
+    router.push(`/lesson/${selectedUnit.unitId}`);
+    setSelectedUnit(null);
+  };
+
+  const handleMemoryComplete = (placeId: string) => {
+    if (!selectedUnit) return;
+    localStorage.setItem(
+      "pending_memory_place",
+      JSON.stringify({ placeId })
+    );
+    router.push(`/lesson/${selectedUnit.unitId}`);
+    setSelectedUnit(null);
+  };
 
   if (!profile) {
     return null;
@@ -50,12 +72,14 @@ export default function Home() {
         progress={profile.unit_progress}
         xp={profile.xp}
         streak={profile.streak}
-        onStoreMemory={() => setShowMemoryFlow(true)}
+        onUnitClick={handleUnitClick}
       />
-      {showMemoryFlow && (
+      {selectedUnit && (
         <MemoryPlaceSearch
-          unitId={currentUnitId}
-          onClose={() => setShowMemoryFlow(false)}
+          unitId={selectedUnit.unitId}
+          unitTitle={selectedUnit.title}
+          onSkip={handleMemorySkip}
+          onComplete={handleMemoryComplete}
         />
       )}
     </>

@@ -125,3 +125,23 @@
   font-size: 0.8rem;
   color: #64748b;
 }
+
+.skipInline {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.skipInline:hover {
+  color: #64748b;
+}
