@@ -5,17 +5,150 @@
 }
 
 :root {
-  --color-accent: #6366f1;
-  --color-bg: #f8f7ff;
-  --color-bg-end: #eef0ff;
-  --color-text: #1e1b4b;
+  /* Duobingo brand — Duolingo green + Google accents */
+  --color-primary: #58cc02;
+  --color-primary-hover: #46a302;
+  --color-primary-dark: #3d8c00;
+  --color-primary-light: #d7ffb8;
+  --color-primary-subtle: #efffdb;
+
+  --color-google-blue: #4285f4;
+  --color-google-red: #ea4335;
+  --color-google-yellow: #fbbc05;
+  --color-google-green: #34a853;
+
+  --color-accent: var(--color-primary);
+
+  /* Surfaces */
+  --color-bg: #f7f9fc;
+  --color-bg-end: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-glass: rgba(255, 255, 255, 0.94);
+  --color-border: #e8eaed;
+  --color-border-strong: #dadce0;
+
+  /* Text */
+  --color-text: #202124;
+  --color-text-secondary: #5f6368;
+  --color-text-muted: #9aa0a6;
+
+  /* Semantic */
+  --color-success: #34a853;
+  --color-success-bg: #e6f4ea;
+  --color-error: #ea4335;
+  --color-error-bg: #fce8e6;
+  --color-warning: #fbbc05;
+  --color-warning-bg: #fef7e0;
+  --color-streak: #ff9600;
+  --color-streak-bg: #fff4e5;
+  --color-xp: #58cc02;
+  --color-xp-bg: #efffdb;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(60, 64, 67, 0.08);
+  --shadow-md: 0 2px 12px rgba(60, 64, 67, 0.1);
+  --shadow-lg: 0 8px 28px rgba(60, 64, 67, 0.12);
+  --shadow-primary: 0 4px 0 var(--color-primary-dark), 0 6px 16px rgba(88, 204, 2, 0.3);
+
+  /* Radius */
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* Layout */
+  --header-height: 64px;
+  --max-content-width: 480px;
+
+  /* Immersive (3D worlds) */
+  --color-immersive-bg: #1a1a2e;
+  --color-overlay: rgba(32, 33, 36, 0.72);
 }
 
 body {
   min-height: 100vh;
   background: linear-gradient(to bottom, var(--color-bg), var(--color-bg-end));
   color: var(--color-text);
-  font-family: var(--font-inter), system-ui, sans-serif;
+  font-family: var(--font-nunito), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Shared UI primitives */
+.appShell {
+  padding-top: var(--header-height);
+  min-height: 100vh;
+}
+
+.appShellCentered {
+  padding-top: var(--header-height);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  color: #fff;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: var(--shadow-primary);
+  transition: filter 0.15s, transform 0.1s;
+}
+
+.btnPrimary:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+
+.btnPrimary:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 var(--color-primary-dark);
+}
+
+.btnPrimary:disabled {
+  background: var(--color-border-strong);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border: 2px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btnSecondary:hover:not(:disabled) {
+  background: var(--color-bg);
+  border-color: var(--color-border);
+}
+
+.textMuted {
+  color: var(--color-text-secondary);
+}
+
+.textError {
+  color: var(--color-error);
+  line-height: 1.5;
 }

@@ -6,12 +6,17 @@
   align-items: center;
   justify-content: center;
   padding: 24px;
+  background: linear-gradient(to bottom, var(--color-bg), var(--color-bg-end));
 }
 
 .pulseBg {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(88, 204, 2, 0.18) 0%,
+    transparent 70%
+  );
   pointer-events: none;
 }
 
@@ -20,16 +25,23 @@
   z-index: 1;
   width: 100%;
   max-width: 400px;
-  background: white;
-  border-radius: 24px;
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
   padding: 40px 32px;
-  box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+  box-shadow: var(--shadow-lg);
   text-align: center;
+  border: 1px solid var(--color-border);
+}
+
+.logoWrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
 }
 
 .heading {
   font-size: 32px;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--color-text);
   margin-bottom: 16px;
 }
@@ -37,43 +49,44 @@
 .xpCounter {
   font-size: 48px;
   font-weight: 800;
-  color: var(--color-accent);
+  color: var(--color-primary);
   margin-bottom: 20px;
 }
 
 .xpLabel {
   font-size: 16px;
-  font-weight: 600;
-  color: #6b7280;
+  font-weight: 700;
+  color: var(--color-text-secondary);
   margin-top: -8px;
   margin-bottom: 20px;
 }
 
 .missed {
   margin-bottom: 24px;
-  color: #f97316;
+  color: var(--color-streak);
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.5;
 }
 
 .missedWords {
   margin-top: 8px;
   font-size: 14px;
-  color: #ea580c;
+  color: #e65100;
 }
 
 .cta {
   width: 100%;
   padding: 16px 24px;
   border: none;
-  border-radius: 16px;
-  background: var(--color-accent);
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
   color: white;
   font-size: 18px;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
+  box-shadow: var(--shadow-primary);
+  font-family: inherit;
 }
 
 .cta:hover {

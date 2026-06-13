@@ -299,18 +299,39 @@ export default function SplatScene({
           zIndex: 0,
         }}
       />
-      {sceneReady && showControlsHint && (
-        <div className={styles.hint}>
-          <div className={styles.hintCard}>
-            <p className={styles.hintTitle}>Click to enter the scene</p>
-            <p className={styles.hintText}>
-              Your view starts inside the generated world. Click anywhere on the
-              scene to capture the mouse and look around.
-            </p>
-            <p className={styles.hintKeys}>
-              WASD move · Space up · Shift down · Esc release mouse
-            </p>
-          </div>
+      {sceneReady && (
+        <div className={styles.controlsPanel} aria-label="Keyboard controls">
+          <p className={styles.controlsTitle}>Controls</p>
+          <ul className={styles.controlsList}>
+            <li>
+              <span className={styles.keyGroup}>
+                <kbd>W</kbd>
+                <kbd>A</kbd>
+                <kbd>S</kbd>
+                <kbd>D</kbd>
+              </span>
+              <span className={styles.controlAction}>Move</span>
+            </li>
+            <li>
+              <kbd>Mouse</kbd>
+              <span className={styles.controlAction}>Look around</span>
+            </li>
+            <li>
+              <kbd>Space</kbd>
+              <span className={styles.controlAction}>Up</span>
+            </li>
+            <li>
+              <kbd>Shift</kbd>
+              <span className={styles.controlAction}>Down</span>
+            </li>
+            <li>
+              <kbd>Esc</kbd>
+              <span className={styles.controlAction}>Release mouse</span>
+            </li>
+          </ul>
+          {showControlsHint && (
+            <p className={styles.controlsNote}>Click the scene to start</p>
+          )}
         </div>
       )}
     </>

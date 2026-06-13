@@ -1,0 +1,37 @@
+.shell {
+  padding-top: var(--header-height);
+  min-height: 100vh;
+}
+
+.stateBlock {
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.errorText {
+  margin-top: 24px;
+  color: var(--color-error);
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.retryBlock {
+  margin-top: 16px;
+  max-width: 420px;
+  margin-inline: auto;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}
+
+.retryButton {
+  margin-top: 12px;
+}
+
+.notFound {
+  padding-top: var(--header-height);
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}

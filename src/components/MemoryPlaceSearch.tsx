@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import AppLogo from "@/components/ui/AppLogo";
 import PhotoSelector from "@/components/PhotoSelector";
 import { RankedPhoto } from "@/lib/types";
 import styles from "./MemoryPlaceSearch.module.css";
@@ -167,12 +168,15 @@ export default function MemoryPlaceSearch({
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: "spring", stiffness: 320, damping: 28 }}
       >
+        <div className={styles.logoWrap}>
+          <AppLogo height={22} />
+        </div>
         <h1 className={styles.heading}>
           What&apos;s your favorite {placeTheme}?
         </h1>
         <p className={styles.subheading}>
           Find it here — we&apos;ll build a 3D world from it so you can
-          practice French in a place you actually know.
+          practice in a place you actually know.
         </p>
 
         {step === "search" && !navigatingToLesson && (

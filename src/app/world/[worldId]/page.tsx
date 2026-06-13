@@ -91,7 +91,12 @@ export default function WorldPage({
   }
 
   if (!ready) {
-    return null;
+    return (
+      <div className={styles.loading}>
+        <div className={styles.loadingSpinner} aria-hidden />
+        <p>Loading your world…</p>
+      </div>
+    );
   }
 
   return (
@@ -100,6 +105,13 @@ export default function WorldPage({
         splatUrl={`/worlds/${worldId}.spz`}
         canvasRef={canvasRef}
       />
+
+      {!strengthsReady && !loadError && (
+        <div className={styles.loading}>
+          <div className={styles.loadingSpinner} aria-hidden />
+          <p>Preparing vocabulary…</p>
+        </div>
+      )}
 
       {strengthsReady && (
         <div className={styles.overlayLayer}>

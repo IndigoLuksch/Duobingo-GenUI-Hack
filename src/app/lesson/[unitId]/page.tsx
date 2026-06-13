@@ -14,6 +14,7 @@ import WordBank from "@/components/exercises/WordBank";
 import Listening from "@/components/exercises/Listening";
 import SpeakIt from "@/components/exercises/SpeakIt";
 import LessonComplete from "@/components/exercises/LessonComplete";
+import LoadingState from "@/components/ui/LoadingState";
 import course from "../../../../data/courses/de.json";
 import {
   pendingExerciseRespondRef,
@@ -26,6 +27,7 @@ import {
   LessonComplete as LessonCompletePayload,
   WordStrength,
 } from "@/lib/types";
+import styles from "./page.module.css";
 
 const typedCourse = course as Course;
 
@@ -319,7 +321,7 @@ function LessonExperience({
 
   if (!unit) {
     return (
-      <div style={{ paddingTop: 96, textAlign: "center" }}>
+      <div className={styles.notFound}>
         <p>Unit not found.</p>
       </div>
     );
@@ -327,14 +329,14 @@ function LessonExperience({
 
   if (loadError || agentError) {
     return (
-      <div
-        style={{ paddingTop: 96, maxWidth: 480, margin: "0 auto", padding: 24 }}
-      >
+      <div className={styles.shell}>
         <LessonHUD />
-        <p style={{ marginTop: 24, color: "#b91c1c", lineHeight: 1.5 }}>
-          {loadError ||
-            "Unable to connect to the lesson agent. Make sure the agent server is running on port 8000."}
-        </p>
+        <div className={styles.stateBlock}>
+          <p className={styles.errorText}>
+            {loadError ||
+              "Unable to connect to the lesson agent. Make sure the agent server is running on port 8000."}
+          </p>
+        </div>
       </div>
     );
   }
@@ -346,41 +348,31 @@ function LessonExperience({
   }
 
   return (
-    <div style={{ paddingTop: 80, minHeight: "100vh" }}>
+    <div className={styles.shell}>
       <LessonHUD />
       <LessonAgentBridge />
 
       {!currentExercise && (
-        <div style={{ textAlign: "center", marginTop: 48, color: "#6b7280" }}>
-          <p>Preparing your lesson…</p>
+        <LoadingState message="Preparing your lesson…">
           {prepTimedOut && (
-            <div style={{ marginTop: 16, maxWidth: 420, marginInline: "auto", lineHeight: 1.5 }}>
+            <div className={styles.retryBlock}>
               <p>
                 This is taking longer than expected. Make sure the lesson agent is
                 running on port 8000.
               </p>
               <button
                 type="button"
+                className={`btnPrimary ${styles.retryButton}`}
                 onClick={() => {
                   lessonStartSentRef.current = false;
                   sendLessonStart();
-                }}
-                style={{
-                  marginTop: 12,
-                  padding: "10px 18px",
-                  borderRadius: 8,
-                  border: "none",
-                  background: "#4f46e5",
-                  color: "#fff",
-                  cursor: "pointer",
-                  fontWeight: 600,
                 }}
               >
                 Try again
               </button>
             </div>
           )}
-        </div>
+        </LoadingState>
       )}
 
       {currentExercise?.type === "exercise.multiple_choice" && (

@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import AppLogo from "@/components/ui/AppLogo";
 import { Unit } from "@/lib/types";
 import styles from "./PathMap.module.css";
 
@@ -10,6 +11,8 @@ interface PathMapProps {
   progress: Record<string, "locked" | "current" | "complete">;
   xp: number;
   streak: number;
+  courseTitle: string;
+  courseFlag: string;
   onUnitClick: (unitId: string) => void;
 }
 
@@ -60,7 +63,15 @@ function XpDisplay({ xp }: { xp: number }) {
   );
 }
 
-export default function PathMap({ units, progress, xp, streak, onUnitClick }: PathMapProps) {
+export default function PathMap({
+  units,
+  progress,
+  xp,
+  streak,
+  courseTitle,
+  courseFlag,
+  onUnitClick,
+}: PathMapProps) {
   const containerHeight = Math.max(760, units.length * 300);
   const containerWidth = 432;
 
@@ -80,9 +91,11 @@ export default function PathMap({ units, progress, xp, streak, onUnitClick }: Pa
     <>
       <header className={styles.header}>
         <div className={styles.courseInfo}>
-          <span className={styles.flag}>🇫🇷</span>
+          <AppLogo height={26} className={styles.logo} />
           <div className={styles.courseText}>
-            <span className={styles.courseName}>French</span>
+            <span className={styles.courseName}>
+              {courseFlag} {courseTitle}
+            </span>
             <span className={styles.courseSubtitle}>
               {completeCount}/{units.length} lessons complete
             </span>

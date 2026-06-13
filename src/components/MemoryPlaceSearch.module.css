@@ -6,71 +6,93 @@
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: rgba(15, 23, 42, 0.72);
-  backdrop-filter: blur(6px);
+  background: var(--color-overlay);
+  backdrop-filter: blur(8px);
 }
 
 .modal {
+  position: relative;
   width: min(520px, 100%);
   padding: 32px 28px;
-  border-radius: 20px;
-  background: #fff;
-  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.2);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border);
+}
+
+.logoWrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
 }
 
 .heading {
   margin: 0 0 8px;
   font-size: 1.5rem;
-  font-weight: 700;
-  color: #0f172a;
+  font-weight: 800;
+  color: var(--color-text);
 }
 
 .subheading {
   margin: 0 0 24px;
   font-size: 0.95rem;
   line-height: 1.5;
-  color: #64748b;
+  color: var(--color-text-secondary);
+  font-weight: 600;
 }
 
 .input {
   width: 100%;
   padding: 14px 16px;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
   font-size: 1rem;
+  font-family: inherit;
   outline: none;
   transition: border-color 0.15s;
 }
 
 .input:focus {
-  border-color: #6366f1;
+  border-color: var(--color-google-blue);
 }
 
 .loading {
   margin-top: 20px;
   text-align: center;
-  color: #6366f1;
-  font-weight: 600;
+  color: var(--color-primary);
+  font-weight: 700;
 }
 
 .closeButton {
   position: absolute;
   top: 20px;
   right: 20px;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.9);
-  color: #334155;
+  padding: 8px 14px;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
+  font-family: inherit;
+  z-index: 201;
+}
+
+.closeButton:hover:not(:disabled) {
+  background: var(--color-bg);
+}
+
+.closeButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .error {
   margin-top: 16px;
-  color: #b91c1c;
+  color: var(--color-error);
   font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .searchBox {
@@ -80,7 +102,8 @@
 .searching {
   margin: 8px 0 0;
   font-size: 0.85rem;
-  color: #6366f1;
+  color: var(--color-text-secondary);
+  font-weight: 600;
 }
 
 .suggestions {
@@ -89,23 +112,24 @@
   padding: 0;
   max-height: 240px;
   overflow-y: auto;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  background: #fff;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
 }
 
 .suggestionButton {
   width: 100%;
   padding: 12px 14px;
   border: none;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--color-border);
   background: transparent;
   text-align: left;
   cursor: pointer;
+  font-family: inherit;
 }
 
 .suggestionButton:hover {
-  background: #f8fafc;
+  background: var(--color-bg);
 }
 
 .suggestionButton:last-child {
@@ -114,8 +138,8 @@
 
 .suggestionMain {
   display: block;
-  font-weight: 600;
-  color: #0f172a;
+  font-weight: 700;
+  color: var(--color-text);
   font-size: 0.95rem;
 }
 
@@ -123,7 +147,7 @@
   display: block;
   margin-top: 2px;
   font-size: 0.8rem;
-  color: #64748b;
+  color: var(--color-text-secondary);
 }
 
 .skipInline {
@@ -133,15 +157,16 @@
   padding: 0;
   border: none;
   background: transparent;
-  color: #94a3b8;
+  color: var(--color-text-muted);
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   text-align: center;
   cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 3px;
+  font-family: inherit;
 }
 
 .skipInline:hover {
-  color: #64748b;
+  color: var(--color-text-secondary);
 }

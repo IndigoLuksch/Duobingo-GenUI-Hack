@@ -6,9 +6,9 @@ import { useWorldStore } from "@/lib/store";
 import styles from "./WorldHUD.module.css";
 
 function strengthColor(strength: number): string {
-  if (strength < 0.3) return "#ef4444";
-  if (strength < 0.6) return "#f97316";
-  return "#22c55e";
+  if (strength < 0.3) return "var(--color-google-red)";
+  if (strength < 0.6) return "var(--color-streak)";
+  return "var(--color-google-green)";
 }
 
 export default function WorldHUD() {

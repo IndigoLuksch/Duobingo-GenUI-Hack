@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import AppLogo from "@/components/ui/AppLogo";
 import { LessonComplete as LessonCompletePayload } from "@/lib/types";
 import PortalTransition from "@/components/PortalTransition";
 import styles from "./LessonComplete.module.css";
@@ -64,6 +65,9 @@ export default function LessonComplete({ exercise }: Props) {
         />
 
         <div className={styles.card}>
+          <div className={styles.logoWrap}>
+            <AppLogo height={24} />
+          </div>
           <h1 className={styles.heading}>Lesson Complete!</h1>
           <div className={styles.xpCounter}>{displayedXp}</div>
           <p className={styles.xpLabel}>XP earned</p>

@@ -5,9 +5,15 @@ import { useRouter } from "next/navigation";
 import course from "../../data/courses/de.json";
 import PathMap from "@/components/PathMap";
 import MemoryPlaceSearch from "@/components/MemoryPlaceSearch";
+import LoadingState from "@/components/ui/LoadingState";
 import { Course, LearnerProfile } from "@/lib/types";
 
 const typedCourse = course as Course;
+
+const COURSE_FLAGS: Record<string, string> = {
+  de: "🇩🇪",
+  fr: "🇫🇷",
+};
 
 const defaultProfile: LearnerProfile = {
   uid: "demo",
@@ -16,10 +22,8 @@ const defaultProfile: LearnerProfile = {
   hearts: 3,
   last_active: new Date().toISOString(),
   unit_progress: {
-    boulangerie_1: "current",
+    kitchen_1: "current",
     cafe_1: "locked",
-    gare_1: "locked",
-    marche_1: "locked",
   },
 };
 
@@ -85,7 +89,11 @@ export default function Home() {
   };
 
   if (!profile) {
-    return null;
+    return (
+      <div className="appShell">
+        <LoadingState message="Loading your path…" />
+      </div>
+    );
   }
 
   return (
@@ -95,6 +103,8 @@ export default function Home() {
         progress={profile.unit_progress}
         xp={profile.xp}
         streak={profile.streak}
+        courseTitle={typedCourse.title}
+        courseFlag={COURSE_FLAGS[typedCourse.course] ?? "🌍"}
         onUnitClick={handleUnitClick}
       />
       {selectedUnit && (
