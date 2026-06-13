@@ -14,11 +14,11 @@ function strengthColor(strength: number): string {
 export default function WorldHUD() {
   const strengthUpdates = useWorldStore((s) => s.strengthUpdates);
   const boostedWordIds = useWorldStore((s) => s.boostedWordIds);
-  const missedWordIds = useWorldStore((s) => s.missedWordIds);
   const [showHeart, setShowHeart] = useState(true);
 
+  const VOCAB_GOAL = 5;
   const foundCount = boostedWordIds.length;
-  const totalCount = missedWordIds.length;
+  const totalCount = VOCAB_GOAL;
   const updatedWords = Object.entries(strengthUpdates);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function WorldHUD() {
     <>
       <div className={styles.panel}>
         <p className={styles.counter}>
-          {foundCount} / {totalCount} mots trouvés
+          {Math.min(foundCount, totalCount)} / {totalCount} words found
         </p>
 
         {updatedWords.length > 0 && (

@@ -105,7 +105,7 @@ export default function PanoViewer({ panoUrl, canvasRef }: PanoViewerProps) {
       material.dispose();
       if (material.map) material.map.dispose();
       renderer.dispose();
-      if (canvasRef) {
+      if (canvasRef?.current === canvas) {
         (canvasRef as React.MutableRefObject<HTMLCanvasElement | null>).current =
           null;
       }

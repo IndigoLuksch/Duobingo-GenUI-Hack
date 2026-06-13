@@ -126,6 +126,15 @@ export class GeminiLiveClient {
     });
   }
 
+  sendClientContent(text: string, turnComplete = true): void {
+    this.send({
+      clientContent: {
+        turns: [{ role: "user", parts: [{ text }] }],
+        turnComplete,
+      },
+    });
+  }
+
   sendToolResponse(callId: string, response: unknown): void {
     this.send({
       toolResponse: {

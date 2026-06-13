@@ -70,3 +70,17 @@
   background: #0f172a;
   color: #e5e7eb;
 }
+
+.splatLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s ease;
+}
+
+.splatLayerVisible {
+  opacity: 1;
+  pointer-events: auto;
+}

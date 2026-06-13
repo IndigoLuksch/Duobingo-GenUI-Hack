@@ -29,6 +29,7 @@ export default function MemoryPlacePage({
   const [wordStrengths, setWordStrengths] = useState<WordStrength[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [retryingWorld, setRetryingWorld] = useState(false);
+  const [splatReady, setSplatReady] = useState(false);
 
   const unit = useMemo(() => {
     if (!memory?.unit_id) return null;
@@ -39,6 +40,10 @@ export default function MemoryPlacePage({
   const sceneReady =
     memory?.pano_status === "ready" &&
     Boolean(memory.pano_url || memory.spz_url);
+
+  useEffect(() => {
+    setSplatReady(false);
+  }, [memory?.spz_url]);
 
   useEffect(() => {
     useWorldStore.getState().reset();
@@ -183,13 +188,25 @@ export default function MemoryPlacePage({
   }
 
   const extraContextLine = `The learner chose to practice in ${memory.place_name}, a real place they have visited.`;
+  const hasSplat = Boolean(memory.spz_url);
+  const showPano = Boolean(memory.pano_url) && (!hasSplat || !splatReady);
 
   return (
     <div className={worldStyles.page}>
-      {memory.spz_url ? (
-        <SplatScene splatUrl={memory.spz_url} canvasRef={canvasRef} />
-      ) : (
+      {showPano && (
         <PanoViewer panoUrl={memory.pano_url!} canvasRef={canvasRef} />
+      )}
+
+      {hasSplat && (
+        <div
+          className={`${styles.splatLayer} ${splatReady ? styles.splatLayerVisible : ""}`}
+        >
+          <SplatScene
+            splatUrl={memory.spz_url!}
+            canvasRef={canvasRef}
+            onReady={() => setSplatReady(true)}
+          />
+        </div>
       )}
 
       {strengthsReady && (

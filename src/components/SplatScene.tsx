@@ -67,8 +67,13 @@ export default function SplatScene({
   onReady,
 }: SplatSceneProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const onReadyRef = useRef(onReady);
   const [sceneReady, setSceneReady] = useState(false);
   const [showControlsHint, setShowControlsHint] = useState(true);
+
+  useEffect(() => {
+    onReadyRef.current = onReady;
+  }, [onReady]);
 
   useEffect(() => {
     setSceneReady(false);
@@ -146,7 +151,7 @@ export default function SplatScene({
             canvas;
         }
         setSceneReady(true);
-        onReady?.();
+        onReadyRef.current?.();
       })
       .catch(() => {
         if (!disposed) {
@@ -280,7 +285,7 @@ export default function SplatScene({
 
       container.removeChild(canvas);
     };
-  }, [canvasRef, splatUrl, spawnPosition, opencvToOpengl, onReady]);
+  }, [canvasRef, splatUrl, spawnPosition, opencvToOpengl]);
 
   return (
     <>

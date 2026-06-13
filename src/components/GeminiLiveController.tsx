@@ -64,6 +64,14 @@ const GEMINI_TOOLS = [
   },
 ];
 
+const VOCAB_GOAL = 5;
+
+const SESSION_START_PROMPT =
+  "The learner just entered the 3D scene. Greet them warmly in German and immediately give your first scavenger hunt instruction. Do not wait for them to speak first.";
+
+const LESSON_COMPLETE_PROMPT =
+  "The learner has confirmed all 5 vocabulary words. Congratulate them, say the lesson is finished (briefly in German, then in English), and invite them to ask questions about anything they see and continue exploring freely.";
+
 const PCM_WORKLET = `
 class PCMProcessor extends AudioWorkletProcessor {
   process(inputs) {
@@ -130,13 +138,17 @@ ${missedLines}
 Full vocabulary for this scene (all of these objects should be visually present):
 ${vocabLines}
 
+SESSION GOAL: Teach exactly ${VOCAB_GOAL} vocabulary words this session. Prioritize missed words first, then pick from the full vocabulary list.
+
 YOUR BEHAVIOR:
-1. GREET the learner warmly in German when the session starts. Mention that you can see what they see.
-2. SCAVENGER HUNT MODE: Ask the learner to find missed objects. Confirm when you see them centered in the frame. Call show_word_card AND update_strength on confirmation.
-3. POINT-AND-ASK MODE: If the learner asks about something visible, identify it and teach.
-4. LANGUAGE RULES: Speak primarily in German. Short responses (1-2 sentences). Use du.
-5. VISUAL GROUNDING: Base responses on what you see in frames. Never claim to see something you're not confident about.
-6. TOOL USAGE: Call show_word_card EVERY TIME you teach or confirm a word. Call update_strength EVERY TIME.`;
+1. PROACTIVE LEADER: You ALWAYS speak first and drive the session. Never wait silently for the learner. After each word is confirmed, immediately give the next instruction — do not wait for them to respond.
+2. SESSION START: Greet warmly in German. Mention that you can see what they see. Immediately start the scavenger hunt with the first target word.
+3. SCAVENGER HUNT MODE: Ask the learner to find objects one at a time. Confirm when you see them centered in the frame. Call show_word_card AND update_strength(boost) on each confirmation. Keep count — stop after ${VOCAB_GOAL} words.
+4. LESSON COMPLETE: After the ${VOCAB_GOAL}th word is confirmed, congratulate the learner, say the lesson is finished, and tell them they can ask questions about anything they see and continue exploring freely. Switch to free exploration / Q&A mode.
+5. POINT-AND-ASK MODE: Before ${VOCAB_GOAL} words are done, only use this if the learner explicitly asks. After lesson complete, answer freely.
+6. LANGUAGE RULES: Speak primarily in German. Short responses (1-2 sentences). Use du.
+7. VISUAL GROUNDING: Base responses on what you see in frames. Never claim to see something you're not confident about.
+8. TOOL USAGE: Call show_word_card EVERY TIME you teach or confirm a word. Call update_strength EVERY TIME.`;
 }
 
 function arrayBufferToBase64(buffer: ArrayBuffer): string {
@@ -255,12 +267,25 @@ export default function GeminiLiveController({
 
   const mutedRef = useRef(muted);
   const subtitleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const clientRef = useRef<GeminiLiveClient | null>(null);
+  const lessonCompleteSentRef = useRef(false);
+
+  const boostedCount = useWorldStore((s) => s.boostedWordIds.length);
 
   useEffect(() => {
     mutedRef.current = muted;
   }, [muted]);
 
   useEffect(() => {
+    if (!connected || boostedCount < VOCAB_GOAL || lessonCompleteSentRef.current) {
+      return;
+    }
+    lessonCompleteSentRef.current = true;
+    clientRef.current?.sendClientContent(LESSON_COMPLETE_PROMPT);
+  }, [boostedCount, connected]);
+
+  useEffect(() => {
+    lessonCompleteSentRef.current = false;
     let client: GeminiLiveClient | null = null;
     let stopFrames: (() => void) | null = null;
     let mediaStream: MediaStream | null = null;
@@ -366,6 +391,7 @@ export default function GeminiLiveController({
           if (!disposed) {
             setConnected(true);
             setConnectionError(null);
+            client?.sendClientContent(SESSION_START_PROMPT);
             void startMicAndFrames();
           }
         },
@@ -382,6 +408,7 @@ export default function GeminiLiveController({
           if (playbackContext) nextPlayTime = playbackContext.currentTime;
         },
       });
+      clientRef.current = client;
       client.connect();
     }
 
@@ -396,6 +423,7 @@ export default function GeminiLiveController({
 
     return () => {
       disposed = true;
+      clientRef.current = null;
       stopFrames?.();
       mediaStream?.getTracks().forEach((track) => track.stop());
       void inputContext?.close();
