@@ -2,6 +2,8 @@
 
 A language learning app that drops you into AI-generated 3D worlds and lets you practice with a real-time voice tutor — built on Google Gemini, CopilotKit, and Gaussian splatting.
 
+Live instance: https://duobingo-genui-hack.onrender.com/
+
 <!-- screenshot: main menu / lesson path -->
 
 ---
@@ -9,7 +11,7 @@ A language learning app that drops you into AI-generated 3D worlds and lets you 
 ## How it works
 
 **1. Choose a lesson**
-Pick a topic (café, kitchen, etc.) from the path map. Before the lesson starts, you're asked to search for a real place that matches — your actual favourite café, for example. We'll build a 3D world from it.
+Pick a topic (café, kitchen, etc.) from the path map. Before the lesson starts, you choose the real place you want to navigate to by searching for one that matches — your actual favourite café, for example. Only after you choose it do we generate the 3D world from that place.
 
 <!-- screenshot: lesson selection + memory place search modal -->
 
