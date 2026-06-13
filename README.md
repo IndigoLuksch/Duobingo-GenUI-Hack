@@ -2,7 +2,7 @@
 
 A language learning app that drops you into AI-generated 3D worlds and lets you practice with a real-time voice tutor — built on Google Gemini, CopilotKit, and Gaussian splatting.
 
-Live instance: https://duobingo-genui-hack.onrender.com/
+Demo Link: https://duobingo-genui-hack.onrender.com/
 
 <!-- screenshot: main menu / lesson path -->
 
