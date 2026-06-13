@@ -107,13 +107,50 @@ function LessonExperience({
     if (!unit) return;
     lessonStartSentRef.current = true;
     setPrepTimedOut(false);
+
+    const vocabLines = unit.vocab
+      .map(
+        (v) =>
+          `  word_id="${v.word_id}" | fr="${v.fr}" | en="${v.en}" | gender=${v.gender ?? "n"} | distractors=${JSON.stringify(v.distractors)}`
+      )
+      .join("\n");
+
+    const sentenceLines = unit.sentences
+      .map(
+        (s) =>
+          `  en="${s.en}" | fr="${s.fr}" | tiles=${JSON.stringify(s.tiles)} | answer=${JSON.stringify(s.answer)}`
+      )
+      .join("\n");
+
+    const defaultStrengths = unit.vocab.map((v) => ({
+      word_id: v.word_id,
+      strength: 0.5,
+    }));
+    const strengths = wordStrengths.length > 0 ? wordStrengths : defaultStrengths;
+    const strengthLines = strengths
+      .map((w) => `  ${w.word_id}: ${w.strength.toFixed(2)}`)
+      .join("\n");
+
     appendMessage(
       new TextMessage({
         role: Role.User,
-        content: `Start the lesson for unit "${unit.title}" (${unit.unit_id}). Use the vocabulary, sentences, and word strengths provided in context.`,
+        content: [
+          `Start the lesson for unit "${unit.title}" (unit_id="${unit.unit_id}", world_id="${unit.world_id}").`,
+          ``,
+          `VOCABULARY — use these exact word_ids, French words, and distractors when building exercises:`,
+          vocabLines,
+          ``,
+          `SENTENCES — use these for word_bank exercises (tiles and answer are exact):`,
+          sentenceLines,
+          ``,
+          `WORD STRENGTHS (0.0 = weakest/highest priority, 1.0 = strongest):`,
+          strengthLines,
+          ``,
+          `Plan and deliver exactly 8 exercises using the show_exercise tool. Start with the 2 weakest words. Begin immediately.`,
+        ].join("\n"),
       })
     );
-  }, [unit, appendMessage]);
+  }, [unit, wordStrengths, appendMessage]);
 
   useCopilotReadable({
     description:
