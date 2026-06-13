@@ -68,6 +68,7 @@ export default function MemoryPlacePage({
           place_id: placeId,
           place_name: data.place_name,
           unit_id: data.unit_id,
+          source: data.source,
           source_photo_url: data.source_photo_url ?? data.pano_url ?? "",
           pano_url: data.pano_url,
           pano_status: data.pano_status,
@@ -200,7 +201,10 @@ export default function MemoryPlacePage({
     );
   }
 
-  const extraContextLine = `The learner chose to practice in ${memory.place_name}, a real place they have visited.`;
+  const extraContextLine =
+    memory.source === "street_view"
+      ? `The learner is practicing at ${memory.place_name}, shown in Google Street View. A full 3D world is being generated in the background — encourage them to look around and explore while they wait.`
+      : `The learner chose to practice in ${memory.place_name}, a real place they have visited.`;
   const hasSplat = Boolean(memory.spz_url);
   const showPano = Boolean(memory.pano_url) && (!hasSplat || !splatReady);
 
@@ -240,7 +244,9 @@ export default function MemoryPlacePage({
 
       {memory.world_status === "generating" && (
         <div className={styles.generatingChip}>
-          Full world generating… check back in a few minutes
+          {memory.source === "street_view"
+            ? "Building your 3D world… you'll switch automatically when it's ready"
+            : "Full world generating… check back in a few minutes"}
         </div>
       )}
 

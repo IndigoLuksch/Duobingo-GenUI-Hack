@@ -70,6 +70,7 @@ export default function SplatScene({
   const onReadyRef = useRef(onReady);
   const [sceneReady, setSceneReady] = useState(false);
   const [showControlsHint, setShowControlsHint] = useState(true);
+  const [showShiftHint, setShowShiftHint] = useState(false);
 
   useEffect(() => {
     onReadyRef.current = onReady;
@@ -77,7 +78,29 @@ export default function SplatScene({
 
   useEffect(() => {
     setSceneReady(false);
+    setShowShiftHint(false);
   }, [splatUrl]);
+
+  useEffect(() => {
+    if (!sceneReady) return;
+
+    setShowShiftHint(true);
+    const timer = window.setTimeout(() => setShowShiftHint(false), 4000);
+    return () => window.clearTimeout(timer);
+  }, [sceneReady]);
+
+  useEffect(() => {
+    if (!showShiftHint) return;
+
+    const dismissOnShift = (event: KeyboardEvent) => {
+      if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
+        setShowShiftHint(false);
+      }
+    };
+
+    window.addEventListener("keydown", dismissOnShift);
+    return () => window.removeEventListener("keydown", dismissOnShift);
+  }, [showShiftHint]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -299,6 +322,11 @@ export default function SplatScene({
           zIndex: 0,
         }}
       />
+      {sceneReady && showShiftHint && (
+        <p className={styles.shiftHint} role="status">
+          Press <kbd className={styles.key}>Shift</kbd> to move down into the world
+        </p>
+      )}
       {sceneReady && (
         <div className={styles.controlsPanel} aria-label="Keyboard controls">
           <p className={styles.controlsTitle}>Controls</p>

@@ -90,7 +90,8 @@ body {
   justify-content: flex-start;
 }
 
-.homeWithSkipBar {
+.homeWithSkipBar,
+.withSkipBar {
   padding-bottom: 132px;
 }
 

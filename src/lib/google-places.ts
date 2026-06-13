@@ -11,11 +11,17 @@ export interface PlacePhoto {
   heightPx?: number;
 }
 
+export interface PlaceLocation {
+  lat: number;
+  lng: number;
+}
+
 export interface PlaceDetails {
   place_id: string;
   place_name: string;
   address: string | null;
   photos: PlacePhoto[];
+  location?: PlaceLocation | null;
 }
 
 export interface PlaceSuggestion {
@@ -135,6 +141,33 @@ function parsePlacesError(body: string): string {
   }
 }
 
+export async function fetchPlaceLocation(
+  placeId: string
+): Promise<PlaceLocation | null> {
+  const apiKey = placesKey();
+  if (!apiKey) return null;
+
+  const res = await fetch(`${PLACES_BASE}/places/${placeId}`, {
+    headers: {
+      "Content-Type": "application/json",
+      "X-Goog-Api-Key": apiKey,
+      "X-Goog-FieldMask": "location",
+    },
+  });
+
+  if (!res.ok) return null;
+
+  const data = (await res.json()) as {
+    location?: { latitude?: number; longitude?: number };
+  };
+
+  const lat = data.location?.latitude;
+  const lng = data.location?.longitude;
+  if (lat == null || lng == null) return null;
+
+  return { lat, lng };
+}
+
 export async function fetchPlaceDetails(
   placeId: string,
   placeName?: string,
@@ -147,7 +180,8 @@ export async function fetchPlaceDetails(
     headers: {
       "Content-Type": "application/json",
       "X-Goog-Api-Key": apiKey,
-      "X-Goog-FieldMask": "id,displayName,formattedAddress,photos",
+      "X-Goog-FieldMask":
+        "id,displayName,formattedAddress,photos,location",
     },
   });
 
@@ -160,6 +194,7 @@ export async function fetchPlaceDetails(
     id?: string;
     displayName?: { text?: string };
     formattedAddress?: string;
+    location?: { latitude?: number; longitude?: number };
     photos?: { name?: string; widthPx?: number; heightPx?: number }[];
   };
 
@@ -177,10 +212,15 @@ export async function fetchPlaceDetails(
     }
   }
 
+  const lat = data.location?.latitude;
+  const lng = data.location?.longitude;
+
   return {
     place_id: placeId,
     place_name: data.displayName?.text ?? placeName ?? placeId,
     address: data.formattedAddress ?? null,
+    location:
+      lat != null && lng != null ? { lat, lng } : null,
     photos,
   };
 }

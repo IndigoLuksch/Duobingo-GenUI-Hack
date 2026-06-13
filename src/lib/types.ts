@@ -138,6 +138,7 @@ export interface MemoryPlaceRecord {
   place_id: string;
   unit_id: string;
   source_photo_url: string;
+  source?: "street_view" | "place_photo";
   address?: string | null;
   pano_url: string | null;
   pano_status: "generating" | "ready";

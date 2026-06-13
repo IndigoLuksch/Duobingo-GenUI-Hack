@@ -27,6 +27,7 @@ export async function GET(request: NextRequest) {
     spz_url: record.spz_url,
     place_name: record.place_name,
     unit_id: record.unit_id,
+    source: record.source,
     world_operation_id: record.world_operation_id,
     world_id: record.world_id,
     source_photo_url: record.source_photo_url,

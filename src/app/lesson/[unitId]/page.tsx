@@ -17,6 +17,7 @@ import Listening from "@/components/exercises/Listening";
 import SpeakIt from "@/components/exercises/SpeakIt";
 import LessonComplete from "@/components/exercises/LessonComplete";
 import StaticLessonExperience from "@/components/StaticLessonExperience";
+import SkipToWorld from "@/components/SkipToWorld";
 import { useCourse } from "@/lib/course-context";
 import { LANGUAGE_LABELS } from "@/lib/courses";
 import { findUnitById } from "@/lib/course-data";
@@ -401,11 +402,12 @@ function AgentLessonExperience({
   }
 
   return (
-    <div className={styles.shell}>
-      <LessonHUD />
-      <LessonAgentBridge />
+    <>
+      <div className={`${styles.shell} withSkipBar`}>
+        <LessonHUD />
+        <LessonAgentBridge />
 
-      {!currentExercise && (
+        {!currentExercise && (
         <LessonPrepLoader activeStepId={prepStepId}>
           {prepTimedOut && (
             <div className={styles.retryBlock}>
@@ -457,7 +459,9 @@ function AgentLessonExperience({
           feedbackState={feedbackState}
         />
       )}
-    </div>
+      </div>
+      <SkipToWorld />
+    </>
   );
 }
 

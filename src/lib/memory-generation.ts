@@ -173,6 +173,80 @@ export async function runMemoryGeneration(
   });
 }
 
+/** Street View worlds: pano is ready immediately; only Marble 3D generates in background. */
+export async function runCustomWorldGeneration(
+  uid: string,
+  placeId: string,
+  streetViewImageUrl: string,
+  placeName: string,
+  textPrompt?: string
+): Promise<void> {
+  const existing = await getMemoryPlace(uid, placeId);
+  if (!existing) {
+    console.warn(
+      `[memory-generation] No memory_place record for ${placeId} — cannot generate`
+    );
+    return;
+  }
+
+  if (!process.env.WORLDLABS_API_KEY) {
+    console.warn(
+      "[memory-generation] WORLDLABS_API_KEY not set — street view only"
+    );
+    return;
+  }
+
+  const mediaAssetId = await prepareAndUploadImage(streetViewImageUrl);
+  if (!mediaAssetId) {
+    console.warn(
+      "[memory-generation] Marble image upload failed — street view only"
+    );
+    return;
+  }
+
+  const operationId = await startWorldGeneration(
+    mediaAssetId,
+    placeName,
+    textPrompt
+  );
+  if (!operationId) {
+    console.warn(
+      "[memory-generation] Marble worlds:generate failed — street view only"
+    );
+    return;
+  }
+
+  await setMemoryPlace(uid, {
+    ...existing,
+    world_operation_id: operationId,
+    world_status: "generating",
+  });
+  console.log(
+    `[memory-generation] Custom world Marble generation started (operation_id=${operationId})`
+  );
+
+  for (let i = 0; i < MAX_POLLS; i++) {
+    await sleep(POLL_MS);
+    const record = await getMemoryPlace(uid, placeId);
+    if (!record) return;
+
+    const updated = await resolveMarbleAssets(record, streetViewImageUrl);
+    if (!updated) continue;
+
+    await setMemoryPlace(uid, updated);
+    if (updated.world_status === "ready" && updated.spz_url) return;
+    if (updated.world_status === "not_started") return;
+  }
+
+  const record = await getMemoryPlace(uid, placeId);
+  if (!record) return;
+
+  const synced = await resolveMarbleAssets(record, streetViewImageUrl);
+  if (synced) {
+    await setMemoryPlace(uid, synced);
+  }
+}
+
 export async function refreshMemoryPlaceFromMarble(
   uid: string,
   placeId: string

@@ -8,6 +8,7 @@ import WordBank from "@/components/exercises/WordBank";
 import Listening from "@/components/exercises/Listening";
 import SpeakIt from "@/components/exercises/SpeakIt";
 import LessonComplete from "@/components/exercises/LessonComplete";
+import SkipToWorld from "@/components/SkipToWorld";
 import {
   buildLessonComplete,
   hasStaticExercises,
@@ -163,37 +164,40 @@ export default function StaticLessonExperience({
   }
 
   return (
-    <div className={styles.shell}>
-      <LessonHUD />
+    <>
+      <div className={`${styles.shell} withSkipBar`}>
+        <LessonHUD />
 
-      {currentExercise.type === "exercise.multiple_choice" && (
-        <MultipleChoice
-          exercise={currentExercise}
-          onSubmit={handleSubmit}
-          feedbackState={feedbackState}
-        />
-      )}
-      {currentExercise.type === "exercise.word_bank" && (
-        <WordBank
-          exercise={currentExercise}
-          onSubmit={handleSubmit}
-          feedbackState={feedbackState}
-        />
-      )}
-      {currentExercise.type === "exercise.listening" && (
-        <Listening
-          exercise={currentExercise}
-          onSubmit={handleSubmit}
-          feedbackState={feedbackState}
-        />
-      )}
-      {currentExercise.type === "exercise.speak_it" && (
-        <SpeakIt
-          exercise={currentExercise}
-          onSubmit={handleSubmit}
-          feedbackState={feedbackState}
-        />
-      )}
-    </div>
+        {currentExercise.type === "exercise.multiple_choice" && (
+          <MultipleChoice
+            exercise={currentExercise}
+            onSubmit={handleSubmit}
+            feedbackState={feedbackState}
+          />
+        )}
+        {currentExercise.type === "exercise.word_bank" && (
+          <WordBank
+            exercise={currentExercise}
+            onSubmit={handleSubmit}
+            feedbackState={feedbackState}
+          />
+        )}
+        {currentExercise.type === "exercise.listening" && (
+          <Listening
+            exercise={currentExercise}
+            onSubmit={handleSubmit}
+            feedbackState={feedbackState}
+          />
+        )}
+        {currentExercise.type === "exercise.speak_it" && (
+          <SpeakIt
+            exercise={currentExercise}
+            onSubmit={handleSubmit}
+            feedbackState={feedbackState}
+          />
+        )}
+      </div>
+      <SkipToWorld />
+    </>
   );
 }
