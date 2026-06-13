@@ -1,31 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import course from "../../data/courses/de.json";
 import PathMap from "@/components/PathMap";
 import MemoryPlaceSearch from "@/components/MemoryPlaceSearch";
+import NewLessonModal from "@/components/NewLessonModal";
 import LoadingState from "@/components/ui/LoadingState";
-import { Course, LearnerProfile } from "@/lib/types";
-
-const typedCourse = course as Course;
-
-const COURSE_FLAGS: Record<string, string> = {
-  de: "🇩🇪",
-  fr: "🇫🇷",
-};
-
-const defaultProfile: LearnerProfile = {
-  uid: "demo",
-  xp: 0,
-  streak: 0,
-  hearts: 3,
-  last_active: new Date().toISOString(),
-  unit_progress: {
-    kitchen_1: "current",
-    cafe_1: "locked",
-  },
-};
+import { useCourse } from "@/lib/course-context";
+import { getCustomUnits, saveCustomUnit } from "@/lib/custom-units";
+import {
+  COURSE_FLAGS,
+  defaultUnitProgress,
+  mergeUnitProgress,
+} from "@/lib/courses";
+import { LearnerProfile, Unit } from "@/lib/types";
 
 interface SelectedUnit {
   unitId: string;
@@ -34,31 +22,53 @@ interface SelectedUnit {
 
 export default function Home() {
   const router = useRouter();
+  const { course, courseId, ready: courseReady } = useCourse();
   const [profile, setProfile] = useState<LearnerProfile | null>(null);
+  const [customUnits, setCustomUnits] = useState<Unit[]>([]);
   const [selectedUnit, setSelectedUnit] = useState<SelectedUnit | null>(null);
+  const [showNewLesson, setShowNewLesson] = useState(false);
   const [navigatingToLesson, setNavigatingToLesson] = useState(false);
 
+  const units = useMemo(
+    () => [...course.units, ...customUnits],
+    [course.units, customUnits]
+  );
+
   useEffect(() => {
+    setCustomUnits(getCustomUnits(courseId));
+  }, [courseId]);
+
+  useEffect(() => {
+    if (!courseReady) return;
+
     fetch("/api/redis/profile?uid=demo")
       .then((res) => res.json())
       .then((data: LearnerProfile) => {
-        // Merge Redis profile with current course units so stale unit_ids are dropped
-        // and any new units that aren't in Redis yet get their default status.
-        const mergedProgress = { ...defaultProfile.unit_progress };
-        for (const unit of typedCourse.units) {
-          if (data.unit_progress[unit.unit_id]) {
-            mergedProgress[unit.unit_id] = data.unit_progress[unit.unit_id];
+        const mergedProgress = mergeUnitProgress(courseId, data);
+        for (const unit of customUnits) {
+          if (!mergedProgress[unit.unit_id]) {
+            mergedProgress[unit.unit_id] = "current";
           }
         }
-        // Ensure at least one unit is "current" if none made it through the merge.
-        const hasCurrent = Object.values(mergedProgress).some((s) => s === "current");
-        if (!hasCurrent && typedCourse.units.length > 0) {
-          mergedProgress[typedCourse.units[0].unit_id] = "current";
+        const hasCurrent = Object.values(mergedProgress).some(
+          (s) => s === "current"
+        );
+        if (!hasCurrent && units.length > 0) {
+          mergedProgress[units[0].unit_id] = "current";
         }
         setProfile({ ...data, unit_progress: mergedProgress });
       })
-      .catch(() => setProfile(defaultProfile));
-  }, []);
+      .catch(() =>
+        setProfile({
+          uid: "demo",
+          xp: 0,
+          streak: 0,
+          hearts: 3,
+          last_active: new Date().toISOString(),
+          unit_progress: defaultUnitProgress(),
+        })
+      );
+  }, [courseId, courseReady, customUnits, units]);
 
   useEffect(() => {
     if (!selectedUnit) return;
@@ -66,11 +76,31 @@ export default function Home() {
   }, [selectedUnit, router]);
 
   const handleUnitClick = (unitId: string) => {
-    const unit = typedCourse.units.find((u) => u.unit_id === unitId);
+    const unit = units.find((u) => u.unit_id === unitId);
     if (unit) {
       setSelectedUnit({ unitId, title: unit.title });
     }
   };
+
+  const handleLessonCreated = useCallback(
+    (unit: Unit) => {
+      saveCustomUnit(courseId, unit);
+      setCustomUnits(getCustomUnits(courseId));
+      setShowNewLesson(false);
+      setProfile((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          unit_progress: {
+            ...prev.unit_progress,
+            [unit.unit_id]: "current",
+          },
+        };
+      });
+      setSelectedUnit({ unitId: unit.unit_id, title: unit.title });
+    },
+    [courseId]
+  );
 
   const handleMemorySkip = () => {
     if (!selectedUnit) return;
@@ -88,7 +118,7 @@ export default function Home() {
     router.push(`/lesson/${selectedUnit.unitId}`);
   };
 
-  if (!profile) {
+  if (!profile || !courseReady) {
     return (
       <div className="appShell">
         <LoadingState message="Loading your path…" />
@@ -99,14 +129,22 @@ export default function Home() {
   return (
     <>
       <PathMap
-        units={typedCourse.units}
+        units={units}
         progress={profile.unit_progress}
         xp={profile.xp}
         streak={profile.streak}
-        courseTitle={typedCourse.title}
-        courseFlag={COURSE_FLAGS[typedCourse.course] ?? "🌍"}
+        courseTitle={course.title}
+        courseFlag={COURSE_FLAGS[courseId]}
         onUnitClick={handleUnitClick}
+        onNewLesson={() => setShowNewLesson(true)}
       />
+      {showNewLesson && (
+        <NewLessonModal
+          courseId={courseId}
+          onClose={() => setShowNewLesson(false)}
+          onCreated={handleLessonCreated}
+        />
+      )}
       {selectedUnit && (
         <MemoryPlaceSearch
           unitId={selectedUnit.unitId}

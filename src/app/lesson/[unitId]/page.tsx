@@ -15,21 +15,21 @@ import Listening from "@/components/exercises/Listening";
 import SpeakIt from "@/components/exercises/SpeakIt";
 import LessonComplete from "@/components/exercises/LessonComplete";
 import LoadingState from "@/components/ui/LoadingState";
-import course from "../../../../data/courses/de.json";
+import { useCourse } from "@/lib/course-context";
+import { LANGUAGE_LABELS } from "@/lib/courses";
+import { findUnitById } from "@/lib/course-data";
 import {
   pendingExerciseRespondRef,
   pendingJudgmentRef,
 } from "@/lib/lessonAgentBridge";
 import { useLessonStore } from "@/lib/store";
 import {
-  Course,
   ExercisePayload,
   LessonComplete as LessonCompletePayload,
+  Unit,
   WordStrength,
 } from "@/lib/types";
 import styles from "./page.module.css";
-
-const typedCourse = course as Course;
 
 function getWordId(exercise: ExercisePayload | null): string | null {
   if (!exercise) return null;
@@ -79,10 +79,18 @@ function LessonExperience({
   unitId: string;
   agentError: boolean;
 }) {
-  const unit = useMemo(
-    () => typedCourse.units.find((u) => u.unit_id === unitId) ?? null,
-    [unitId]
+  const { course, courseId } = useCourse();
+  const language = LANGUAGE_LABELS[courseId];
+
+  const builtInUnit = useMemo(
+    () => course.units.find((u) => u.unit_id === unitId) ?? null,
+    [course.units, unitId]
   );
+  const [unit, setUnit] = useState<Unit | null>(builtInUnit);
+
+  useEffect(() => {
+    setUnit(findUnitById(courseId, unitId));
+  }, [courseId, unitId]);
 
   const [wordStrengths, setWordStrengths] = useState<WordStrength[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -113,14 +121,14 @@ function LessonExperience({
     const vocabLines = unit.vocab
       .map(
         (v) =>
-          `  word_id="${v.word_id}" | fr="${v.fr}" | en="${v.en}" | gender=${v.gender ?? "n"} | distractors=${JSON.stringify(v.distractors)}`
+          `  word_id="${v.word_id}" | target="${v.fr}" | en="${v.en}" | gender=${v.gender ?? "n"} | distractors=${JSON.stringify(v.distractors)}`
       )
       .join("\n");
 
     const sentenceLines = unit.sentences
       .map(
         (s) =>
-          `  en="${s.en}" | fr="${s.fr}" | tiles=${JSON.stringify(s.tiles)} | answer=${JSON.stringify(s.answer)}`
+          `  en="${s.en}" | target="${s.fr}" | tiles=${JSON.stringify(s.tiles)} | answer=${JSON.stringify(s.answer)}`
       )
       .join("\n");
 
@@ -137,9 +145,9 @@ function LessonExperience({
       new TextMessage({
         role: Role.User,
         content: [
-          `Start the lesson for unit "${unit.title}" (unit_id="${unit.unit_id}", world_id="${unit.world_id}").`,
+          `Start the lesson for unit "${unit.title}" (unit_id="${unit.unit_id}", world_id="${unit.world_id}", target_language="${language.name}").`,
           ``,
-          `VOCABULARY — use these exact word_ids, French words, and distractors when building exercises:`,
+          `VOCABULARY — use these exact word_ids, ${language.name} target words (target field), and distractors when building exercises:`,
           vocabLines,
           ``,
           `SENTENCES — use these for word_bank exercises (tiles and answer are exact):`,
@@ -152,7 +160,7 @@ function LessonExperience({
         ].join("\n"),
       })
     );
-  }, [unit, wordStrengths, appendMessage]);
+  }, [unit, wordStrengths, appendMessage, language.name]);
 
   useCopilotReadable({
     description:
@@ -273,10 +281,12 @@ function LessonExperience({
 
     lastAssistantMessageRef.current = text;
 
-    if (/Bien joué|Exactement|Parfait/i.test(text)) {
+    if (
+      new RegExp(language.feedbackCorrect.join("|"), "i").test(text)
+    ) {
       setFeedback("correct");
       addXp(10);
-    } else if (/Presque/i.test(text)) {
+    } else if (new RegExp(language.feedbackWrong.join("|"), "i").test(text)) {
       setFeedback("wrong");
       loseHeart();
       const wordId = pendingJudgmentRef.current.wordId;
@@ -286,7 +296,7 @@ function LessonExperience({
     pendingJudgmentRef.current = null;
     const timer = setTimeout(() => setFeedback("idle"), 1500);
     return () => clearTimeout(timer);
-  }, [messages, setFeedback, addXp, loseHeart, addMissed]);
+  }, [messages, setFeedback, addXp, loseHeart, addMissed, language]);
 
   useEffect(() => {
     if (!unit || exerciseIndex < totalExercises - 2) return;
@@ -413,10 +423,11 @@ export default function LessonPage({
   params: Promise<{ unitId: string }>;
 }) {
   const { unitId } = use(params);
+  const { courseId } = useCourse();
   const [agentError, setAgentError] = useState(false);
   const lessonThreadId = useMemo(
-    () => `lesson-${unitId}-${crypto.randomUUID()}`,
-    [unitId]
+    () => `lesson-${courseId}-${unitId}-${crypto.randomUUID()}`,
+    [courseId, unitId]
   );
 
   return (

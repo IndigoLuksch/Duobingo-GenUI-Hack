@@ -321,3 +321,34 @@
   background: var(--color-bg);
   border-color: var(--color-border);
 }
+
+.unitBadgeNew {
+  color: var(--color-google-blue);
+  background: #e8f0fe;
+  border-color: #aecbfa;
+}
+
+.newLessonNode {
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px dashed var(--color-google-blue);
+  background: #fff;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  font-family: inherit;
+}
+
+.newLessonNode:hover {
+  background: #e8f0fe;
+}
+
+.plusIcon {
+  font-size: 42px;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--color-google-blue);
+}

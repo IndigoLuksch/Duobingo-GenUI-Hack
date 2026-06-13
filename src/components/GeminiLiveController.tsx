@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { GeminiLiveClient } from "@/lib/gemini-live";
 import { startFrameCapture } from "@/lib/frame-capture";
+import { CourseId, LANGUAGE_LABELS } from "@/lib/courses";
 import { useWorldStore } from "@/lib/store";
 import { VocabItem, WordStrength, WorldCardData } from "@/lib/types";
 import styles from "./GeminiLiveController.module.css";
@@ -66,11 +67,13 @@ const GEMINI_TOOLS = [
 
 const VOCAB_GOAL = 5;
 
-const SESSION_START_PROMPT =
-  "The learner just entered the 3D scene. Greet them warmly in German and immediately give your first scavenger hunt instruction. Do not wait for them to speak first.";
+function sessionStartPrompt(languageName: string): string {
+  return `The learner just entered the 3D scene. Greet them warmly in ${languageName} and immediately give your first scavenger hunt instruction. Do not wait for them to speak first.`;
+}
 
-const LESSON_COMPLETE_PROMPT =
-  "The learner has confirmed all 5 vocabulary words. Congratulate them, say the lesson is finished (briefly in German, then in English), and invite them to ask questions about anything they see and continue exploring freely.";
+function lessonCompletePrompt(languageName: string): string {
+  return `The learner has confirmed all 5 vocabulary words. Congratulate them, say the lesson is finished (briefly in ${languageName}, then in English), and invite them to ask questions about anything they see and continue exploring freely.`;
+}
 
 const PCM_WORKLET = `
 class PCMProcessor extends AudioWorkletProcessor {
@@ -95,16 +98,19 @@ interface GeminiLiveControllerProps {
   unitVocab: VocabItem[];
   wordStrengths: WordStrength[];
   unitTitle: string;
+  courseId: CourseId;
   extraContextLine?: string;
 }
 
 function buildSystemInstruction(
+  courseId: CourseId,
   unitTitle: string,
   missedWordIds: string[],
   unitVocab: VocabItem[],
   wordStrengths: WordStrength[],
   extraContextLine?: string
 ): string {
+  const language = LANGUAGE_LABELS[courseId];
   const strengthMap = Object.fromEntries(
     wordStrengths.map((w) => [w.word_id, w.strength])
   );
@@ -128,7 +134,7 @@ function buildSystemInstruction(
 
   const memoryLine = extraContextLine ? `\n${extraContextLine}\n` : "";
 
-  return `You are a warm, playful German language tutor. You are inside a 3D scene with the learner. You can SEE the scene through image frames that are sent to you periodically — these are screenshots of what the learner currently sees as they navigate the 3D environment.
+  return `You are a warm, playful ${language.tutorRole}. You are inside a 3D scene with the learner. You can SEE the scene through image frames that are sent to you periodically — these are screenshots of what the learner currently sees as they navigate the 3D environment.
 ${memoryLine}
 CONTEXT:
 The learner just completed a lesson on the theme "${unitTitle}".
@@ -142,11 +148,11 @@ SESSION GOAL: Teach exactly ${VOCAB_GOAL} vocabulary words this session. Priorit
 
 YOUR BEHAVIOR:
 1. PROACTIVE LEADER: You ALWAYS speak first and drive the session. Never wait silently for the learner. After each word is confirmed, immediately give the next instruction — do not wait for them to respond.
-2. SESSION START: Greet warmly in German. Mention that you can see what they see. Immediately start the scavenger hunt with the first target word.
+2. SESSION START: ${language.sessionGreeting}. Mention that you can see what they see. Immediately start the scavenger hunt with the first target word.
 3. SCAVENGER HUNT MODE: Ask the learner to find objects one at a time. Confirm when you see them centered in the frame. Call show_word_card AND update_strength(boost) on each confirmation. Keep count — stop after ${VOCAB_GOAL} words.
-4. LESSON COMPLETE: After the ${VOCAB_GOAL}th word is confirmed, congratulate the learner, say the lesson is finished, and tell them they can ask questions about anything they see and continue exploring freely. Switch to free exploration / Q&A mode.
+4. LESSON COMPLETE: After the ${VOCAB_GOAL}th word is confirmed, congratulate the learner, say the lesson is finished (${language.lessonCompleteNote}), and tell them they can ask questions about anything they see and continue exploring freely. Switch to free exploration / Q&A mode.
 5. POINT-AND-ASK MODE: Before ${VOCAB_GOAL} words are done, only use this if the learner explicitly asks. After lesson complete, answer freely.
-6. LANGUAGE RULES: Speak primarily in German. Short responses (1-2 sentences). Use du.
+6. LANGUAGE RULES: Speak primarily in ${language.name}. Short responses (1-2 sentences). Use informal address (tu/du/tu).
 7. VISUAL GROUNDING: Base responses on what you see in frames. Never claim to see something you're not confident about.
 8. TOOL USAGE: Call show_word_card EVERY TIME you teach or confirm a word. Call update_strength EVERY TIME.`;
 }
@@ -257,6 +263,7 @@ export default function GeminiLiveController({
   unitVocab,
   wordStrengths,
   unitTitle,
+  courseId,
   extraContextLine,
 }: GeminiLiveControllerProps) {
   const [connected, setConnected] = useState(false);
@@ -272,6 +279,8 @@ export default function GeminiLiveController({
 
   const boostedCount = useWorldStore((s) => s.boostedWordIds.length);
 
+  const language = LANGUAGE_LABELS[courseId];
+
   useEffect(() => {
     mutedRef.current = muted;
   }, [muted]);
@@ -281,8 +290,8 @@ export default function GeminiLiveController({
       return;
     }
     lessonCompleteSentRef.current = true;
-    clientRef.current?.sendClientContent(LESSON_COMPLETE_PROMPT);
-  }, [boostedCount, connected]);
+    clientRef.current?.sendClientContent(lessonCompletePrompt(language.name));
+  }, [boostedCount, connected, language.name]);
 
   useEffect(() => {
     lessonCompleteSentRef.current = false;
@@ -380,6 +389,7 @@ export default function GeminiLiveController({
       client = new GeminiLiveClient({
         apiKey,
         systemInstruction: buildSystemInstruction(
+          courseId,
           unitTitle,
           missedWordIds,
           unitVocab,
@@ -391,7 +401,7 @@ export default function GeminiLiveController({
           if (!disposed) {
             setConnected(true);
             setConnectionError(null);
-            client?.sendClientContent(SESSION_START_PROMPT);
+            client?.sendClientContent(sessionStartPrompt(language.name));
             void startMicAndFrames();
           }
         },
@@ -432,7 +442,7 @@ export default function GeminiLiveController({
       if (workletUrl) URL.revokeObjectURL(workletUrl);
       if (subtitleTimerRef.current) clearTimeout(subtitleTimerRef.current);
     };
-  }, [canvasRef, missedWordIds, unitVocab, wordStrengths, unitTitle, extraContextLine]);
+  }, [canvasRef, missedWordIds, unitVocab, wordStrengths, unitTitle, courseId, extraContextLine, language.name]);
 
   return (
     <div className={styles.overlay}>

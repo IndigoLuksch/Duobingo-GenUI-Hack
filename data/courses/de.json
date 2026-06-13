@@ -3,212 +3,845 @@
   "title": "German",
   "units": [
     {
-      "unit_id": "kitchen_1",
-      "title": "In the Kitchen",
-      "icon": "🍳",
-      "world_id": "kitchen_fr",
-      "marble_prompt": "A photorealistic German farmhouse kitchen interior, warmly lit. A large wooden dining table with four chairs in the center. A prominent stove with a big stockpot on the burner. A large open oven with a baking tray visible inside. A deep farmhouse sink under a window. A tall refrigerator against the wall. Open wooden shelving displaying stacked plates and bowls. A hanging pot rack above the counter with a large frying pan and a colander. A cutting board on the counter next to a bread basket. Tiled floor, wooden cabinets, rustic details.",
+      "unit_id": "boulangerie_1",
+      "title": "At the Bakery",
+      "description": "Bread, pastries & the baker",
+      "icon": "🥖",
+      "world_id": "boulangerie_fr",
+      "marble_prompt": "A photorealistic German bakery interior with warm golden light. A long wooden display counter laden with golden loaves and pretzels. A tall glass pastry case filled with Berliners and butter croissants. A large stone oven glowing amber through an arch in the back wall. Flour-dusted wooden shelving stacked with artisan breads. A vintage brass cash register on the counter. A baker in a white apron behind the counter. Wicker bread baskets hanging from the ceiling. Hand-painted German signage and a chalkboard menu. Terracotta tiled floor, exposed wooden beams, warm morning light through a glass storefront.",
       "vocab": [
         {
-          "word_id": "tisch",
-          "fr": "der Tisch",
-          "en": "table",
-          "gender": "m",
-          "distractors": ["der Schreibtisch", "die Theke", "das Regal"]
+          "word_id": "baguette",
+          "fr": "das Baguette",
+          "en": "baguette",
+          "gender": null,
+          "distractors": [
+            "das Brötchen",
+            "der Kuchen",
+            "das Brot"
+          ]
         },
         {
-          "word_id": "stuhl",
-          "fr": "der Stuhl",
-          "en": "chair",
-          "gender": "m",
-          "distractors": ["der Hocker", "das Sofa", "der Sessel"]
+          "word_id": "pain",
+          "fr": "das Brot",
+          "en": "bread",
+          "gender": null,
+          "distractors": [
+            "das Baguette",
+            "das Mehl",
+            "der Kuchen"
+          ]
         },
         {
-          "word_id": "ofen",
+          "word_id": "gateau",
+          "fr": "der Kuchen",
+          "en": "cake",
+          "gender": "m",
+          "distractors": [
+            "das Baguette",
+            "das Brot",
+            "das Brötchen"
+          ]
+        },
+        {
+          "word_id": "farine",
+          "fr": "das Mehl",
+          "en": "flour",
+          "gender": null,
+          "distractors": [
+            "das Brot",
+            "der Zucker",
+            "das Salz"
+          ]
+        },
+        {
+          "word_id": "four",
           "fr": "der Ofen",
           "en": "oven",
           "gender": "m",
-          "distractors": ["der Kühlschrank", "der Herd", "die Mikrowelle"]
+          "distractors": [
+            "die Kasse",
+            "die Theke",
+            "der Tisch"
+          ]
         },
         {
-          "word_id": "kuehlschrank",
-          "fr": "der Kühlschrank",
-          "en": "refrigerator",
-          "gender": "m",
-          "distractors": ["der Gefrierschrank", "der Ofen", "das Spülbecken"]
-        },
-        {
-          "word_id": "spuelbecken",
-          "fr": "das Spülbecken",
-          "en": "sink",
-          "gender": null,
-          "distractors": ["die Badewanne", "das Waschbecken", "die Dusche"]
-        },
-        {
-          "word_id": "herd",
-          "fr": "der Herd",
-          "en": "stove",
-          "gender": "m",
-          "distractors": ["der Ofen", "die Mikrowelle", "der Kühlschrank"]
-        },
-        {
-          "word_id": "pfanne",
-          "fr": "die Pfanne",
-          "en": "frying pan",
+          "word_id": "caisse",
+          "fr": "die Kasse",
+          "en": "cash register",
           "gender": "f",
-          "distractors": ["der Topf", "die Kelle", "der Spatel"]
+          "distractors": [
+            "der Ofen",
+            "die Theke",
+            "das Fenster"
+          ]
         },
         {
-          "word_id": "topf",
-          "fr": "der Topf",
-          "en": "stockpot",
+          "word_id": "panier",
+          "fr": "der Korb",
+          "en": "basket",
           "gender": "m",
-          "distractors": ["die Pfanne", "die Kasserolle", "die Schüssel"]
+          "distractors": [
+            "die Kasse",
+            "die Tasche",
+            "der Tisch"
+          ]
         },
         {
-          "word_id": "regal",
-          "fr": "das Regal",
-          "en": "shelf",
-          "gender": null,
-          "distractors": ["der Schrank", "die Schublade", "die Theke"]
+          "word_id": "boulanger",
+          "fr": "der Bäcker",
+          "en": "baker",
+          "gender": "m",
+          "distractors": [
+            "der Verkäufer",
+            "der Koch",
+            "der Konditor"
+          ]
         },
         {
-          "word_id": "fenster",
-          "fr": "das Fenster",
-          "en": "window",
-          "gender": null,
-          "distractors": ["die Tür", "die Wand", "der Vorhang"]
+          "word_id": "tablier",
+          "fr": "die Schürze",
+          "en": "apron",
+          "gender": "f",
+          "distractors": [
+            "der Hut",
+            "der Mantel",
+            "die Hose"
+          ]
+        },
+        {
+          "word_id": "comptoir",
+          "fr": "die Theke",
+          "en": "counter",
+          "gender": "f",
+          "distractors": [
+            "der Tisch",
+            "die Kasse",
+            "der Ofen"
+          ]
         }
       ],
       "sentences": [
         {
-          "fr": "Der Ofen ist heiß",
-          "en": "The oven is hot",
-          "tiles": ["Der", "Ofen", "ist", "heiß", "kalt", "Die"],
-          "answer": ["Der", "Ofen", "ist", "heiß"]
+          "fr": "Das Baguette ist frisch",
+          "en": "The baguette is fresh",
+          "tiles": [
+            "Das",
+            "Baguette",
+            "ist",
+            "frisch",
+            "das",
+            "Brot",
+            "alt"
+          ],
+          "answer": [
+            "Das",
+            "Baguette",
+            "ist",
+            "frisch"
+          ]
         },
         {
-          "fr": "Der Topf steht auf dem Herd",
-          "en": "The pot is on the stove",
-          "tiles": ["Der", "Topf", "steht", "auf", "dem", "Herd", "die", "Pfanne"],
-          "answer": ["Der", "Topf", "steht", "auf", "dem", "Herd"]
+          "fr": "Der Bäcker legt das Brot in den Ofen",
+          "en": "The baker puts the bread in the oven",
+          "tiles": [
+            "Der",
+            "Bäcker",
+            "legt",
+            "das",
+            "Brot",
+            "in",
+            "den",
+            "Ofen",
+            "die",
+            "Kasse"
+          ],
+          "answer": [
+            "Der",
+            "Bäcker",
+            "legt",
+            "das",
+            "Brot",
+            "in",
+            "den",
+            "Ofen"
+          ]
         },
         {
-          "fr": "Die Stühle stehen um den Tisch",
-          "en": "The chairs are around the table",
-          "tiles": ["Die", "Stühle", "stehen", "um", "den", "Tisch", "Der", "Ofen"],
-          "answer": ["Die", "Stühle", "stehen", "um", "den", "Tisch"]
+          "fr": "Der Kuchen ist im Korb",
+          "en": "The cake is in the basket",
+          "tiles": [
+            "Der",
+            "Kuchen",
+            "ist",
+            "im",
+            "Korb",
+            "die",
+            "Kasse",
+            "auf"
+          ],
+          "answer": [
+            "Der",
+            "Kuchen",
+            "ist",
+            "im",
+            "Korb"
+          ]
         },
         {
-          "fr": "Es gibt eine Pfanne auf dem Regal",
-          "en": "There is a frying pan on the shelf",
-          "tiles": ["Es", "gibt", "eine", "Pfanne", "auf", "dem", "Regal", "den", "Topf"],
-          "answer": ["Es", "gibt", "eine", "Pfanne", "auf", "dem", "Regal"]
+          "fr": "Das Mehl liegt auf der Theke",
+          "en": "The flour is on the counter",
+          "tiles": [
+            "Das",
+            "Mehl",
+            "liegt",
+            "auf",
+            "der",
+            "Theke",
+            "in",
+            "der",
+            "Kasse"
+          ],
+          "answer": [
+            "Das",
+            "Mehl",
+            "liegt",
+            "auf",
+            "der",
+            "Theke"
+          ]
         }
       ]
     },
     {
       "unit_id": "cafe_1",
       "title": "At the Café",
+      "description": "Drinks, seating & café life",
       "icon": "☕",
       "world_id": "cafe_fr",
-      "marble_prompt": "A photorealistic Viennese café interior. A long marble counter with a large brass espresso machine as the centerpiece. A tall glass display case filled with Schnecken and large pastries. Small round bistro tables with bentwood chairs. A large chalkboard menu covering most of the back wall. An ornate bar with shelves of bottles behind it. A coat rack near the entrance. A large arched window looking onto a European street with an awning. Warm amber lighting from hanging pendant lamps. Tiled mosaic floor.",
+      "marble_prompt": "A photorealistic Viennese café interior. A long marble counter with a large brass espresso machine as the centerpiece. A tall glass display case filled with pastries. Small round bistro tables with bentwood chairs. A large chalkboard menu on the back wall. An ornate bar with shelves of bottles behind it. A coat rack near the entrance. A large arched window onto a European street with an awning. Warm amber pendant lamps. Tiled mosaic floor.",
       "vocab": [
         {
-          "word_id": "theke",
+          "word_id": "comptoir",
           "fr": "die Theke",
           "en": "counter",
           "gender": "f",
-          "distractors": ["der Tisch", "die Bar", "die Vitrine"]
+          "distractors": [
+            "der Tisch",
+            "die Bar",
+            "die Vitrine"
+          ]
         },
         {
           "word_id": "croissant",
           "fr": "das Croissant",
           "en": "croissant",
           "gender": null,
-          "distractors": ["das Brot", "das Brötchen", "der Kuchen"]
+          "distractors": [
+            "das Brot",
+            "das Brötchen",
+            "der Kuchen"
+          ]
         },
         {
           "word_id": "vitrine",
           "fr": "die Vitrine",
           "en": "display case",
           "gender": "f",
-          "distractors": ["die Theke", "das Fenster", "das Regal"]
+          "distractors": [
+            "die Theke",
+            "das Fenster",
+            "das Regal"
+          ]
         },
         {
-          "word_id": "stuhl",
+          "word_id": "chaise",
           "fr": "der Stuhl",
           "en": "chair",
           "gender": "m",
-          "distractors": ["der Hocker", "der Sessel", "die Bank"]
+          "distractors": [
+            "der Hocker",
+            "der Sessel",
+            "die Bank"
+          ]
         },
         {
-          "word_id": "tisch",
+          "word_id": "table",
           "fr": "der Tisch",
           "en": "table",
           "gender": "m",
-          "distractors": ["die Theke", "die Bar", "der Schreibtisch"]
+          "distractors": [
+            "die Theke",
+            "die Bar",
+            "der Schreibtisch"
+          ]
         },
         {
-          "word_id": "gemaelde",
+          "word_id": "tableau",
           "fr": "das Gemälde",
           "en": "painting",
           "gender": null,
-          "distractors": ["der Spiegel", "das Fenster", "das Plakat"]
+          "distractors": [
+            "der Spiegel",
+            "das Fenster",
+            "das Plakat"
+          ]
         },
         {
-          "word_id": "fenster",
+          "word_id": "fenetre",
           "fr": "das Fenster",
           "en": "window",
           "gender": null,
-          "distractors": ["die Tür", "die Wand", "die Vitrine"]
+          "distractors": [
+            "die Tür",
+            "die Wand",
+            "die Vitrine"
+          ]
         },
         {
           "word_id": "lampe",
           "fr": "die Lampe",
           "en": "lamp",
           "gender": "f",
-          "distractors": ["das Licht", "der Kronleuchter", "die Kerze"]
+          "distractors": [
+            "das Licht",
+            "der Kronleuchter",
+            "die Kerze"
+          ]
         },
         {
-          "word_id": "garderobenstaender",
+          "word_id": "porte_manteau",
           "fr": "der Garderobenständer",
           "en": "coat rack",
           "gender": "m",
-          "distractors": ["die Tür", "der Mantel", "die Garderobe"]
+          "distractors": [
+            "die Tür",
+            "der Mantel",
+            "die Garderobe"
+          ]
         },
         {
-          "word_id": "kaffeemaschine",
+          "word_id": "machine_a_cafe",
           "fr": "die Kaffeemaschine",
           "en": "coffee machine",
           "gender": "f",
-          "distractors": ["die Tasse", "der Kaffee", "die Kaffeekanne"]
+          "distractors": [
+            "die Tasse",
+            "der Kaffee",
+            "die Kaffeekanne"
+          ]
         }
       ],
       "sentences": [
         {
           "fr": "Die Theke ist aus Marmor",
           "en": "The counter is marble",
-          "tiles": ["Die", "Theke", "ist", "aus", "Marmor", "Der", "Holz"],
-          "answer": ["Die", "Theke", "ist", "aus", "Marmor"]
+          "tiles": [
+            "Die",
+            "Theke",
+            "ist",
+            "aus",
+            "Marmor",
+            "Der",
+            "Holz"
+          ],
+          "answer": [
+            "Die",
+            "Theke",
+            "ist",
+            "aus",
+            "Marmor"
+          ]
         },
         {
           "fr": "Die Croissants sind in der Vitrine",
           "en": "The croissants are in the display case",
-          "tiles": ["Die", "Croissants", "sind", "in", "der", "Vitrine", "Das", "Regal"],
-          "answer": ["Die", "Croissants", "sind", "in", "der", "Vitrine"]
+          "tiles": [
+            "Die",
+            "Croissants",
+            "sind",
+            "in",
+            "der",
+            "Vitrine",
+            "Das",
+            "Regal"
+          ],
+          "answer": [
+            "Die",
+            "Croissants",
+            "sind",
+            "in",
+            "der",
+            "Vitrine"
+          ]
         },
         {
           "fr": "Das Gemälde hängt an der Wand",
           "en": "The painting is on the wall",
-          "tiles": ["Das", "Gemälde", "hängt", "an", "der", "Wand", "Die", "Fenster"],
-          "answer": ["Das", "Gemälde", "hängt", "an", "der", "Wand"]
+          "tiles": [
+            "Das",
+            "Gemälde",
+            "hängt",
+            "an",
+            "der",
+            "Wand",
+            "Die",
+            "Fenster"
+          ],
+          "answer": [
+            "Das",
+            "Gemälde",
+            "hängt",
+            "an",
+            "der",
+            "Wand"
+          ]
         },
         {
           "fr": "Die Lampe hängt über dem Tisch",
           "en": "The lamp is above the table",
-          "tiles": ["Die", "Lampe", "hängt", "über", "dem", "Tisch", "Das", "Fenster"],
-          "answer": ["Die", "Lampe", "hängt", "über", "dem", "Tisch"]
+          "tiles": [
+            "Die",
+            "Lampe",
+            "hängt",
+            "über",
+            "dem",
+            "Tisch",
+            "Das",
+            "Fenster"
+          ],
+          "answer": [
+            "Die",
+            "Lampe",
+            "hängt",
+            "über",
+            "dem",
+            "Tisch"
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "gare_1",
+      "title": "At the Station",
+      "description": "Travel, tickets & departures",
+      "icon": "🚂",
+      "world_id": "gare_fr",
+      "marble_prompt": "A photorealistic German train station interior. High vaulted glass ceiling flooding the concourse with natural light. A large station clock above the platforms. A row of ticket windows. A departures board showing German city names. Wooden benches on a polished floor. A train visible through arched platform entrances. Passengers with suitcases. Iron pillars, glazed tile walls, a small newsstand kiosk. Warm afternoon sunlight through the glass roof.",
+      "vocab": [
+        {
+          "word_id": "train",
+          "fr": "der Zug",
+          "en": "train",
+          "gender": "m",
+          "distractors": [
+            "der Bus",
+            "die U-Bahn",
+            "die Straßenbahn"
+          ]
+        },
+        {
+          "word_id": "quai",
+          "fr": "der Bahnsteig",
+          "en": "platform",
+          "gender": "m",
+          "distractors": [
+            "der Gang",
+            "der Saal",
+            "die Halle"
+          ]
+        },
+        {
+          "word_id": "billet",
+          "fr": "die Fahrkarte",
+          "en": "ticket",
+          "gender": "f",
+          "distractors": [
+            "der Reisepass",
+            "die Karte",
+            "die Quittung"
+          ]
+        },
+        {
+          "word_id": "valise",
+          "fr": "der Koffer",
+          "en": "suitcase",
+          "gender": "m",
+          "distractors": [
+            "die Tasche",
+            "der Korb",
+            "die Mappe"
+          ]
+        },
+        {
+          "word_id": "horloge",
+          "fr": "die Uhr",
+          "en": "clock",
+          "gender": "f",
+          "distractors": [
+            "die Armbanduhr",
+            "der Wecker",
+            "der Kalender"
+          ]
+        },
+        {
+          "word_id": "guichet",
+          "fr": "der Schalter",
+          "en": "ticket window",
+          "gender": "m",
+          "distractors": [
+            "das Büro",
+            "die Tür",
+            "die Theke"
+          ]
+        },
+        {
+          "word_id": "panneau",
+          "fr": "das Schild",
+          "en": "sign",
+          "gender": null,
+          "distractors": [
+            "die Tafel",
+            "die Wand",
+            "der Bildschirm"
+          ]
+        },
+        {
+          "word_id": "banc",
+          "fr": "die Bank",
+          "en": "bench",
+          "gender": "f",
+          "distractors": [
+            "der Stuhl",
+            "der Sitz",
+            "der Sessel"
+          ]
+        },
+        {
+          "word_id": "escalier",
+          "fr": "die Treppe",
+          "en": "staircase",
+          "gender": "f",
+          "distractors": [
+            "der Aufzug",
+            "die Rampe",
+            "der Gang"
+          ]
+        },
+        {
+          "word_id": "depart",
+          "fr": "die Abfahrt",
+          "en": "departure",
+          "gender": "f",
+          "distractors": [
+            "die Ankunft",
+            "die Verspätung",
+            "die Fahrt"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "fr": "Der Zug kommt auf dem Bahnsteig an",
+          "en": "The train arrives on the platform",
+          "tiles": [
+            "Der",
+            "Zug",
+            "kommt",
+            "auf",
+            "dem",
+            "Bahnsteig",
+            "an",
+            "in",
+            "der",
+            "Halle"
+          ],
+          "answer": [
+            "Der",
+            "Zug",
+            "kommt",
+            "auf",
+            "dem",
+            "Bahnsteig",
+            "an"
+          ]
+        },
+        {
+          "fr": "Die Fahrkarte ist am Schalter",
+          "en": "The ticket is at the window",
+          "tiles": [
+            "Die",
+            "Fahrkarte",
+            "ist",
+            "am",
+            "Schalter",
+            "der",
+            "Koffer",
+            "auf",
+            "dem"
+          ],
+          "answer": [
+            "Die",
+            "Fahrkarte",
+            "ist",
+            "am",
+            "Schalter"
+          ]
+        },
+        {
+          "fr": "Der Koffer steht auf der Bank",
+          "en": "The suitcase is on the bench",
+          "tiles": [
+            "Der",
+            "Koffer",
+            "steht",
+            "auf",
+            "der",
+            "Bank",
+            "die",
+            "Treppe",
+            "dem"
+          ],
+          "answer": [
+            "Der",
+            "Koffer",
+            "steht",
+            "auf",
+            "der",
+            "Bank"
+          ]
+        },
+        {
+          "fr": "Die Uhr hängt über dem Schild",
+          "en": "The clock is above the sign",
+          "tiles": [
+            "Die",
+            "Uhr",
+            "hängt",
+            "über",
+            "dem",
+            "Schild",
+            "dem",
+            "Schalter",
+            "unter"
+          ],
+          "answer": [
+            "Die",
+            "Uhr",
+            "hängt",
+            "über",
+            "dem",
+            "Schild"
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "marche_1",
+      "title": "At the Market",
+      "description": "Fresh produce & vendors",
+      "icon": "🛒",
+      "world_id": "marche_fr",
+      "marble_prompt": "A photorealistic open-air German farmers market. Colourful canvas awnings shading wooden stalls. Crates overflowing with tomatoes, courgettes, carrots, and peppers. A cheese stand with large wheels of cheese. A flower stall with sunflowers and roses. A friendly vendor in an apron behind the produce stand. Old brass weighing scales on a wooden table. Cobblestone street, clear sky, dappled morning sunlight.",
+      "vocab": [
+        {
+          "word_id": "tomate",
+          "fr": "die Tomate",
+          "en": "tomato",
+          "gender": "f",
+          "distractors": [
+            "der Apfel",
+            "die Birne",
+            "die Kirsche"
+          ]
+        },
+        {
+          "word_id": "fromage",
+          "fr": "der Käse",
+          "en": "cheese",
+          "gender": "m",
+          "distractors": [
+            "die Butter",
+            "die Milch",
+            "die Sahne"
+          ]
+        },
+        {
+          "word_id": "legume",
+          "fr": "das Gemüse",
+          "en": "vegetable",
+          "gender": null,
+          "distractors": [
+            "das Obst",
+            "das Fleisch",
+            "das Getreide"
+          ]
+        },
+        {
+          "word_id": "fruit",
+          "fr": "das Obst",
+          "en": "fruit",
+          "gender": null,
+          "distractors": [
+            "das Gemüse",
+            "das Fleisch",
+            "das Brot"
+          ]
+        },
+        {
+          "word_id": "stand",
+          "fr": "der Stand",
+          "en": "stall",
+          "gender": "m",
+          "distractors": [
+            "das Geschäft",
+            "der Laden",
+            "der Kiosk"
+          ]
+        },
+        {
+          "word_id": "vendeur",
+          "fr": "der Verkäufer",
+          "en": "vendor",
+          "gender": "m",
+          "distractors": [
+            "der Kunde",
+            "der Koch",
+            "der Lieferant"
+          ]
+        },
+        {
+          "word_id": "panier",
+          "fr": "der Korb",
+          "en": "basket",
+          "gender": "m",
+          "distractors": [
+            "die Tasche",
+            "die Kasse",
+            "die Box"
+          ]
+        },
+        {
+          "word_id": "fleur",
+          "fr": "die Blume",
+          "en": "flower",
+          "gender": "f",
+          "distractors": [
+            "die Pflanze",
+            "der Baum",
+            "das Blatt"
+          ]
+        },
+        {
+          "word_id": "balance",
+          "fr": "die Waage",
+          "en": "scales",
+          "gender": "f",
+          "distractors": [
+            "das Maß",
+            "die Box",
+            "die Kasse"
+          ]
+        },
+        {
+          "word_id": "prix",
+          "fr": "der Preis",
+          "en": "price",
+          "gender": "m",
+          "distractors": [
+            "die Kosten",
+            "der Wert",
+            "das Geld"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "fr": "Die Tomaten sind im Korb",
+          "en": "The tomatoes are in the basket",
+          "tiles": [
+            "Die",
+            "Tomaten",
+            "sind",
+            "im",
+            "Korb",
+            "auf",
+            "dem",
+            "Stand"
+          ],
+          "answer": [
+            "Die",
+            "Tomaten",
+            "sind",
+            "im",
+            "Korb"
+          ]
+        },
+        {
+          "fr": "Der Verkäufer verkauft Käse",
+          "en": "The vendor sells cheese",
+          "tiles": [
+            "Der",
+            "Verkäufer",
+            "verkauft",
+            "Käse",
+            "das",
+            "Obst",
+            "die",
+            "Tomate"
+          ],
+          "answer": [
+            "Der",
+            "Verkäufer",
+            "verkauft",
+            "Käse"
+          ]
+        },
+        {
+          "fr": "Das Gemüse liegt auf der Waage",
+          "en": "The vegetables are on the scales",
+          "tiles": [
+            "Das",
+            "Gemüse",
+            "liegt",
+            "auf",
+            "der",
+            "Waage",
+            "dem",
+            "Stand",
+            "in"
+          ],
+          "answer": [
+            "Das",
+            "Gemüse",
+            "liegt",
+            "auf",
+            "der",
+            "Waage"
+          ]
+        },
+        {
+          "fr": "Die Blume hat einen guten Preis",
+          "en": "The flower has a good price",
+          "tiles": [
+            "Die",
+            "Blume",
+            "hat",
+            "einen",
+            "guten",
+            "Preis",
+            "das",
+            "Obst",
+            "schönen"
+          ],
+          "answer": [
+            "Die",
+            "Blume",
+            "hat",
+            "einen",
+            "guten",
+            "Preis"
+          ]
         }
       ]
     }

@@ -50,21 +50,21 @@ function assertClose(actual: number, expected: number, tolerance = 0.001) {
 
 async function testCourseData() {
   const typed = course as Course;
-  if (typed.units.length < 2) {
-    fail("Course has kitchen + café units");
+  if (typed.units.length < 4) {
+    fail("Course has bakery, café, station, and market units");
     return;
   }
-  const kitchen = typed.units.find((u) => u.unit_id === "kitchen_1");
+  const bakery = typed.units.find((u) => u.unit_id === "boulangerie_1");
   const cafe = typed.units.find((u) => u.unit_id === "cafe_1");
-  if (!kitchen || kitchen.world_id !== "kitchen_fr") {
-    fail("Kitchen unit data");
+  if (!bakery || bakery.world_id !== "boulangerie_fr") {
+    fail("Bakery unit data");
     return;
   }
   if (!cafe) {
     fail("Café unit data");
     return;
   }
-  pass("Course data", `${typed.units.length} units, kitchen_fr world`);
+  pass("Course data", `${typed.units.length} units, boulangerie_fr world`);
 }
 
 function testSrsMath() {
@@ -101,8 +101,8 @@ async function testRedisProfile() {
     return;
   }
   const profile = body as Record<string, unknown>;
-  if (profile.unit_progress?.kitchen_1 !== "current") {
-    fail("Profile kitchen_1 progress", JSON.stringify(profile.unit_progress));
+  if (profile.unit_progress?.boulangerie_1 !== "current") {
+    fail("Profile boulangerie_1 progress", JSON.stringify(profile.unit_progress));
     return;
   }
   if (profile.unit_progress?.cafe_1 !== "locked") {
@@ -114,7 +114,7 @@ async function testRedisProfile() {
 
 async function testWordStrengths() {
   const { status, body } = await fetchJson(
-    "/api/redis/word-strengths?uid=demo&word_ids=table,chaise,four"
+    "/api/redis/word-strengths?uid=demo&word_ids=baguette,pain,four"
   );
   if (status !== 200) {
     fail("GET /api/redis/word-strengths", `status ${status}`);
@@ -130,7 +130,7 @@ async function testWordStrengths() {
 
 async function testStrengthUpdateRoundTrip() {
   const { body: beforeBody } = await fetchJson(
-    "/api/redis/word-strengths?uid=demo&word_ids=table"
+    "/api/redis/word-strengths?uid=demo&word_ids=baguette"
   );
   const before = (beforeBody as { strengths: { strength: number }[] })
     .strengths[0].strength;
@@ -138,7 +138,7 @@ async function testStrengthUpdateRoundTrip() {
   const { status, body } = await fetchJson("/api/redis/update-strength", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ uid: "demo", word_id: "table", result: "boost" }),
+    body: JSON.stringify({ uid: "demo", word_id: "baguette", result: "boost" }),
   });
   if (status !== 200) {
     fail("POST /api/redis/update-strength", `status ${status}`);
@@ -151,7 +151,7 @@ async function testStrengthUpdateRoundTrip() {
   }
 
   const { body: afterBody } = await fetchJson(
-    "/api/redis/word-strengths?uid=demo&word_ids=table"
+    "/api/redis/word-strengths?uid=demo&word_ids=baguette"
   );
   const persisted = (afterBody as { strengths: { strength: number }[] })
     .strengths[0].strength;
@@ -159,14 +159,14 @@ async function testStrengthUpdateRoundTrip() {
     fail("Strength persisted to Redis", `expected ${newStrength}, got ${persisted}`);
     return;
   }
-  pass("Redis strength update round-trip", `table ${before.toFixed(2)} → ${newStrength.toFixed(2)}`);
+  pass("Redis strength update round-trip", `baguette ${before.toFixed(2)} → ${newStrength.toFixed(2)}`);
 }
 
 async function testPages() {
   const routes = [
     { path: "/", label: "Path map" },
-    { path: "/lesson/kitchen_1", label: "Lesson page" },
-    { path: "/world/kitchen_fr?missed=table,chaise", label: "World page" },
+    { path: "/lesson/boulangerie_1", label: "Lesson page" },
+    { path: "/world/cafe_fr?missed=baguette,pain", label: "World page" },
   ];
   for (const route of routes) {
     const res = await fetch(`${BASE}${route.path}`);
@@ -295,10 +295,10 @@ async function main() {
 
   if (failed > 0) {
     console.log("Manual browser checklist (Stage 19.2):");
-    console.log("  1. http://localhost:3000 — Kitchen current, Café locked");
-    console.log("  2. Tap Kitchen → /lesson/kitchen_1");
+    console.log("  1. http://localhost:3000 — Bakery current, Café locked");
+    console.log("  2. Tap Bakery → /lesson/boulangerie_1");
     console.log("  3. Complete 8 exercises (mix correct/wrong)");
-    console.log("  4. Lesson-complete card → Enter the Kitchen →");
+    console.log("  4. Lesson-complete card → Enter the Bakery →");
     console.log("  5. Portal transition → world loads");
     console.log("  6. Gemini Live greets, word cards + HUD update");
     console.log("  7. Exit world → back to path map\n");

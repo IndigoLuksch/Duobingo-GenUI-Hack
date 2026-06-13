@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import AppLogo from "@/components/ui/AppLogo";
+import CourseSwitcher from "@/components/CourseSwitcher";
 import { Unit } from "@/lib/types";
 import styles from "./PathMap.module.css";
 
@@ -14,6 +15,7 @@ interface PathMapProps {
   courseTitle: string;
   courseFlag: string;
   onUnitClick: (unitId: string) => void;
+  onNewLesson?: () => void;
 }
 
 interface NodePosition {
@@ -71,13 +73,15 @@ export default function PathMap({
   courseTitle,
   courseFlag,
   onUnitClick,
+  onNewLesson,
 }: PathMapProps) {
-  const containerHeight = Math.max(760, units.length * 300);
+  const nodeCount = units.length + (onNewLesson ? 1 : 0);
+  const containerHeight = Math.max(760, nodeCount * 300);
   const containerWidth = 432;
 
   const positions = useMemo(
-    () => getNodePositions(units.length, containerWidth, containerHeight),
-    [units.length, containerHeight]
+    () => getNodePositions(nodeCount, containerWidth, containerHeight),
+    [nodeCount, containerHeight]
   );
   const pathD = useMemo(() => buildPath(positions), [positions]);
 
@@ -91,6 +95,7 @@ export default function PathMap({
     <>
       <header className={styles.header}>
         <div className={styles.courseInfo}>
+          <CourseSwitcher />
           <AppLogo height={26} className={styles.logo} />
           <div className={styles.courseText}>
             <span className={styles.courseName}>
@@ -128,7 +133,7 @@ export default function PathMap({
 
         <div className={styles.nodes}>
           {units.map((unit, index) => {
-            const status = progress[unit.unit_id] ?? "locked";
+            const status = progress[unit.unit_id] ?? (unit.custom ? "current" : "locked");
             const pos = positions[index];
             const isLocked = status === "locked";
             const isCurrent = status === "current";
@@ -224,6 +229,35 @@ export default function PathMap({
               </div>
             );
           })}
+
+          {onNewLesson && (
+            <div
+              className={styles.nodeWrapper}
+              style={{
+                left: `${(positions[units.length].x / containerWidth) * 100}%`,
+                top: positions[units.length].y,
+              }}
+            >
+              <span className={`${styles.unitBadge} ${styles.unitBadgeNew}`}>
+                Custom
+              </span>
+
+              <motion.button
+                type="button"
+                className={styles.newLessonNode}
+                onClick={onNewLesson}
+                aria-label="Create new lesson"
+                whileTap={{ scale: 0.92 }}
+              >
+                <span className={styles.plusIcon}>+</span>
+              </motion.button>
+
+              <div className={styles.labelCard}>
+                <span className={styles.labelTitle}>New lesson</span>
+                <span className={styles.labelDesc}>Type any topic</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>

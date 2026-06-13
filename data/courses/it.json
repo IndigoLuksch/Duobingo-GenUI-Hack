@@ -1,0 +1,828 @@
+{
+  "course": "it",
+  "title": "Italian",
+  "units": [
+    {
+      "unit_id": "boulangerie_1",
+      "title": "At the Bakery",
+      "description": "Bread, pastries & the baker",
+      "icon": "🥖",
+      "world_id": "boulangerie_fr",
+      "marble_prompt": "A photorealistic Italian bakery interior with warm golden light. A long wooden display counter laden with golden focaccia and rustic loaves. A tall glass pastry case filled with cannoli and cornetti. A large stone oven glowing amber through an arch in the back wall. Flour-dusted wooden shelving stacked with artisan breads. A vintage brass cash register on the counter. A baker in a white apron behind the counter. Wicker bread baskets hanging from the ceiling. Hand-painted Italian signage and a chalkboard menu. Terracotta tiled floor, exposed wooden beams, warm morning light through a glass storefront.",
+      "vocab": [
+        {
+          "word_id": "baguette",
+          "fr": "la baguette",
+          "en": "baguette",
+          "gender": "f",
+          "distractors": [
+            "il cornetto",
+            "la torta",
+            "il pane"
+          ]
+        },
+        {
+          "word_id": "pain",
+          "fr": "il pane",
+          "en": "bread",
+          "gender": "m",
+          "distractors": [
+            "la baguette",
+            "la farina",
+            "la torta"
+          ]
+        },
+        {
+          "word_id": "gateau",
+          "fr": "la torta",
+          "en": "cake",
+          "gender": "f",
+          "distractors": [
+            "la baguette",
+            "il pane",
+            "il cornetto"
+          ]
+        },
+        {
+          "word_id": "farine",
+          "fr": "la farina",
+          "en": "flour",
+          "gender": "f",
+          "distractors": [
+            "il pane",
+            "lo zucchero",
+            "il sale"
+          ]
+        },
+        {
+          "word_id": "four",
+          "fr": "il forno",
+          "en": "oven",
+          "gender": "m",
+          "distractors": [
+            "la cassa",
+            "il bancone",
+            "il tavolo"
+          ]
+        },
+        {
+          "word_id": "caisse",
+          "fr": "la cassa",
+          "en": "cash register",
+          "gender": "f",
+          "distractors": [
+            "il forno",
+            "il bancone",
+            "la finestra"
+          ]
+        },
+        {
+          "word_id": "panier",
+          "fr": "il cesto",
+          "en": "basket",
+          "gender": "m",
+          "distractors": [
+            "la cassa",
+            "la borsa",
+            "il tavolo"
+          ]
+        },
+        {
+          "word_id": "boulanger",
+          "fr": "il fornaio",
+          "en": "baker",
+          "gender": "m",
+          "distractors": [
+            "il venditore",
+            "lo chef",
+            "il cuoco"
+          ]
+        },
+        {
+          "word_id": "tablier",
+          "fr": "il grembiule",
+          "en": "apron",
+          "gender": "m",
+          "distractors": [
+            "il cappello",
+            "il cappotto",
+            "i pantaloni"
+          ]
+        },
+        {
+          "word_id": "comptoir",
+          "fr": "il bancone",
+          "en": "counter",
+          "gender": "m",
+          "distractors": [
+            "il tavolo",
+            "la cassa",
+            "il forno"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "fr": "La baguette è fresca",
+          "en": "The baguette is fresh",
+          "tiles": [
+            "La",
+            "baguette",
+            "è",
+            "fresca",
+            "il",
+            "pane",
+            "vecchio"
+          ],
+          "answer": [
+            "La",
+            "baguette",
+            "è",
+            "fresca"
+          ]
+        },
+        {
+          "fr": "Il fornaio mette il pane nel forno",
+          "en": "The baker puts the bread in the oven",
+          "tiles": [
+            "Il",
+            "fornaio",
+            "mette",
+            "il",
+            "pane",
+            "nel",
+            "forno",
+            "la",
+            "cassa"
+          ],
+          "answer": [
+            "Il",
+            "fornaio",
+            "mette",
+            "il",
+            "pane",
+            "nel",
+            "forno"
+          ]
+        },
+        {
+          "fr": "La torta è nel cesto",
+          "en": "The cake is in the basket",
+          "tiles": [
+            "La",
+            "torta",
+            "è",
+            "nel",
+            "cesto",
+            "la",
+            "cassa",
+            "sul"
+          ],
+          "answer": [
+            "La",
+            "torta",
+            "è",
+            "nel",
+            "cesto"
+          ]
+        },
+        {
+          "fr": "La farina è sul bancone",
+          "en": "The flour is on the counter",
+          "tiles": [
+            "La",
+            "farina",
+            "è",
+            "sul",
+            "bancone",
+            "nella",
+            "cassa"
+          ],
+          "answer": [
+            "La",
+            "farina",
+            "è",
+            "sul",
+            "bancone"
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "cafe_1",
+      "title": "At the Café",
+      "description": "Drinks, seating & café life",
+      "icon": "☕",
+      "world_id": "cafe_fr",
+      "marble_prompt": "A photorealistic Italian café interior. A long marble counter with a large brass espresso machine as the centerpiece. A tall glass display case filled with cornetti and pastries. Small round bistro tables with chairs. A large chalkboard menu on the back wall. An ornate bar with shelves of bottles behind it. A coat rack near the entrance. A large arched window onto an Italian piazza. Warm amber pendant lamps. Tiled mosaic floor.",
+      "vocab": [
+        {
+          "word_id": "comptoir",
+          "fr": "il bancone",
+          "en": "counter",
+          "gender": "m",
+          "distractors": [
+            "il tavolo",
+            "il bar",
+            "la vetrina"
+          ]
+        },
+        {
+          "word_id": "croissant",
+          "fr": "il cornetto",
+          "en": "croissant",
+          "gender": "m",
+          "distractors": [
+            "il pane",
+            "la baguette",
+            "la torta"
+          ]
+        },
+        {
+          "word_id": "vitrine",
+          "fr": "la vetrina",
+          "en": "display case",
+          "gender": "f",
+          "distractors": [
+            "il bancone",
+            "la finestra",
+            "lo scaffale"
+          ]
+        },
+        {
+          "word_id": "chaise",
+          "fr": "la sedia",
+          "en": "chair",
+          "gender": "f",
+          "distractors": [
+            "lo sgabello",
+            "la poltrona",
+            "la panchina"
+          ]
+        },
+        {
+          "word_id": "table",
+          "fr": "il tavolo",
+          "en": "table",
+          "gender": "m",
+          "distractors": [
+            "il bancone",
+            "il bar",
+            "la scrivania"
+          ]
+        },
+        {
+          "word_id": "tableau",
+          "fr": "il quadro",
+          "en": "painting",
+          "gender": "m",
+          "distractors": [
+            "lo specchio",
+            "la finestra",
+            "il manifesto"
+          ]
+        },
+        {
+          "word_id": "fenetre",
+          "fr": "la finestra",
+          "en": "window",
+          "gender": "f",
+          "distractors": [
+            "la porta",
+            "il muro",
+            "la vetrina"
+          ]
+        },
+        {
+          "word_id": "lampe",
+          "fr": "la lampada",
+          "en": "lamp",
+          "gender": "f",
+          "distractors": [
+            "la luce",
+            "il lampadario",
+            "la candela"
+          ]
+        },
+        {
+          "word_id": "porte_manteau",
+          "fr": "il appendiabiti",
+          "en": "coat rack",
+          "gender": "m",
+          "distractors": [
+            "la porta",
+            "il cappotto",
+            "il guardaroba"
+          ]
+        },
+        {
+          "word_id": "machine_a_cafe",
+          "fr": "la macchina del caffè",
+          "en": "coffee machine",
+          "gender": "f",
+          "distractors": [
+            "la tazza",
+            "il caffè",
+            "la caffettiera"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "fr": "Il bancone è di marmo",
+          "en": "The counter is marble",
+          "tiles": [
+            "Il",
+            "bancone",
+            "è",
+            "di",
+            "marmo",
+            "La",
+            "legno"
+          ],
+          "answer": [
+            "Il",
+            "bancone",
+            "è",
+            "di",
+            "marmo"
+          ]
+        },
+        {
+          "fr": "I cornetti sono nella vetrina",
+          "en": "The croissants are in the display case",
+          "tiles": [
+            "I",
+            "cornetti",
+            "sono",
+            "nella",
+            "vetrina",
+            "Il",
+            "bancone"
+          ],
+          "answer": [
+            "I",
+            "cornetti",
+            "sono",
+            "nella",
+            "vetrina"
+          ]
+        },
+        {
+          "fr": "Il quadro è sul muro",
+          "en": "The painting is on the wall",
+          "tiles": [
+            "Il",
+            "quadro",
+            "è",
+            "sul",
+            "muro",
+            "La",
+            "finestra"
+          ],
+          "answer": [
+            "Il",
+            "quadro",
+            "è",
+            "sul",
+            "muro"
+          ]
+        },
+        {
+          "fr": "La lampada è sopra il tavolo",
+          "en": "The lamp is above the table",
+          "tiles": [
+            "La",
+            "lampada",
+            "è",
+            "sopra",
+            "il",
+            "tavolo",
+            "Il",
+            "bancone"
+          ],
+          "answer": [
+            "La",
+            "lampada",
+            "è",
+            "sopra",
+            "il",
+            "tavolo"
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "gare_1",
+      "title": "At the Station",
+      "description": "Travel, tickets & departures",
+      "icon": "🚂",
+      "world_id": "gare_fr",
+      "marble_prompt": "A photorealistic Italian train station interior. High vaulted glass ceiling flooding the concourse with natural light. A large station clock above the platforms. A row of ticket windows. A departures board showing Italian city names. Wooden benches on a polished floor. A train visible through arched platform entrances. Passengers with suitcases. Iron pillars, glazed tile walls, a small newsstand kiosk. Warm afternoon sunlight through the glass roof.",
+      "vocab": [
+        {
+          "word_id": "train",
+          "fr": "il treno",
+          "en": "train",
+          "gender": "m",
+          "distractors": [
+            "il bus",
+            "la metropolitana",
+            "il tram"
+          ]
+        },
+        {
+          "word_id": "quai",
+          "fr": "il binario",
+          "en": "platform",
+          "gender": "m",
+          "distractors": [
+            "il corridoio",
+            "la sala",
+            "la hall"
+          ]
+        },
+        {
+          "word_id": "billet",
+          "fr": "il biglietto",
+          "en": "ticket",
+          "gender": "m",
+          "distractors": [
+            "il passaporto",
+            "la carta",
+            "la ricevuta"
+          ]
+        },
+        {
+          "word_id": "valise",
+          "fr": "la valigia",
+          "en": "suitcase",
+          "gender": "f",
+          "distractors": [
+            "la borsa",
+            "il cesto",
+            "lo zaino"
+          ]
+        },
+        {
+          "word_id": "horloge",
+          "fr": "l'orologio",
+          "en": "clock",
+          "gender": "m",
+          "distractors": [
+            "l'orologio da polso",
+            "la sveglia",
+            "il calendario"
+          ]
+        },
+        {
+          "word_id": "guichet",
+          "fr": "lo sportello",
+          "en": "ticket window",
+          "gender": "m",
+          "distractors": [
+            "l'ufficio",
+            "la porta",
+            "il bancone"
+          ]
+        },
+        {
+          "word_id": "panneau",
+          "fr": "il cartello",
+          "en": "sign",
+          "gender": "m",
+          "distractors": [
+            "la lavagna",
+            "il muro",
+            "lo schermo"
+          ]
+        },
+        {
+          "word_id": "banc",
+          "fr": "la panchina",
+          "en": "bench",
+          "gender": "f",
+          "distractors": [
+            "la sedia",
+            "il sedile",
+            "la poltrona"
+          ]
+        },
+        {
+          "word_id": "escalier",
+          "fr": "le scale",
+          "en": "staircase",
+          "gender": "f",
+          "distractors": [
+            "l'ascensore",
+            "la rampa",
+            "il corridoio"
+          ]
+        },
+        {
+          "word_id": "depart",
+          "fr": "la partenza",
+          "en": "departure",
+          "gender": "f",
+          "distractors": [
+            "l'arrivo",
+            "il ritardo",
+            "il viaggio"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "fr": "Il treno arriva al binario",
+          "en": "The train arrives on the platform",
+          "tiles": [
+            "Il",
+            "treno",
+            "arriva",
+            "al",
+            "binario",
+            "nella",
+            "stazione"
+          ],
+          "answer": [
+            "Il",
+            "treno",
+            "arriva",
+            "al",
+            "binario"
+          ]
+        },
+        {
+          "fr": "Il biglietto è allo sportello",
+          "en": "The ticket is at the window",
+          "tiles": [
+            "Il",
+            "biglietto",
+            "è",
+            "allo",
+            "sportello",
+            "la",
+            "valigia",
+            "sul"
+          ],
+          "answer": [
+            "Il",
+            "biglietto",
+            "è",
+            "allo",
+            "sportello"
+          ]
+        },
+        {
+          "fr": "La valigia è sulla panchina",
+          "en": "The suitcase is on the bench",
+          "tiles": [
+            "La",
+            "valigia",
+            "è",
+            "sulla",
+            "panchina",
+            "le",
+            "scale",
+            "il"
+          ],
+          "answer": [
+            "La",
+            "valigia",
+            "è",
+            "sulla",
+            "panchina"
+          ]
+        },
+        {
+          "fr": "L'orologio è sopra il cartello",
+          "en": "The clock is above the sign",
+          "tiles": [
+            "L'orologio",
+            "è",
+            "sopra",
+            "il",
+            "cartello",
+            "lo",
+            "sportello",
+            "sotto"
+          ],
+          "answer": [
+            "L'orologio",
+            "è",
+            "sopra",
+            "il",
+            "cartello"
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "marche_1",
+      "title": "At the Market",
+      "description": "Fresh produce & vendors",
+      "icon": "🛒",
+      "world_id": "marche_fr",
+      "marble_prompt": "A photorealistic open-air Italian market. Colourful canvas awnings shading wooden stalls. Crates overflowing with tomatoes, courgettes, carrots, and peppers. A cheese stand with large wheels of pecorino. A flower stall with sunflowers and roses. A friendly vendor in an apron behind the produce stand. Old brass weighing scales on a wooden table. Cobblestone street, clear sky, dappled morning sunlight.",
+      "vocab": [
+        {
+          "word_id": "tomate",
+          "fr": "il pomodoro",
+          "en": "tomato",
+          "gender": "m",
+          "distractors": [
+            "la mela",
+            "la pera",
+            "la ciliegia"
+          ]
+        },
+        {
+          "word_id": "fromage",
+          "fr": "il formaggio",
+          "en": "cheese",
+          "gender": "m",
+          "distractors": [
+            "il burro",
+            "il latte",
+            "la panna"
+          ]
+        },
+        {
+          "word_id": "legume",
+          "fr": "la verdura",
+          "en": "vegetable",
+          "gender": "f",
+          "distractors": [
+            "la frutta",
+            "la carne",
+            "il cereale"
+          ]
+        },
+        {
+          "word_id": "fruit",
+          "fr": "la frutta",
+          "en": "fruit",
+          "gender": "f",
+          "distractors": [
+            "la verdura",
+            "la carne",
+            "il pane"
+          ]
+        },
+        {
+          "word_id": "stand",
+          "fr": "lo stand",
+          "en": "stall",
+          "gender": "m",
+          "distractors": [
+            "il negozio",
+            "il mercato",
+            "il chiosco"
+          ]
+        },
+        {
+          "word_id": "vendeur",
+          "fr": "il venditore",
+          "en": "vendor",
+          "gender": "m",
+          "distractors": [
+            "il cliente",
+            "lo chef",
+            "il fattorino"
+          ]
+        },
+        {
+          "word_id": "panier",
+          "fr": "il cesto",
+          "en": "basket",
+          "gender": "m",
+          "distractors": [
+            "la borsa",
+            "la cassa",
+            "la scatola"
+          ]
+        },
+        {
+          "word_id": "fleur",
+          "fr": "il fiore",
+          "en": "flower",
+          "gender": "m",
+          "distractors": [
+            "la pianta",
+            "l'albero",
+            "la foglia"
+          ]
+        },
+        {
+          "word_id": "balance",
+          "fr": "la bilancia",
+          "en": "scales",
+          "gender": "f",
+          "distractors": [
+            "la misura",
+            "la scatola",
+            "la cassa"
+          ]
+        },
+        {
+          "word_id": "prix",
+          "fr": "il prezzo",
+          "en": "price",
+          "gender": "m",
+          "distractors": [
+            "il costo",
+            "il valore",
+            "i soldi"
+          ]
+        }
+      ],
+      "sentences": [
+        {
+          "fr": "I pomodori sono nel cesto",
+          "en": "The tomatoes are in the basket",
+          "tiles": [
+            "I",
+            "pomodori",
+            "sono",
+            "nel",
+            "cesto",
+            "sul",
+            "lo",
+            "stand"
+          ],
+          "answer": [
+            "I",
+            "pomodori",
+            "sono",
+            "nel",
+            "cesto"
+          ]
+        },
+        {
+          "fr": "Il venditore vende formaggio",
+          "en": "The vendor sells cheese",
+          "tiles": [
+            "Il",
+            "venditore",
+            "vende",
+            "formaggio",
+            "la",
+            "frutta",
+            "il",
+            "pomodoro"
+          ],
+          "answer": [
+            "Il",
+            "venditore",
+            "vende",
+            "formaggio"
+          ]
+        },
+        {
+          "fr": "La verdura è sulla bilancia",
+          "en": "The vegetables are on the scales",
+          "tiles": [
+            "La",
+            "verdura",
+            "è",
+            "sulla",
+            "bilancia",
+            "lo",
+            "stand",
+            "nel"
+          ],
+          "answer": [
+            "La",
+            "verdura",
+            "è",
+            "sulla",
+            "bilancia"
+          ]
+        },
+        {
+          "fr": "Il fiore ha un buon prezzo",
+          "en": "The flower has a good price",
+          "tiles": [
+            "Il",
+            "fiore",
+            "ha",
+            "un",
+            "buon",
+            "prezzo",
+            "la",
+            "frutta",
+            "bello"
+          ],
+          "answer": [
+            "Il",
+            "fiore",
+            "ha",
+            "un",
+            "buon",
+            "prezzo"
+          ]
+        }
+      ]
+    }
+  ]
+}

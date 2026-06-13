@@ -1,4 +1,5 @@
 import redis, { setProfile, setWordStrength } from "./redis";
+import { defaultCourseProgress } from "./courses";
 import { LearnerProfile, WordStrength } from "./types";
 
 const uid = "demo";
@@ -9,10 +10,8 @@ const profile: LearnerProfile = {
   streak: 6,
   hearts: 3,
   last_active: new Date().toISOString(),
-  unit_progress: {
-    kitchen_1: "current",
-    cafe_1: "locked",
-  },
+  unit_progress: defaultCourseProgress().fr,
+  course_progress: defaultCourseProgress(),
 };
 
 function wordStrength(
@@ -32,24 +31,24 @@ function wordStrength(
   };
 }
 
-const kitchenWords: WordStrength[] = [
-  wordStrength("table", 0.25),
-  wordStrength("chaise", 0.30),
-  wordStrength("four", 0.80),
-  wordStrength("refrigerateur", 0.65),
-  wordStrength("evier", 0.60),
-  wordStrength("cuisiniere", 0.70),
-  wordStrength("poele", 0.55),
-  wordStrength("marmite", 0.50),
-  wordStrength("etagere", 0.75),
-  wordStrength("fenetre", 0.85),
+const bakeryWords: WordStrength[] = [
+  wordStrength("baguette", 0.25),
+  wordStrength("pain", 0.3),
+  wordStrength("gateau", 0.8),
+  wordStrength("farine", 0.65),
+  wordStrength("four", 0.6),
+  wordStrength("caisse", 0.7),
+  wordStrength("panier", 0.55),
+  wordStrength("boulanger", 0.5),
+  wordStrength("tablier", 0.75),
+  wordStrength("comptoir", 0.85),
 ];
 
 async function seed() {
   await setProfile(uid, profile);
   console.log("Seeded profile:", profile);
 
-  for (const ws of kitchenWords) {
+  for (const ws of bakeryWords) {
     await setWordStrength(uid, ws);
     console.log(`Seeded word strength: ${ws.word_id} (strength: ${ws.strength})`);
   }

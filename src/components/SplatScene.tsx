@@ -303,29 +303,29 @@ export default function SplatScene({
         <div className={styles.controlsPanel} aria-label="Keyboard controls">
           <p className={styles.controlsTitle}>Controls</p>
           <ul className={styles.controlsList}>
-            <li>
+            <li className={styles.controlsListItem}>
               <span className={styles.keyGroup}>
-                <kbd>W</kbd>
-                <kbd>A</kbd>
-                <kbd>S</kbd>
-                <kbd>D</kbd>
+                <kbd className={styles.key}>W</kbd>
+                <kbd className={styles.key}>A</kbd>
+                <kbd className={styles.key}>S</kbd>
+                <kbd className={styles.key}>D</kbd>
               </span>
               <span className={styles.controlAction}>Move</span>
             </li>
-            <li>
-              <kbd>Mouse</kbd>
+            <li className={styles.controlsListItem}>
+              <kbd className={styles.key}>Mouse</kbd>
               <span className={styles.controlAction}>Look around</span>
             </li>
-            <li>
-              <kbd>Space</kbd>
+            <li className={styles.controlsListItem}>
+              <kbd className={styles.key}>Space</kbd>
               <span className={styles.controlAction}>Up</span>
             </li>
-            <li>
-              <kbd>Shift</kbd>
+            <li className={styles.controlsListItem}>
+              <kbd className={styles.key}>Shift</kbd>
               <span className={styles.controlAction}>Down</span>
             </li>
-            <li>
-              <kbd>Esc</kbd>
+            <li className={styles.controlsListItem}>
+              <kbd className={styles.key}>Esc</kbd>
               <span className={styles.controlAction}>Release mouse</span>
             </li>
           </ul>

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { defaultCourseProgress } from "@/lib/courses";
 import { getProfile } from "@/lib/redis";
 import { LearnerProfile } from "@/lib/types";
 
@@ -18,12 +19,8 @@ export async function GET(request: NextRequest) {
       streak: 0,
       hearts: 3,
       last_active: new Date().toISOString(),
-      unit_progress: {
-        boulangerie_1: "current",
-        cafe_1: "locked",
-        gare_1: "locked",
-        marche_1: "locked",
-      },
+      unit_progress: defaultCourseProgress().fr,
+      course_progress: defaultCourseProgress(),
     };
     return NextResponse.json(defaultProfile);
   }

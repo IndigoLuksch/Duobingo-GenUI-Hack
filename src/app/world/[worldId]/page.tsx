@@ -7,12 +7,11 @@ import SplatScene from "@/components/SplatScene";
 import GeminiLiveController from "@/components/GeminiLiveController";
 import WorldCard from "@/components/WorldCard";
 import WorldHUD from "@/components/WorldHUD";
-import course from "../../../../data/courses/de.json";
+import { useCourse } from "@/lib/course-context";
+import { findUnitByWorldId, getSplatWorldId } from "@/lib/course-data";
 import { useWorldStore } from "@/lib/store";
-import { Course, WordStrength } from "@/lib/types";
+import { WordStrength, Unit } from "@/lib/types";
 import styles from "./page.module.css";
-
-const typedCourse = course as Course;
 
 export default function WorldPage({
   params,
@@ -25,6 +24,7 @@ export default function WorldPage({
   const { missed } = use(searchParams);
   const router = useRouter();
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { course, courseId } = useCourse();
 
   const [wordStrengths, setWordStrengths] = useState<WordStrength[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -36,10 +36,17 @@ export default function WorldPage({
     [missed]
   );
 
-  const unit = useMemo(
-    () => typedCourse.units.find((u) => u.world_id === worldId) ?? null,
-    [worldId]
+  const builtInUnit = useMemo(
+    () => course.units.find((u) => u.world_id === worldId) ?? null,
+    [course.units, worldId]
   );
+  const [unit, setUnit] = useState<Unit | null>(builtInUnit);
+
+  useEffect(() => {
+    setUnit(findUnitByWorldId(courseId, worldId));
+  }, [courseId, worldId]);
+
+  const splatUrl = unit ? `/worlds/${getSplatWorldId(unit)}.spz` : "";
 
   const strengthsReady = wordStrengths.length > 0;
 
@@ -102,7 +109,7 @@ export default function WorldPage({
   return (
     <div className={styles.page}>
       <SplatScene
-        splatUrl={`/worlds/${worldId}.spz`}
+        splatUrl={splatUrl}
         canvasRef={canvasRef}
       />
 
@@ -121,6 +128,7 @@ export default function WorldPage({
             unitVocab={unit.vocab}
             wordStrengths={wordStrengths}
             unitTitle={unit.title}
+            courseId={courseId}
           />
           <WorldCard />
           <WorldHUD />

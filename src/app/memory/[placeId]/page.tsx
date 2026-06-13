@@ -7,13 +7,13 @@ import PanoViewer from "@/components/PanoViewer";
 import GeminiLiveController from "@/components/GeminiLiveController";
 import WorldCard from "@/components/WorldCard";
 import WorldHUD from "@/components/WorldHUD";
-import course from "../../../../data/courses/de.json";
+import { useCourse } from "@/lib/course-context";
+import { findUnitById } from "@/lib/course-data";
 import { useWorldStore } from "@/lib/store";
-import { Course, MemoryPlaceRecord, WordStrength } from "@/lib/types";
+import { MemoryPlaceRecord, WordStrength } from "@/lib/types";
 import worldStyles from "../../world/[worldId]/page.module.css";
 import styles from "./page.module.css";
 
-const typedCourse = course as Course;
 const EMPTY_MISSED: string[] = [];
 
 export default function MemoryPlacePage({
@@ -24,6 +24,7 @@ export default function MemoryPlacePage({
   const { placeId } = use(params);
   const router = useRouter();
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { courseId } = useCourse();
 
   const [memory, setMemory] = useState<MemoryPlaceRecord | null>(null);
   const [wordStrengths, setWordStrengths] = useState<WordStrength[]>([]);
@@ -33,8 +34,8 @@ export default function MemoryPlacePage({
 
   const unit = useMemo(() => {
     if (!memory?.unit_id) return null;
-    return typedCourse.units.find((u) => u.unit_id === memory.unit_id) ?? null;
-  }, [memory?.unit_id]);
+    return findUnitById(courseId, memory.unit_id);
+  }, [memory?.unit_id, courseId]);
 
   const strengthsReady = wordStrengths.length > 0;
   const sceneReady =
@@ -217,6 +218,7 @@ export default function MemoryPlacePage({
             unitVocab={unit.vocab}
             wordStrengths={wordStrengths}
             unitTitle={unit.title}
+            courseId={courseId}
             extraContextLine={extraContextLine}
           />
           <WorldCard />
