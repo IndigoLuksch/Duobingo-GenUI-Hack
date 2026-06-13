@@ -7,7 +7,7 @@ import SplatScene from "@/components/SplatScene";
 import GeminiLiveController from "@/components/GeminiLiveController";
 import WorldCard from "@/components/WorldCard";
 import WorldHUD from "@/components/WorldHUD";
-import course from "../../../../data/courses/fr.json";
+import course from "../../../../data/courses/de.json";
 import { useWorldStore } from "@/lib/store";
 import { Course, WordStrength } from "@/lib/types";
 import styles from "./page.module.css";

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import course from "../../data/courses/fr.json";
+import course from "../../data/courses/de.json";
 import PathMap from "@/components/PathMap";
 import MemoryPlaceSearch from "@/components/MemoryPlaceSearch";
 import { Course, LearnerProfile } from "@/lib/types";

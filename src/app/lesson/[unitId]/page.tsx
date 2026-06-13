@@ -14,7 +14,7 @@ import WordBank from "@/components/exercises/WordBank";
 import Listening from "@/components/exercises/Listening";
 import SpeakIt from "@/components/exercises/SpeakIt";
 import LessonComplete from "@/components/exercises/LessonComplete";
-import course from "../../../../data/courses/fr.json";
+import course from "../../../../data/courses/de.json";
 import {
   pendingExerciseRespondRef,
   pendingJudgmentRef,

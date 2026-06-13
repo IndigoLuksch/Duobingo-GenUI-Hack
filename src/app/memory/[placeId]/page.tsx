@@ -7,7 +7,7 @@ import PanoViewer from "@/components/PanoViewer";
 import GeminiLiveController from "@/components/GeminiLiveController";
 import WorldCard from "@/components/WorldCard";
 import WorldHUD from "@/components/WorldHUD";
-import course from "../../../../data/courses/fr.json";
+import course from "../../../../data/courses/de.json";
 import { useWorldStore } from "@/lib/store";
 import { Course, MemoryPlaceRecord, WordStrength } from "@/lib/types";
 import worldStyles from "../../world/[worldId]/page.module.css";
