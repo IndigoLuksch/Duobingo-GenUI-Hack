@@ -1,0 +1,49 @@
+services:
+  - type: redis
+    name: duobingo-redis
+    plan: free
+    ipAllowList: []
+
+  - type: web
+    name: duobingo-agent
+    runtime: python
+    rootDir: services/agents
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn server:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+      - key: FRONTEND_URL
+        fromService:
+          type: web
+          name: duobingo
+          property: host
+
+  - type: web
+    name: duobingo
+    runtime: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GOOGLE_PLACES_API_KEY
+        sync: false
+      - key: LINKUP_API_KEY
+        sync: false
+      - key: WORLDLABS_API_KEY
+        sync: false
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: duobingo-redis
+          property: connectionString
+      - key: LESSON_AGENT_HOST
+        fromService:
+          type: web
+          name: duobingo-agent
+          property: host

@@ -12,6 +12,8 @@ interface SplatSceneProps {
   spawnPosition?: [number, number, number];
   /** Apply OpenCV→OpenGL axis fix for Marble CDN splats. Auto-detected from URL when omitted. */
   opencvToOpengl?: boolean;
+  /** Called once the splat mesh has loaded and the scene is ready to display. */
+  onReady?: () => void;
 }
 
 const MOVE_SPEED = 4;
@@ -62,9 +64,15 @@ export default function SplatScene({
   canvasRef,
   spawnPosition,
   opencvToOpengl = isMarbleSplatUrl(splatUrl),
+  onReady,
 }: SplatSceneProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [sceneReady, setSceneReady] = useState(false);
   const [showControlsHint, setShowControlsHint] = useState(true);
+
+  useEffect(() => {
+    setSceneReady(false);
+  }, [splatUrl]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -76,11 +84,6 @@ export default function SplatScene({
     canvas.style.display = "block";
     canvas.style.cursor = "crosshair";
     container.appendChild(canvas);
-
-    if (canvasRef) {
-      (canvasRef as React.MutableRefObject<HTMLCanvasElement | null>).current =
-        canvas;
-    }
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
@@ -138,6 +141,12 @@ export default function SplatScene({
           spawnPosition,
           opencvToOpengl
         );
+        if (canvasRef) {
+          (canvasRef as React.MutableRefObject<HTMLCanvasElement | null>).current =
+            canvas;
+        }
+        setSceneReady(true);
+        onReady?.();
       })
       .catch(() => {
         if (!disposed) {
@@ -264,14 +273,14 @@ export default function SplatScene({
       (fallbackCube.material as THREE.Material).dispose();
       renderer.dispose();
 
-      if (canvasRef) {
+      if (canvasRef?.current === canvas) {
         (canvasRef as React.MutableRefObject<HTMLCanvasElement | null>).current =
           null;
       }
 
       container.removeChild(canvas);
     };
-  }, [canvasRef, splatUrl, spawnPosition, opencvToOpengl]);
+  }, [canvasRef, splatUrl, spawnPosition, opencvToOpengl, onReady]);
 
   return (
     <>
@@ -285,7 +294,7 @@ export default function SplatScene({
           zIndex: 0,
         }}
       />
-      {showControlsHint && (
+      {sceneReady && showControlsHint && (
         <div className={styles.hint}>
           <div className={styles.hintCard}>
             <p className={styles.hintTitle}>Click to enter the scene</p>

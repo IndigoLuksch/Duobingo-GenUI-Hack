@@ -1,0 +1,216 @@
+{
+  "course": "de",
+  "title": "German",
+  "units": [
+    {
+      "unit_id": "kitchen_1",
+      "title": "In the Kitchen",
+      "icon": "🍳",
+      "world_id": "kitchen_fr",
+      "marble_prompt": "A photorealistic German farmhouse kitchen interior, warmly lit. A large wooden dining table with four chairs in the center. A prominent stove with a big stockpot on the burner. A large open oven with a baking tray visible inside. A deep farmhouse sink under a window. A tall refrigerator against the wall. Open wooden shelving displaying stacked plates and bowls. A hanging pot rack above the counter with a large frying pan and a colander. A cutting board on the counter next to a bread basket. Tiled floor, wooden cabinets, rustic details.",
+      "vocab": [
+        {
+          "word_id": "tisch",
+          "fr": "der Tisch",
+          "en": "table",
+          "gender": "m",
+          "distractors": ["der Schreibtisch", "die Theke", "das Regal"]
+        },
+        {
+          "word_id": "stuhl",
+          "fr": "der Stuhl",
+          "en": "chair",
+          "gender": "m",
+          "distractors": ["der Hocker", "das Sofa", "der Sessel"]
+        },
+        {
+          "word_id": "ofen",
+          "fr": "der Ofen",
+          "en": "oven",
+          "gender": "m",
+          "distractors": ["der Kühlschrank", "der Herd", "die Mikrowelle"]
+        },
+        {
+          "word_id": "kuehlschrank",
+          "fr": "der Kühlschrank",
+          "en": "refrigerator",
+          "gender": "m",
+          "distractors": ["der Gefrierschrank", "der Ofen", "das Spülbecken"]
+        },
+        {
+          "word_id": "spuelbecken",
+          "fr": "das Spülbecken",
+          "en": "sink",
+          "gender": null,
+          "distractors": ["die Badewanne", "das Waschbecken", "die Dusche"]
+        },
+        {
+          "word_id": "herd",
+          "fr": "der Herd",
+          "en": "stove",
+          "gender": "m",
+          "distractors": ["der Ofen", "die Mikrowelle", "der Kühlschrank"]
+        },
+        {
+          "word_id": "pfanne",
+          "fr": "die Pfanne",
+          "en": "frying pan",
+          "gender": "f",
+          "distractors": ["der Topf", "die Kelle", "der Spatel"]
+        },
+        {
+          "word_id": "topf",
+          "fr": "der Topf",
+          "en": "stockpot",
+          "gender": "m",
+          "distractors": ["die Pfanne", "die Kasserolle", "die Schüssel"]
+        },
+        {
+          "word_id": "regal",
+          "fr": "das Regal",
+          "en": "shelf",
+          "gender": null,
+          "distractors": ["der Schrank", "die Schublade", "die Theke"]
+        },
+        {
+          "word_id": "fenster",
+          "fr": "das Fenster",
+          "en": "window",
+          "gender": null,
+          "distractors": ["die Tür", "die Wand", "der Vorhang"]
+        }
+      ],
+      "sentences": [
+        {
+          "fr": "Der Ofen ist heiß",
+          "en": "The oven is hot",
+          "tiles": ["Der", "Ofen", "ist", "heiß", "kalt", "Die"],
+          "answer": ["Der", "Ofen", "ist", "heiß"]
+        },
+        {
+          "fr": "Der Topf steht auf dem Herd",
+          "en": "The pot is on the stove",
+          "tiles": ["Der", "Topf", "steht", "auf", "dem", "Herd", "die", "Pfanne"],
+          "answer": ["Der", "Topf", "steht", "auf", "dem", "Herd"]
+        },
+        {
+          "fr": "Die Stühle stehen um den Tisch",
+          "en": "The chairs are around the table",
+          "tiles": ["Die", "Stühle", "stehen", "um", "den", "Tisch", "Der", "Ofen"],
+          "answer": ["Die", "Stühle", "stehen", "um", "den", "Tisch"]
+        },
+        {
+          "fr": "Es gibt eine Pfanne auf dem Regal",
+          "en": "There is a frying pan on the shelf",
+          "tiles": ["Es", "gibt", "eine", "Pfanne", "auf", "dem", "Regal", "den", "Topf"],
+          "answer": ["Es", "gibt", "eine", "Pfanne", "auf", "dem", "Regal"]
+        }
+      ]
+    },
+    {
+      "unit_id": "cafe_1",
+      "title": "At the Café",
+      "icon": "☕",
+      "world_id": "cafe_fr",
+      "marble_prompt": "A photorealistic Viennese café interior. A long marble counter with a large brass espresso machine as the centerpiece. A tall glass display case filled with Schnecken and large pastries. Small round bistro tables with bentwood chairs. A large chalkboard menu covering most of the back wall. An ornate bar with shelves of bottles behind it. A coat rack near the entrance. A large arched window looking onto a European street with an awning. Warm amber lighting from hanging pendant lamps. Tiled mosaic floor.",
+      "vocab": [
+        {
+          "word_id": "theke",
+          "fr": "die Theke",
+          "en": "counter",
+          "gender": "f",
+          "distractors": ["der Tisch", "die Bar", "die Vitrine"]
+        },
+        {
+          "word_id": "croissant",
+          "fr": "das Croissant",
+          "en": "croissant",
+          "gender": null,
+          "distractors": ["das Brot", "das Brötchen", "der Kuchen"]
+        },
+        {
+          "word_id": "vitrine",
+          "fr": "die Vitrine",
+          "en": "display case",
+          "gender": "f",
+          "distractors": ["die Theke", "das Fenster", "das Regal"]
+        },
+        {
+          "word_id": "stuhl",
+          "fr": "der Stuhl",
+          "en": "chair",
+          "gender": "m",
+          "distractors": ["der Hocker", "der Sessel", "die Bank"]
+        },
+        {
+          "word_id": "tisch",
+          "fr": "der Tisch",
+          "en": "table",
+          "gender": "m",
+          "distractors": ["die Theke", "die Bar", "der Schreibtisch"]
+        },
+        {
+          "word_id": "gemaelde",
+          "fr": "das Gemälde",
+          "en": "painting",
+          "gender": null,
+          "distractors": ["der Spiegel", "das Fenster", "das Plakat"]
+        },
+        {
+          "word_id": "fenster",
+          "fr": "das Fenster",
+          "en": "window",
+          "gender": null,
+          "distractors": ["die Tür", "die Wand", "die Vitrine"]
+        },
+        {
+          "word_id": "lampe",
+          "fr": "die Lampe",
+          "en": "lamp",
+          "gender": "f",
+          "distractors": ["das Licht", "der Kronleuchter", "die Kerze"]
+        },
+        {
+          "word_id": "garderobenstaender",
+          "fr": "der Garderobenständer",
+          "en": "coat rack",
+          "gender": "m",
+          "distractors": ["die Tür", "der Mantel", "die Garderobe"]
+        },
+        {
+          "word_id": "kaffeemaschine",
+          "fr": "die Kaffeemaschine",
+          "en": "coffee machine",
+          "gender": "f",
+          "distractors": ["die Tasse", "der Kaffee", "die Kaffeekanne"]
+        }
+      ],
+      "sentences": [
+        {
+          "fr": "Die Theke ist aus Marmor",
+          "en": "The counter is marble",
+          "tiles": ["Die", "Theke", "ist", "aus", "Marmor", "Der", "Holz"],
+          "answer": ["Die", "Theke", "ist", "aus", "Marmor"]
+        },
+        {
+          "fr": "Die Croissants sind in der Vitrine",
+          "en": "The croissants are in the display case",
+          "tiles": ["Die", "Croissants", "sind", "in", "der", "Vitrine", "Das", "Regal"],
+          "answer": ["Die", "Croissants", "sind", "in", "der", "Vitrine"]
+        },
+        {
+          "fr": "Das Gemälde hängt an der Wand",
+          "en": "The painting is on the wall",
+          "tiles": ["Das", "Gemälde", "hängt", "an", "der", "Wand", "Die", "Fenster"],
+          "answer": ["Das", "Gemälde", "hängt", "an", "der", "Wand"]
+        },
+        {
+          "fr": "Die Lampe hängt über dem Tisch",
+          "en": "The lamp is above the table",
+          "tiles": ["Die", "Lampe", "hängt", "über", "dem", "Tisch", "Das", "Fenster"],
+          "answer": ["Die", "Lampe", "hängt", "über", "dem", "Tisch"]
+        }
+      ]
+    }
+  ]
+}
