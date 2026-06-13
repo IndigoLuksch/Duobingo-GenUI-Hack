@@ -19,8 +19,10 @@ export async function GET(request: NextRequest) {
       hearts: 3,
       last_active: new Date().toISOString(),
       unit_progress: {
-        kitchen_1: "current",
+        boulangerie_1: "current",
         cafe_1: "locked",
+        gare_1: "locked",
+        marche_1: "locked",
       },
     };
     return NextResponse.json(defaultProfile);
