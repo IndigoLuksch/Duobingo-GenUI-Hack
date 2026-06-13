@@ -1,5 +1,6 @@
 import redis, { setProfile, setWordStrength } from "./redis";
 import { defaultCourseProgress } from "./courses";
+import { seedAllPrebuiltWorlds } from "./prebuilt-worlds-server";
 import { LearnerProfile, WordStrength } from "./types";
 
 const uid = "demo";
@@ -52,6 +53,9 @@ async function seed() {
     await setWordStrength(uid, ws);
     console.log(`Seeded word strength: ${ws.word_id} (strength: ${ws.strength})`);
   }
+
+  await seedAllPrebuiltWorlds(uid);
+  console.log("Seeded prebuilt Kings Cross worlds (station, Pret, bakery)");
 
   await redis.disconnect();
   console.log("Done.");

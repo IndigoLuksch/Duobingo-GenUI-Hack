@@ -25,11 +25,17 @@ export interface PlaceSuggestion {
 }
 
 export async function autocompletePlaces(
-  input: string
+  input: string,
+  includedPrimaryTypes?: string[]
 ): Promise<PlaceSuggestion[]> {
   const apiKey = placesKey();
   const trimmed = input.trim();
   if (!apiKey || trimmed.length < 2) return [];
+
+  const body: Record<string, unknown> = { input: trimmed };
+  if (includedPrimaryTypes?.length) {
+    body.includedPrimaryTypes = includedPrimaryTypes;
+  }
 
   const res = await fetch(`${PLACES_BASE}/places:autocomplete`, {
     method: "POST",
@@ -37,7 +43,7 @@ export async function autocompletePlaces(
       "Content-Type": "application/json",
       "X-Goog-Api-Key": apiKey,
     },
-    body: JSON.stringify({ input: trimmed }),
+    body: JSON.stringify(body),
   });
 
   if (!res.ok) {

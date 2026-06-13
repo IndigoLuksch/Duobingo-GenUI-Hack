@@ -85,3 +85,9 @@ app.add_middleware(
 app.add_middleware(PatchMissingStateMiddleware)
 
 add_adk_fastapi_endpoint(app, adk_lesson_director, path="/copilotkit")
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run("server:app", host="127.0.0.1", port=8000, reload=True)

@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
 
 interface PortalTransitionProps {
   active?: boolean;
@@ -60,6 +59,19 @@ function playRisingTone() {
   }
 }
 
+export function buildPortalHref(
+  worldId: string,
+  missedIds: string[],
+  memoryPlaceId?: string
+): string {
+  if (memoryPlaceId) {
+    return `/memory/${encodeURIComponent(memoryPlaceId)}`;
+  }
+  const missed = missedIds.filter(Boolean).join(",");
+  const query = missed ? `?missed=${missed}` : "";
+  return `/world/${worldId}${query}`;
+}
+
 export default function PortalTransition({
   active = true,
   worldId,
@@ -68,7 +80,6 @@ export default function PortalTransition({
   onComplete,
   children,
 }: PortalTransitionProps) {
-  const router = useRouter();
   const startedRef = useRef(false);
 
   useEffect(() => {
@@ -78,17 +89,20 @@ export default function PortalTransition({
 
     const navTimer = setTimeout(() => {
       if (memoryPlaceId) {
-        router.push(`/memory/${encodeURIComponent(memoryPlaceId)}`);
-      } else {
-        const missed = missedIds.filter(Boolean).join(",");
-        const query = missed ? `?missed=${missed}` : "";
-        router.push(`/world/${worldId}${query}`);
+        try {
+          localStorage.removeItem("pending_memory_place");
+        } catch {
+          // ignore
+        }
       }
       onComplete();
+      // Full navigation avoids ChunkLoadError from client-side route chunks
+      // (e.g. _next/undefined) when leaving the CopilotKit lesson shell.
+      window.location.assign(buildPortalHref(worldId, missedIds, memoryPlaceId));
     }, 1200);
 
     return () => clearTimeout(navTimer);
-  }, [active, worldId, missedIds, onComplete, router]);
+  }, [active, worldId, missedIds, memoryPlaceId, onComplete]);
 
   if (!active) {
     return <>{children}</>;

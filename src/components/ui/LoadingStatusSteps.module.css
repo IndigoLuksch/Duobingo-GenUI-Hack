@@ -1,0 +1,54 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+  width: min(100%, 320px);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  transition: color 0.2s ease;
+}
+
+.item[data-state="complete"] {
+  color: var(--color-primary);
+}
+
+.item[data-state="active"] {
+  color: var(--color-text);
+}
+
+.marker {
+  flex-shrink: 0;
+  width: 18px;
+  text-align: center;
+  font-size: 13px;
+}
+
+.item[data-state="active"] .marker {
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.label {
+  flex: 1;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}

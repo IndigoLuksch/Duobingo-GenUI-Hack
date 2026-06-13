@@ -1,9 +1,9 @@
-import LoadingState from "@/components/ui/LoadingState";
+import LessonPrepLoader from "@/components/LessonPrepLoader";
 
 export default function LessonLoading() {
   return (
     <div className="appShell">
-      <LoadingState message="Preparing your lesson…" />
+      <LessonPrepLoader indeterminate />
     </div>
   );
 }

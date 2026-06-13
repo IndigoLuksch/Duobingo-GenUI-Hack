@@ -87,8 +87,8 @@ export default function PathMap({
 
   const completeCount = Object.values(progress).filter((s) => s === "complete").length;
 
-  const handleNodeClick = (unitId: string, status: string) => {
-    if (status !== "locked") onUnitClick(unitId);
+  const handleNodeClick = (unitId: string) => {
+    onUnitClick(unitId);
   };
 
   return (
@@ -133,9 +133,9 @@ export default function PathMap({
 
         <div className={styles.nodes}>
           {units.map((unit, index) => {
-            const status = progress[unit.unit_id] ?? (unit.custom ? "current" : "locked");
+            const rawStatus = progress[unit.unit_id] ?? "current";
+            const status = rawStatus === "locked" ? "current" : rawStatus;
             const pos = positions[index];
-            const isLocked = status === "locked";
             const isCurrent = status === "current";
             const isComplete = status === "complete";
 
@@ -152,9 +152,7 @@ export default function PathMap({
                   className={`${styles.unitBadge} ${
                     isComplete
                       ? styles.unitBadgeComplete
-                      : isLocked
-                        ? styles.unitBadgeLocked
-                        : styles.unitBadgeCurrent
+                      : styles.unitBadgeCurrent
                   }`}
                 >
                   {isComplete ? "✓ Done" : `Lesson ${index + 1}`}
@@ -163,22 +161,19 @@ export default function PathMap({
                 <motion.button
                   type="button"
                   className={`${styles.node} ${
-                    isLocked
-                      ? styles.nodeLocked
-                      : isCurrent
-                        ? styles.nodeCurrent
-                        : styles.nodeComplete
+                    isComplete
+                      ? styles.nodeComplete
+                      : styles.nodeCurrent
                   }`}
-                  onClick={() => handleNodeClick(unit.unit_id, status)}
+                  onClick={() => handleNodeClick(unit.unit_id)}
                   aria-label={unit.title}
-                  disabled={isLocked}
                   animate={isCurrent ? { scale: [1, 1.06, 1] } : undefined}
                   transition={
                     isCurrent
                       ? { duration: 2.2, repeat: Infinity, ease: "easeInOut" }
                       : undefined
                   }
-                  whileTap={!isLocked ? { scale: 0.92 } : undefined}
+                  whileTap={{ scale: 0.92 }}
                 >
                   {isCurrent && (
                     <motion.span
@@ -191,12 +186,9 @@ export default function PathMap({
                   {isComplete && (
                     <span className={styles.completeCheck}>✓</span>
                   )}
-                  {isLocked && (
-                    <span className={styles.lockBadge}>🔒</span>
-                  )}
                 </motion.button>
 
-                <div className={`${styles.labelCard} ${isLocked ? styles.labelCardLocked : ""}`}>
+                <div className={styles.labelCard}>
                   <span className={styles.labelTitle}>{unit.title}</span>
                   {unit.description && (
                     <span className={styles.labelDesc}>{unit.description}</span>

@@ -105,8 +105,8 @@ async function testRedisProfile() {
     fail("Profile boulangerie_1 progress", JSON.stringify(profile.unit_progress));
     return;
   }
-  if (profile.unit_progress?.cafe_1 !== "locked") {
-    fail("Profile cafe_1 locked", JSON.stringify(profile.unit_progress));
+  if (profile.unit_progress?.cafe_1 !== "current") {
+    fail("Profile cafe_1 current", JSON.stringify(profile.unit_progress));
     return;
   }
   pass("Redis profile", `xp=${profile.xp}, streak=${profile.streak}`);
@@ -295,7 +295,7 @@ async function main() {
 
   if (failed > 0) {
     console.log("Manual browser checklist (Stage 19.2):");
-    console.log("  1. http://localhost:3000 — Bakery current, Café locked");
+    console.log("  1. http://localhost:3000 — all lessons available");
     console.log("  2. Tap Bakery → /lesson/boulangerie_1");
     console.log("  3. Complete 8 exercises (mix correct/wrong)");
     console.log("  4. Lesson-complete card → Enter the Bakery →");

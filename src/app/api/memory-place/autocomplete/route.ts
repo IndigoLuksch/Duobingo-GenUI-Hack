@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { autocompletePlaces } from "@/lib/google-places";
+import { getPlaceTypesForUnit } from "@/lib/place-types";
 
 export async function GET(request: NextRequest) {
   const input = request.nextUrl.searchParams.get("input")?.trim() ?? "";
+  const unitId = request.nextUrl.searchParams.get("unit_id") ?? undefined;
+  const unitTitle = request.nextUrl.searchParams.get("unit_title") ?? undefined;
 
   if (input.length < 2) {
     return NextResponse.json({ suggestions: [] });
@@ -16,7 +19,10 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const suggestions = await autocompletePlaces(input);
+    const placeTypes = unitId
+      ? getPlaceTypesForUnit(unitId, unitTitle)
+      : undefined;
+    const suggestions = await autocompletePlaces(input, placeTypes);
     return NextResponse.json({ suggestions });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Places search failed";

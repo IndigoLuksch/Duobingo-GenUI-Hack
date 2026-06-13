@@ -1,0 +1,19 @@
+{
+  "worlds": [
+    {
+      "key": "station",
+      "spz_url": null,
+      "pano_url": null
+    },
+    {
+      "key": "pret",
+      "spz_url": null,
+      "pano_url": null
+    },
+    {
+      "key": "bakery",
+      "spz_url": null,
+      "pano_url": null
+    }
+  ]
+}

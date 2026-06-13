@@ -82,6 +82,18 @@ export default function MemoryPlacePage({
         data.pano_status === "ready" &&
         Boolean(data.pano_url || data.spz_url);
       const worldStillGenerating = data.world_status === "generating";
+
+      if (
+        !cancelled &&
+        data.pano_status !== "generating" &&
+        !data.pano_url &&
+        !data.spz_url &&
+        data.world_id
+      ) {
+        router.replace(`/world/${data.world_id}`);
+        return false;
+      }
+
       return !sceneReady || worldStillGenerating;
     }
 
@@ -96,7 +108,7 @@ export default function MemoryPlacePage({
       cancelled = true;
       clearInterval(interval);
     };
-  }, [placeId]);
+  }, [placeId, router]);
 
   useEffect(() => {
     if (!unit) return;

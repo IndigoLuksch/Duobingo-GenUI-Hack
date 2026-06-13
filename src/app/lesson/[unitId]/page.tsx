@@ -1,6 +1,7 @@
 "use client";
 
 import { use, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   CopilotKit,
   useCopilotChatInternal,
@@ -9,12 +10,12 @@ import {
 import { TextMessage, Role } from "@copilotkit/runtime-client-gql";
 import LessonHUD from "@/components/LessonHUD";
 import LessonAgentBridge from "@/components/LessonAgentBridge";
+import LessonPrepLoader from "@/components/LessonPrepLoader";
 import MultipleChoice from "@/components/exercises/MultipleChoice";
 import WordBank from "@/components/exercises/WordBank";
 import Listening from "@/components/exercises/Listening";
 import SpeakIt from "@/components/exercises/SpeakIt";
 import LessonComplete from "@/components/exercises/LessonComplete";
-import LoadingState from "@/components/ui/LoadingState";
 import { useCourse } from "@/lib/course-context";
 import { LANGUAGE_LABELS } from "@/lib/courses";
 import { findUnitById } from "@/lib/course-data";
@@ -22,6 +23,7 @@ import {
   pendingExerciseRespondRef,
   pendingJudgmentRef,
 } from "@/lib/lessonAgentBridge";
+import { getLessonPrepStepId } from "@/lib/lesson-prep-status";
 import { useLessonStore } from "@/lib/store";
 import {
   ExercisePayload,
@@ -79,7 +81,8 @@ function LessonExperience({
   unitId: string;
   agentError: boolean;
 }) {
-  const { course, courseId } = useCourse();
+  const router = useRouter();
+  const { course, courseId, ready: courseReady } = useCourse();
   const language = LANGUAGE_LABELS[courseId];
 
   const builtInUnit = useMemo(
@@ -95,6 +98,7 @@ function LessonExperience({
   const [wordStrengths, setWordStrengths] = useState<WordStrength[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [prepTimedOut, setPrepTimedOut] = useState(false);
+  const [lessonStartSent, setLessonStartSent] = useState(false);
   const lastAssistantMessageRef = useRef<string | null>(null);
   const lessonStartSentRef = useRef(false);
   const prevUnitIdRef = useRef(unitId);
@@ -113,9 +117,30 @@ function LessonExperience({
 
   const strengthsReady = wordStrengths.length > 0;
 
+  const prepStepId = useMemo(
+    () =>
+      getLessonPrepStepId({
+        courseReady,
+        unit,
+        strengthsReady,
+        agentAvailable: isAvailable,
+        lessonStartSent,
+        hasExercise: !!currentExercise,
+      }),
+    [
+      courseReady,
+      unit,
+      strengthsReady,
+      isAvailable,
+      lessonStartSent,
+      currentExercise,
+    ]
+  );
+
   const sendLessonStart = useCallback(() => {
     if (!unit) return;
     lessonStartSentRef.current = true;
+    setLessonStartSent(true);
     setPrepTimedOut(false);
 
     const vocabLines = unit.vocab
@@ -182,6 +207,7 @@ function LessonExperience({
   useEffect(() => {
     if (prevUnitIdRef.current !== unitId) {
       lessonStartSentRef.current = false;
+      setLessonStartSent(false);
       prevUnitIdRef.current = unitId;
     }
     setPrepTimedOut(false);
@@ -215,6 +241,7 @@ function LessonExperience({
     if (lessonStartSentRef.current) return;
     if (hasLessonStartMessage(messages, unitId)) {
       lessonStartSentRef.current = true;
+      setLessonStartSent(true);
       return;
     }
 
@@ -300,8 +327,11 @@ function LessonExperience({
 
   useEffect(() => {
     if (!unit || exerciseIndex < totalExercises - 2) return;
+    const missed = useLessonStore.getState().missedWordIds.join(",");
+    const query = missed ? `?missed=${missed}` : "";
+    router.prefetch(`/world/${unit.world_id}${query}`);
     fetch(`/worlds/${unit.world_id}.spz`).catch(() => {});
-  }, [exerciseIndex, totalExercises, unit]);
+  }, [exerciseIndex, totalExercises, unit, router]);
 
   const handleSubmit = (exerciseId: string, response: unknown) => {
     const wordId = getWordId(useLessonStore.getState().currentExercise);
@@ -329,10 +359,18 @@ function LessonExperience({
     );
   };
 
-  if (!unit) {
+  if (!courseReady || !unit) {
+    if (courseReady && !unit) {
+      return (
+        <div className={styles.notFound}>
+          <p>Unit not found.</p>
+        </div>
+      );
+    }
+
     return (
-      <div className={styles.notFound}>
-        <p>Unit not found.</p>
+      <div className={styles.shell}>
+        <LessonPrepLoader activeStepId={prepStepId} />
       </div>
     );
   }
@@ -353,7 +391,10 @@ function LessonExperience({
 
   if (currentExercise?.type === "lesson.complete") {
     return (
-      <LessonComplete exercise={currentExercise as LessonCompletePayload} />
+      <LessonComplete
+        exercise={currentExercise as LessonCompletePayload}
+        fallbackWorldId={unit.world_id}
+      />
     );
   }
 
@@ -363,7 +404,7 @@ function LessonExperience({
       <LessonAgentBridge />
 
       {!currentExercise && (
-        <LoadingState message="Preparing your lesson…">
+        <LessonPrepLoader activeStepId={prepStepId}>
           {prepTimedOut && (
             <div className={styles.retryBlock}>
               <p>
@@ -375,6 +416,7 @@ function LessonExperience({
                 className={`btnPrimary ${styles.retryButton}`}
                 onClick={() => {
                   lessonStartSentRef.current = false;
+                  setLessonStartSent(false);
                   sendLessonStart();
                 }}
               >
@@ -382,7 +424,7 @@ function LessonExperience({
               </button>
             </div>
           )}
-        </LoadingState>
+        </LessonPrepLoader>
       )}
 
       {currentExercise?.type === "exercise.multiple_choice" && (

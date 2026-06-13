@@ -66,9 +66,9 @@ export function defaultUnitProgress(): Record<
 > {
   return {
     boulangerie_1: "current",
-    cafe_1: "locked",
-    gare_1: "locked",
-    marche_1: "locked",
+    cafe_1: "current",
+    gare_1: "current",
+    marche_1: "current",
   };
 }
 
@@ -124,7 +124,7 @@ export function mergeUnitProgress(
   for (const unit of course.units) {
     const status = fromCourse?.[unit.unit_id] ?? fromLegacy?.[unit.unit_id];
     if (status) {
-      merged[unit.unit_id] = status;
+      merged[unit.unit_id] = status === "locked" ? "current" : status;
     }
   }
 

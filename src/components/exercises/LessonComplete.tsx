@@ -2,16 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import AppLogo from "@/components/ui/AppLogo";
 import { LessonComplete as LessonCompletePayload } from "@/lib/types";
-import PortalTransition from "@/components/PortalTransition";
+import PortalTransition, { buildPortalHref } from "@/components/PortalTransition";
 import styles from "./LessonComplete.module.css";
 
 interface Props {
   exercise: LessonCompletePayload;
+  fallbackWorldId?: string;
 }
 
-export default function LessonComplete({ exercise }: Props) {
+export default function LessonComplete({ exercise, fallbackWorldId }: Props) {
+  const router = useRouter();
   const [displayedXp, setDisplayedXp] = useState(0);
   const [portalOpen, setPortalOpen] = useState(false);
   const [memoryPlaceId, setMemoryPlaceId] = useState<string | undefined>(undefined);
@@ -45,11 +48,18 @@ export default function LessonComplete({ exercise }: Props) {
   }, []);
 
   const unitLabel = exercise.unit_title.replace(/^In the /, "").replace(/^At the /, "");
+  const worldId = exercise.world_id || fallbackWorldId || "";
+
+  useEffect(() => {
+    if (!worldId) return;
+    const href = buildPortalHref(worldId, exercise.missed_word_ids, memoryPlaceId);
+    router.prefetch(href);
+  }, [worldId, exercise.missed_word_ids, memoryPlaceId, router]);
 
   return (
     <PortalTransition
       active={portalOpen}
-      worldId={exercise.world_id}
+      worldId={worldId}
       missedIds={exercise.missed_word_ids}
       memoryPlaceId={memoryPlaceId}
       onComplete={() => {
@@ -85,6 +95,7 @@ export default function LessonComplete({ exercise }: Props) {
             type="button"
             className={styles.cta}
             onClick={() => setPortalOpen(true)}
+            disabled={!worldId}
           >
             Enter the {unitLabel} →
           </button>

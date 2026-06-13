@@ -90,6 +90,10 @@ body {
   justify-content: flex-start;
 }
 
+.homeWithSkipBar {
+  padding-bottom: 132px;
+}
+
 .btnPrimary {
   display: inline-flex;
   align-items: center;

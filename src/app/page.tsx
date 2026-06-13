@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import PathMap from "@/components/PathMap";
 import MemoryPlaceSearch from "@/components/MemoryPlaceSearch";
 import NewLessonModal from "@/components/NewLessonModal";
+import SkipToWorld from "@/components/SkipToWorld";
 import LoadingState from "@/components/ui/LoadingState";
 import { useCourse } from "@/lib/course-context";
 import { getCustomUnits, saveCustomUnit } from "@/lib/custom-units";
@@ -128,16 +129,19 @@ export default function Home() {
 
   return (
     <>
-      <PathMap
-        units={units}
-        progress={profile.unit_progress}
-        xp={profile.xp}
-        streak={profile.streak}
-        courseTitle={course.title}
-        courseFlag={COURSE_FLAGS[courseId]}
-        onUnitClick={handleUnitClick}
-        onNewLesson={() => setShowNewLesson(true)}
-      />
+      <div className="homeWithSkipBar">
+        <PathMap
+          units={units}
+          progress={profile.unit_progress}
+          xp={profile.xp}
+          streak={profile.streak}
+          courseTitle={course.title}
+          courseFlag={COURSE_FLAGS[courseId]}
+          onUnitClick={handleUnitClick}
+          onNewLesson={() => setShowNewLesson(true)}
+        />
+      </div>
+      <SkipToWorld />
       {showNewLesson && (
         <NewLessonModal
           courseId={courseId}

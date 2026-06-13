@@ -60,8 +60,13 @@ export default function MemoryPlaceSearch({
     debounceRef.current = setTimeout(async () => {
       setSearching(true);
       try {
+        const params = new URLSearchParams({
+          input: query,
+          unit_id: unitId,
+          unit_title: unitTitle,
+        });
         const res = await fetch(
-          `/api/memory-place/autocomplete?input=${encodeURIComponent(query)}`
+          `/api/memory-place/autocomplete?${params.toString()}`
         );
         const data = await res.json();
         setSuggestions(data.suggestions ?? []);
@@ -81,7 +86,7 @@ export default function MemoryPlaceSearch({
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [query, step]);
+  }, [query, step, unitId, unitTitle]);
 
   const handlePlaceSelected = async (selection: PlaceSelection) => {
     setPlace(selection);
