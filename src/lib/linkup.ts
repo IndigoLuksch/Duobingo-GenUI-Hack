@@ -1,7 +1,3 @@
-import { LinkupClient } from "linkup-sdk";
-
-const client = new LinkupClient({ apiKey: process.env.LINKUP_API_KEY ?? "" });
-
 export interface AuthenticSentence {
   sentence: string;
   source: string;
@@ -20,6 +16,9 @@ export async function fetchAuthenticSentence(
   }
 
   try {
+    const { LinkupClient } = await import("linkup-sdk");
+    const client = new LinkupClient({ apiKey: process.env.LINKUP_API_KEY });
+
     const response = await client.search({
       query: `Example sentence in French using the word "${frenchWord}" (meaning: ${englishTranslation})`,
       depth: "standard",

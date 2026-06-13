@@ -34,6 +34,11 @@
   animation: none;
 }
 
+.dotError {
+  background: #ef4444;
+  animation: none;
+}
+
 @keyframes pulse {
   0%,
   100% {

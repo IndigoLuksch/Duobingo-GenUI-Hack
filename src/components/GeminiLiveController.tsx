@@ -87,13 +87,15 @@ interface GeminiLiveControllerProps {
   unitVocab: VocabItem[];
   wordStrengths: WordStrength[];
   unitTitle: string;
+  extraContextLine?: string;
 }
 
 function buildSystemInstruction(
   unitTitle: string,
   missedWordIds: string[],
   unitVocab: VocabItem[],
-  wordStrengths: WordStrength[]
+  wordStrengths: WordStrength[],
+  extraContextLine?: string
 ): string {
   const strengthMap = Object.fromEntries(
     wordStrengths.map((w) => [w.word_id, w.strength])
@@ -116,8 +118,10 @@ function buildSystemInstruction(
     .map((v) => `- ${v.fr} (${v.en}, ${v.gender ?? "n"})`)
     .join("\n");
 
-  return `You are a warm, playful French language tutor. You are inside a 3D scene with the learner. You can SEE the scene through image frames that are sent to you periodically — these are screenshots of what the learner currently sees as they navigate the 3D environment.
+  const memoryLine = extraContextLine ? `\n${extraContextLine}\n` : "";
 
+  return `You are a warm, playful French language tutor. You are inside a 3D scene with the learner. You can SEE the scene through image frames that are sent to you periodically — these are screenshots of what the learner currently sees as they navigate the 3D environment.
+${memoryLine}
 CONTEXT:
 The learner just completed a lesson on the theme "${unitTitle}".
 They missed these words during the lesson — these are your PRIMARY targets:
@@ -241,8 +245,10 @@ export default function GeminiLiveController({
   unitVocab,
   wordStrengths,
   unitTitle,
+  extraContextLine,
 }: GeminiLiveControllerProps) {
   const [connected, setConnected] = useState(false);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
   const [muted, setMuted] = useState(false);
   const [subtitle, setSubtitle] = useState<string | null>(null);
   const [subtitleVisible, setSubtitleVisible] = useState(false);
@@ -273,10 +279,58 @@ export default function GeminiLiveController({
       }, 5000);
     };
 
+    async function startMicAndFrames() {
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        if (disposed) {
+          mediaStream.getTracks().forEach((track) => track.stop());
+          return;
+        }
+
+        inputContext = new AudioContext({ sampleRate: 16000 });
+        workletUrl = URL.createObjectURL(
+          new Blob([PCM_WORKLET], { type: "application/javascript" })
+        );
+        await inputContext.audioWorklet.addModule(workletUrl);
+
+        const source = inputContext.createMediaStreamSource(mediaStream);
+        const worklet = new AudioWorkletNode(inputContext, "pcm-processor");
+        worklet.port.onmessage = (event: MessageEvent<ArrayBuffer>) => {
+          if (mutedRef.current || !client) return;
+          client.sendAudio(arrayBufferToBase64(event.data));
+        };
+        source.connect(worklet);
+
+        const canvas = await waitForCanvas(canvasRef);
+        if (!disposed && client) {
+          stopFrames = startFrameCapture(
+            canvas,
+            (base64) => client?.sendFrame(base64),
+            1000
+          );
+        }
+      } catch (error) {
+        console.error("Gemini Live mic/capture failed:", error);
+        if (!disposed) {
+          setConnectionError(
+            "Microphone access is required for voice tutoring. Check browser permissions."
+          );
+        }
+      }
+    }
+
     async function init() {
       const tokenRes = await fetch("/api/gemini-token");
       const { apiKey } = await tokenRes.json();
-      if (!apiKey || disposed) return;
+      if (!apiKey) {
+        if (!disposed) {
+          setConnectionError(
+            "GEMINI_API_KEY is not configured on the server."
+          );
+        }
+        return;
+      }
+      if (disposed) return;
 
       playbackContext = new AudioContext({ sampleRate: 24000 });
 
@@ -304,11 +358,22 @@ export default function GeminiLiveController({
           unitTitle,
           missedWordIds,
           unitVocab,
-          wordStrengths
+          wordStrengths,
+          extraContextLine
         ),
         tools: GEMINI_TOOLS,
         onReady: () => {
-          if (!disposed) setConnected(true);
+          if (!disposed) {
+            setConnected(true);
+            setConnectionError(null);
+            void startMicAndFrames();
+          }
+        },
+        onError: (message) => {
+          if (!disposed) {
+            setConnectionError(message);
+            setConnected(false);
+          }
         },
         onAudio: schedulePlayback,
         onText: showSubtitle,
@@ -318,35 +383,6 @@ export default function GeminiLiveController({
         },
       });
       client.connect();
-
-      mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      if (disposed) {
-        mediaStream.getTracks().forEach((track) => track.stop());
-        return;
-      }
-
-      inputContext = new AudioContext({ sampleRate: 16000 });
-      workletUrl = URL.createObjectURL(
-        new Blob([PCM_WORKLET], { type: "application/javascript" })
-      );
-      await inputContext.audioWorklet.addModule(workletUrl);
-
-      const source = inputContext.createMediaStreamSource(mediaStream);
-      const worklet = new AudioWorkletNode(inputContext, "pcm-processor");
-      worklet.port.onmessage = (event: MessageEvent<ArrayBuffer>) => {
-        if (mutedRef.current || !client) return;
-        client.sendAudio(arrayBufferToBase64(event.data));
-      };
-      source.connect(worklet);
-
-      const canvas = await waitForCanvas(canvasRef);
-      if (!disposed && client) {
-        stopFrames = startFrameCapture(
-          canvas,
-          (base64) => client?.sendFrame(base64),
-          1000
-        );
-      }
     }
 
     init().catch((error) => {
@@ -363,15 +399,21 @@ export default function GeminiLiveController({
       if (workletUrl) URL.revokeObjectURL(workletUrl);
       if (subtitleTimerRef.current) clearTimeout(subtitleTimerRef.current);
     };
-  }, [canvasRef, missedWordIds, unitVocab, wordStrengths, unitTitle]);
+  }, [canvasRef, missedWordIds, unitVocab, wordStrengths, unitTitle, extraContextLine]);
 
   return (
     <div className={styles.overlay}>
       <div className={styles.status}>
         <span
-          className={`${styles.dot} ${connected ? "" : styles.dotPending}`}
+          className={`${styles.dot} ${
+            connected ? "" : connectionError ? styles.dotError : styles.dotPending
+          }`}
         />
-        {connected ? "Gemini Live connected" : "Connecting…"}
+        {connected
+          ? "Gemini Live connected"
+          : connectionError
+            ? connectionError
+            : "Connecting…"}
       </div>
 
       <button

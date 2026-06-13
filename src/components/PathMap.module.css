@@ -20,6 +20,27 @@
   color: var(--color-text);
 }
 
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.memoryButton {
+  padding: 8px 12px;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: 999px;
+  background: rgba(99, 102, 241, 0.08);
+  color: #4338ca;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.memoryButton:hover {
+  background: rgba(99, 102, 241, 0.14);
+}
+
 .xp {
   font-size: 18px;
   font-weight: 700;

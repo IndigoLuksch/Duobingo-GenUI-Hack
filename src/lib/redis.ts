@@ -1,5 +1,5 @@
 import Redis from "ioredis";
-import { LearnerProfile, WordStrength } from "./types";
+import { LearnerProfile, MemoryPlaceRecord, WordStrength } from "./types";
 
 const redis = new Redis(process.env.REDIS_URL || "redis://localhost:6379");
 export default redis;
@@ -7,6 +7,7 @@ export default redis;
 // Key patterns:
 // learner:{uid}:profile         → JSON string of LearnerProfile
 // learner:{uid}:word:{word_id}  → JSON string of WordStrength
+// memory_place:{uid}:{place_id} → JSON string of MemoryPlaceRecord
 
 export async function getProfile(uid: string): Promise<LearnerProfile | null> {
   const data = await redis.get(`learner:${uid}:profile`);
@@ -33,4 +34,22 @@ export async function getAllWordStrengths(uid: string, wordIds: string[]): Promi
   return results
     .filter((r): r is string => r !== null)
     .map((r) => JSON.parse(r) as WordStrength);
+}
+
+export async function getMemoryPlace(
+  uid: string,
+  placeId: string
+): Promise<MemoryPlaceRecord | null> {
+  const data = await redis.get(`memory_place:${uid}:${placeId}`);
+  return data ? (JSON.parse(data) as MemoryPlaceRecord) : null;
+}
+
+export async function setMemoryPlace(
+  uid: string,
+  record: MemoryPlaceRecord
+): Promise<void> {
+  await redis.set(
+    `memory_place:${uid}:${record.place_id}`,
+    JSON.stringify(record)
+  );
 }

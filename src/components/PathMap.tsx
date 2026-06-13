@@ -11,6 +11,7 @@ interface PathMapProps {
   progress: Record<string, "locked" | "current" | "complete">;
   xp: number;
   streak: number;
+  onStoreMemory?: () => void;
 }
 
 interface NodePosition {
@@ -62,7 +63,7 @@ function XpDisplay({ xp }: { xp: number }) {
   );
 }
 
-export default function PathMap({ units, progress, xp, streak }: PathMapProps) {
+export default function PathMap({ units, progress, xp, streak, onStoreMemory }: PathMapProps) {
   const router = useRouter();
   const containerHeight = Math.max(520, units.length * 240);
   const containerWidth = 432;
@@ -82,7 +83,18 @@ export default function PathMap({ units, progress, xp, streak }: PathMapProps) {
     <>
       <header className={styles.header}>
         <span className={styles.streak}>🔥 {streak}</span>
-        <XpDisplay xp={xp} />
+        <div className={styles.headerRight}>
+          {onStoreMemory && (
+            <button
+              type="button"
+              className={styles.memoryButton}
+              onClick={onStoreMemory}
+            >
+              📍 Store a memory
+            </button>
+          )}
+          <XpDisplay xp={xp} />
+        </div>
       </header>
 
       <div className={styles.container} style={{ height: containerHeight }}>

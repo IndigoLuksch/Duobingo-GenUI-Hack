@@ -17,6 +17,7 @@ import SpeakIt from "@/components/exercises/SpeakIt";
 import LessonComplete from "@/components/exercises/LessonComplete";
 import course from "../../../../data/courses/fr.json";
 import {
+  lessonStartSent,
   pendingExerciseRespondRef,
   pendingJudgmentRef,
 } from "@/lib/lessonAgentBridge";
@@ -50,8 +51,8 @@ function LessonExperience({
 
   const [wordStrengths, setWordStrengths] = useState<WordStrength[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [lessonStarted, setLessonStarted] = useState(false);
   const lastAssistantMessageRef = useRef<string | null>(null);
+  const prevUnitIdRef = useRef<string | null>(null);
 
   const currentExercise = useLessonStore((s) => s.currentExercise);
   const feedbackState = useLessonStore((s) => s.feedbackState);
@@ -82,6 +83,11 @@ function LessonExperience({
   });
 
   useEffect(() => {
+    if (prevUnitIdRef.current && prevUnitIdRef.current !== unitId) {
+      lessonStartSent.delete(prevUnitIdRef.current);
+    }
+    prevUnitIdRef.current = unitId;
+
     useLessonStore.getState().reset();
     pendingExerciseRespondRef.current = null;
     pendingJudgmentRef.current = null;
@@ -106,16 +112,18 @@ function LessonExperience({
   }, [unit]);
 
   useEffect(() => {
-    if (!unit || lessonStarted || loadError) return;
+    if (!unit || loadError) return;
 
+    if (lessonStartSent.has(unitId)) return;
+
+    lessonStartSent.add(unitId);
     appendMessage(
       new TextMessage({
         role: Role.User,
         content: `Start the lesson for unit "${unit.title}" (${unit.unit_id}). Use the vocabulary, sentences, and word strengths provided in context.`,
       })
     );
-    setLessonStarted(true);
-  }, [unit, lessonStarted, loadError, appendMessage]);
+  }, [unit, unitId, loadError, appendMessage]);
 
   useEffect(() => {
     const assistants = (messages ?? []).filter(

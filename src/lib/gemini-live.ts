@@ -1,6 +1,8 @@
 const WS_URL =
   "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent";
 
+const LIVE_MODEL = "models/gemini-2.5-flash-native-audio-preview-12-2025";
+
 export interface GeminiLiveConfig {
   apiKey: string;
   systemInstruction: string;
@@ -10,6 +12,7 @@ export interface GeminiLiveConfig {
   onToolCall: (id: string, name: string, args: unknown) => Promise<unknown>;
   onInterrupted: () => void;
   onReady?: () => void;
+  onError?: (message: string) => void;
 }
 
 function base64ToArrayBuffer(base64: string): ArrayBuffer {
@@ -24,12 +27,14 @@ function base64ToArrayBuffer(base64: string): ArrayBuffer {
 export class GeminiLiveClient {
   private config: GeminiLiveConfig;
   private ws: WebSocket | null = null;
+  private ready = false;
 
   constructor(config: GeminiLiveConfig) {
     this.config = config;
   }
 
   connect(): void {
+    this.ready = false;
     this.ws = new WebSocket(`${WS_URL}?key=${this.config.apiKey}`);
     this.ws.onopen = () => this.sendSetup();
     this.ws.onmessage = (event) => {
@@ -40,17 +45,26 @@ export class GeminiLiveClient {
         console.warn("Gemini Live message parse failed:", e);
       }
     };
-    this.ws.onerror = (event) => {
-      console.error("Gemini Live WebSocket error:", event);
+    this.ws.onerror = () => {
+      this.config.onError?.("Gemini Live connection error");
+    };
+    this.ws.onclose = (event) => {
+      if (!this.ready) {
+        const reason = event.reason?.trim();
+        this.config.onError?.(
+          reason || `Gemini Live disconnected (${event.code})`
+        );
+      }
+      this.ws = null;
     };
   }
 
   sendSetup(): void {
     this.send({
       setup: {
-        model: "models/gemini-2.5-flash-live-preview",
+        model: LIVE_MODEL,
         generationConfig: {
-          responseModalities: ["AUDIO", "TEXT"],
+          responseModalities: ["AUDIO"],
           speechConfig: {
             voiceConfig: {
               prebuiltVoiceConfig: { voiceName: "Aoede" },
@@ -61,6 +75,7 @@ export class GeminiLiveClient {
           parts: [{ text: this.config.systemInstruction }],
         },
         tools: this.config.tools,
+        outputAudioTranscription: {},
       },
     });
   }
@@ -90,10 +105,24 @@ export class GeminiLiveClient {
   }
 
   async handleMessage(msg: Record<string, unknown>): Promise<void> {
-    if (msg.setupComplete) {
+    if (msg.error) {
+      const error = msg.error as { message?: string };
+      this.config.onError?.(error.message || "Gemini Live setup failed");
+      return;
+    }
+
+    if (msg.setupComplete !== undefined) {
+      this.ready = true;
       console.log("Gemini Live session ready");
       this.config.onReady?.();
       return;
+    }
+
+    const outputTranscription = msg.outputTranscription as
+      | { text?: string }
+      | undefined;
+    if (outputTranscription?.text) {
+      this.config.onText(outputTranscription.text);
     }
 
     const serverContent = msg.serverContent as

@@ -114,3 +114,27 @@ export interface WorldCardData {
   position_hint: "center" | "top-left" | "top-right" | "bottom-left" | "bottom-right";
   timestamp: number;
 }
+
+// === Memory Place (Stage 20) ===
+
+export interface RankedPhoto {
+  photo_index: number;
+  score: number;
+  label: string;
+  url: string;
+  photo_name?: string;
+}
+
+export interface MemoryPlaceRecord {
+  place_name: string;
+  place_id: string;
+  unit_id: string;
+  source_photo_url: string;
+  address?: string | null;
+  pano_url: string | null;
+  pano_status: "generating" | "ready";
+  spz_url: string | null;
+  world_status: "not_started" | "generating" | "ready";
+  world_operation_id: string | null;
+  created_at: string;
+}
