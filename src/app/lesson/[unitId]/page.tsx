@@ -98,7 +98,7 @@ function LessonExperience({
   const loseHeart = useLessonStore((s) => s.loseHeart);
   const addMissed = useLessonStore((s) => s.addMissed);
 
-  const { appendMessage, messages, isAvailable, isLoading } =
+  const { appendMessage, messages } =
     useCopilotChatInternal();
 
   const strengthsReady = wordStrengths.length > 0;
@@ -199,7 +199,7 @@ function LessonExperience({
   }, [unit]);
 
   useEffect(() => {
-    if (!unit || loadError || !isAvailable || !strengthsReady || isLoading) {
+    if (!unit || loadError || !strengthsReady) {
       return;
     }
     if (lessonStartSentRef.current) return;
@@ -208,19 +208,18 @@ function LessonExperience({
       return;
     }
 
+    // Give CopilotKit 800ms to establish its runtime connection before sending.
     const timer = setTimeout(() => {
       if (lessonStartSentRef.current) return;
       sendLessonStart();
-    }, 300);
+    }, 800);
 
     return () => clearTimeout(timer);
   }, [
     unit,
     unitId,
     loadError,
-    isAvailable,
     strengthsReady,
-    isLoading,
     messages,
     sendLessonStart,
   ]);
